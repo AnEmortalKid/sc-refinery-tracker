@@ -9,3 +9,9 @@ Things to do:
 3. Form validation (pre submit?)
 
 4. Table re-arrengament (entry time | yield | status (ticker??) | actions)
+
+
+## Users
+
+"Name" -> "RefineryData"
+
