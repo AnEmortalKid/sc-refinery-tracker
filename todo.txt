@@ -1,23 +1,11 @@
 Things to do:
 
-
+1. about / usage top button
 3. Form validation (pre submit?)
-
-
-4. Table re-arrengament (entry time | yield | status (ticker??) | actions)
-5. finish actions / wiring runs
-
-6. Layout Enhancements
-
 7. restructure source? 
 
-## Initial Load
-
-- Remove 'refinery table' until a user is selected (no add run button to null);
 
 ## Restruct
-
-
 
 src/app.js
 
@@ -27,4 +15,9 @@ src/users/
 ### App
 
 Expose view/controller for each thing?
+
+## UI
+
+Either have an example of time on the duration (place holder text) or format dd hh mm ss OR have separate boxes 
+- ideal -> separate boxes
 
