@@ -1,13 +1,63 @@
 import { toDurationString } from "./durationParser";
-import { removeChildren} from './elementUtils';
+import { removeChildren } from "./elementUtils";
+
+const removeAllBtnId = "remove-all-jobs-btn";
+
+function createActionBar(run) {
+  /**
+   * Creates a td like:
+   * <td>
+   *   <div class="w3-bar">
+   *     <button class="w3-btn w3-red w3-round-xlarge" onclick>
+   *       <i class="fa fa-trash fa-lg"></i>
+   *     </button>
+   *   </div>
+   * </td>
+   */
+  var tableData = document.createElement("td");
+
+  var buttonBar = document.createElement("div");
+  buttonBar.classList = ["w3-bar"];
+
+  var removeJobButton = document.createElement("button");
+  removeJobButton.classList.add("w3-btn", "w3-red", "w3-round-xlarge");
+
+  var trashIcon = document.createElement("i");
+  trashIcon.classList.add("fa", "fa-trash", "fa-lg");
+
+  removeJobButton.appendChild(trashIcon);
+  removeJobButton.onclick = () => app.removeRun(run);
+
+  buttonBar.appendChild(removeJobButton);
+  tableData.appendChild(buttonBar);
+
+  return tableData;
+}
 
 export default class RunView {
-  constructor(runController) {
+  constructor(userController, runController) {
+    this.userController = userController;
     this.runController = runController;
   }
 
   layout() {
+    if (!this.userController.getCurrentUser()) {
+      document.getElementById("refinery-tracker-container").hidden = true;
+      return;
+    }
+
+    document.getElementById("refinery-tracker-container").hidden = false;
+
     var runs = this.runController.fetch();
+    if (runs.length == 0) {
+      document
+        .getElementById("remove-all-jobs-btn")
+        .classList.add("w3-disabled");
+    } else {
+      document
+        .getElementById("remove-all-jobs-btn")
+        .classList.remove("w3-disabled");
+    }
 
     var table = document.getElementById("runs-table");
 
@@ -16,6 +66,10 @@ export default class RunView {
 
     runs.forEach((run) => {
       var row = document.createElement("tr");
+
+      var name = document.createElement("td");
+      name.textContent = run.name;
+      row.appendChild(name);
 
       var location = document.createElement("td");
       location.textContent = run.location;
@@ -53,7 +107,7 @@ export default class RunView {
       status.appendChild(statusTag);
       row.appendChild(status);
 
-      // TODO actions
+      row.appendChild(createActionBar(run.uuid));
 
       tableBody.appendChild(row);
     });

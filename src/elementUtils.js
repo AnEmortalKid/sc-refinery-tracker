@@ -1,5 +1,5 @@
 export function removeChildren(element) {
-    while (element.firstChild) {
-        element.firstChild.remove();
-      }
+  while (element.firstChild) {
+    element.firstChild.remove();
+  }
 }

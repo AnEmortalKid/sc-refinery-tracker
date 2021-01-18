@@ -1,9 +1,9 @@
-import "./css/w3.css";
-import Run from "./run";
+import "./assets/w3/css/w3.css";
+import "font-awesome/css/font-awesome.css";
 
 import RunView from "./runView";
 import RunEntry from "./runEntry";
-import RunController from './runController';
+import RunController from "./runController";
 
 import UserController from "./userController";
 import UserView from "./userView";
@@ -12,10 +12,10 @@ const userController = new UserController();
 const userView = new UserView(userController);
 
 const runController = new RunController(userController);
-const runView = new RunView(runController);
+const runView = new RunView(userController, runController);
 
 export function submitJobEntry() {
-  var form = document.getElementById("entry-form");
+  var form = document.getElementById("add-job-form");
   var elements = form.elements;
 
   var obj = {};
@@ -27,6 +27,7 @@ export function submitJobEntry() {
   }
 
   var runEntry = new RunEntry(
+    obj["name"],
     obj["location"],
     obj["duration"],
     obj["yieldAmount"]
@@ -48,8 +49,7 @@ export function addUser() {
   var userName = obj["username"];
 
   // TODO perhaps return something?
-  if(!userController.hasUser(userName))
-  {
+  if (!userController.hasUser(userName)) {
     userController.storeUser(userName);
     // immediately switch
     userController.setUser(userName);
@@ -71,23 +71,33 @@ export function confirmRemoveUser() {
   // a new user will be selected
   userView.layout();
   runView.layout();
-  closeModal('remove-user-form-modal');
+  closeModal("remove-user-form-modal");
+}
+
+export function confirmRemoveAllJobs() {
+  runController.removeAllRuns(userController.getCurrentUser());
+  runView.layout();
+  closeModal("remove-all-jobs-modal");
 }
 
 export function prepareRemoveUser() {
   userView.prepareRemoveModal();
-  openModal('remove-user-form-modal');
+  openModal("remove-user-form-modal");
 }
 
+export function removeRun(runId) {
+  runController.remove(runId);
+  runView.layout();
+}
 
 export function startApp() {
   userView.layout();
   runController.loadRuns();
   runView.layout();
-  
+
   // TODO make this configurable between having it auto update or not
   // TODO add options - refresh rate and update to a datatable?
-  window.setInterval(function () {
-    runView.layout();
-  }, 1000);
+  // window.setInterval(function () {
+  //   runView.layout();
+  // }, 1000);
 }

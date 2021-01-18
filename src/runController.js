@@ -15,6 +15,7 @@ function toRun(runEntry) {
 
   var run = new Run(
     uuid,
+    runEntry.name,
     runEntry.location,
     runEntry.duration,
     durationSeconds,
@@ -28,7 +29,7 @@ function toRun(runEntry) {
 function storeRuns(userName, runData) {
   var rawRunData = localStorage.getItem(runsKey);
   var allRuns = {};
-  if(rawRunData) {
+  if (rawRunData) {
     allRuns = JSON.parse(rawRunData);
   }
 
@@ -39,7 +40,7 @@ function storeRuns(userName, runData) {
 function removeRunData(userName) {
   var rawRunData = localStorage.getItem(runsKey);
   var allRuns = {};
-  if(rawRunData) {
+  if (rawRunData) {
     allRuns = JSON.parse(rawRunData);
   }
 
@@ -52,40 +53,32 @@ export default class RunController {
     this.runs = [];
     this.userController = userController;
   }
- 
-  loadRuns()
-  {
+
+  loadRuns() {
     var current = this.userController.getCurrentUser();
 
-    if(!current) {
+    if (!current) {
       this.runs = [];
       return;
     }
 
     var raw = localStorage.getItem(runsKey);
-    if(!raw) {
+    if (!raw) {
       this.runs = [];
       return;
     }
 
     var allRuns = JSON.parse(raw);
-    if(!allRuns[current])
-    {
+    if (!allRuns[current]) {
       this.runs = [];
-    }
-    else {
+    } else {
       this.runs = allRuns[current];
     }
   }
 
   store(runEntry) {
     this.runs.push(toRun(runEntry));
-    //safe guard against myself
-    var current = this.userController.getCurrentUser();
-    if(current) {
-      storeRuns(current, this.runs);
-    }
-    // ELSE this should have been disabled
+    this.save();
   }
 
   fetch() {
@@ -93,11 +86,22 @@ export default class RunController {
   }
 
   remove(runId) {
-    // remove
+    const found = this.runs.find((run) => run.uuid == runId);
+    if (found) {
+      this.runs.splice(found);
+    }
+    this.save();
   }
 
   removeAllRuns(userName) {
     this.runs = [];
     removeRunData(userName);
+  }
+
+  save() {
+    var current = this.userController.getCurrentUser();
+    if (current) {
+      storeRuns(current, this.runs);
+    }
   }
 }
