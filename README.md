@@ -2,6 +2,8 @@
 
 The Refinery Tracker keeps track of your refinery jobs in StarCitizen
 
+See in action: http://anemortalkid.github.io/starcitizen/mining_tracker/
+
 ## Data
 
 * All data is kept locally on your browser through the usage of `localStorage` (for now)
