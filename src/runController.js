@@ -88,7 +88,8 @@ export default class RunController {
   remove(runId) {
     const found = this.runs.find((run) => run.uuid == runId);
     if (found) {
-      this.runs.splice(found);
+      const foundIndex = this.runs.indexOf(found);
+      this.runs.splice(foundIndex, 1);
     }
     this.save();
   }

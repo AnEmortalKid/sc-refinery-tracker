@@ -1,7 +1,6 @@
 Things to do:
 
-1. about / usage top button
-3. Form validation (pre submit?)
+1. Form validation (pre submit?)
 7. restructure source? 
 
 
@@ -14,10 +13,5 @@ src/users/
 
 ### App
 
-Expose view/controller for each thing?
-
-## UI
-
-Either have an example of time on the duration (place holder text) or format dd hh mm ss OR have separate boxes 
-- ideal -> separate boxes
+- simplify this shit Expose view/controller for each thing?
 

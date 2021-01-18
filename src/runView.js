@@ -112,4 +112,10 @@ export default class RunView {
       tableBody.appendChild(row);
     });
   }
+
+  isValidEntry(runEntry) {
+    // TODO validate
+
+    return false;
+  }
 }

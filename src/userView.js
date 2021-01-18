@@ -46,7 +46,6 @@ export default class UserView {
     var selector = document.getElementById(selectorId);
     var value = selector.value;
     this.userController.setUser(value);
-    // re-render
     this.layout();
   }
 

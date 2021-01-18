@@ -8,44 +8,73 @@ import RunController from "./runController";
 import UserController from "./userController";
 import UserView from "./userView";
 
+import Settings from "./settings/settings";
+import SettingsController from "./settings/settingsController";
+import SettingsView from "./settings/settingsView";
+
 const userController = new UserController();
 const userView = new UserView(userController);
 
 const runController = new RunController(userController);
 const runView = new RunView(userController, runController);
 
+const settingsController = new SettingsController(userController);
+const settingsView = new SettingsView(userController, settingsController);
+var currentRefreshFn;
+
 export function submitJobEntry() {
   var form = document.getElementById("add-job-form");
-  var elements = form.elements;
-
+  var inputs = form.querySelectorAll("input");
   var obj = {};
-  for (var i = 0; i < elements.length; i++) {
-    var item = elements.item(i);
+  for (var i = 0; i < inputs.length; i++) {
+    var item = inputs.item(i);
     if (item.name) {
       obj[item.name] = item.value;
     }
   }
+
+  var durationStr = "";
+  if (obj["duration.days"] > 0) {
+    durationStr += obj["duration.days"] + "d ";
+  }
+  if (obj["duration.hours"] > 0) {
+    durationStr += obj["duration.hours"] + "h ";
+  }
+  if (obj["duration.minutes"] > 0) {
+    durationStr += obj["duration.minutes"] + "m ";
+  }
+  if (obj["duration.seconds"] > 0) {
+    durationStr += obj["duration.seconds"] + "s";
+  }
+  durationStr = durationStr.trim();
 
   var runEntry = new RunEntry(
     obj["name"],
     obj["location"],
-    obj["duration"],
+    durationStr,
     obj["yieldAmount"]
   );
-  runController.store(runEntry);
+
+  if (runView.isValidEntry(runEntry)) {
+    runController.store(runEntry);
+    closeModal("add-job-modal");
+    runView.layout();
+  } else {
+    // TODO SHAKE IT
+  }
 }
 
 export function addUser() {
   var form = document.getElementById("user-form");
-  var elements = form.elements;
-
+  var inputs = form.querySelectorAll("input");
   var obj = {};
-  for (var i = 0; i < elements.length; i++) {
-    var item = elements.item(i);
+  for (var i = 0; i < inputs.length; i++) {
+    var item = inputs.item(i);
     if (item.name) {
       obj[item.name] = item.value;
     }
   }
+
   var userName = obj["username"];
 
   // TODO perhaps return something?
@@ -57,10 +86,16 @@ export function addUser() {
     runController.loadRuns();
     runView.layout();
   }
+
+  closeModal("add-user-form-modal");
 }
 
 export function onUserChange() {
   userView.onUserChange();
+
+  settingsView.layout();
+  synchronizeSettings();
+
   runController.loadRuns();
   runView.layout();
 }
@@ -68,9 +103,12 @@ export function onUserChange() {
 export function confirmRemoveUser() {
   runController.removeAllRuns(userController.getCurrentUser());
   userController.removeUser(userController.getCurrentUser());
-  // a new user will be selected
+
   userView.layout();
   runView.layout();
+  settingsView.layout();
+  synchronizeSettings();
+
   closeModal("remove-user-form-modal");
 }
 
@@ -90,14 +128,44 @@ export function removeRun(runId) {
   runView.layout();
 }
 
+export function prepareSettingsModal() {
+  settingsView.prepareSettingsModal();
+  openModal("settings-modal");
+}
+
+export function applySettings() {
+  var form = document.getElementById("settings-form");
+  var inputs = form.querySelectorAll("input");
+  var obj = {};
+  for (var i = 0; i < inputs.length; i++) {
+    var item = inputs.item(i);
+    if (item.name) {
+      obj[item.name] = item.value;
+    }
+  }
+
+  var newSettings = new Settings(obj["refresh.interval"]);
+  settingsController.saveSettings(newSettings);
+  synchronizeSettings();
+  closeModal("settings-modal");
+}
+
+function synchronizeSettings() {
+  var userSettings = settingsController.getUserSettings();
+  if (currentRefreshFn) {
+    window.clearInterval(currentRefreshFn);
+  }
+  if (userSettings.refreshRateSeconds > 0) {
+    currentRefreshFn = window.setInterval(function () {
+      runView.layout();
+    }, userSettings.refreshRateSeconds * 1000);
+  }
+}
+
 export function startApp() {
   userView.layout();
   runController.loadRuns();
   runView.layout();
-
-  // TODO make this configurable between having it auto update or not
-  // TODO add options - refresh rate and update to a datatable?
-  // window.setInterval(function () {
-  //   runView.layout();
-  // }, 1000);
+  settingsView.layout();
+  synchronizeSettings();
 }
