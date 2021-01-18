@@ -96,7 +96,7 @@ export function addUser() {
     // immediately switch
     userController.setUser(userName);
     userView.layout();
-    
+
     runController.loadRuns();
     runView.layout();
 
