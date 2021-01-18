@@ -28,7 +28,10 @@
           <i class="fa fa-github fa-lg"></i>
         </button>
         <button class="w3-btn w3-blue-grey w3-round-large" onclick="openModal('about-modal')">
-          <i class="fa fa-cog fa-question"></i>
+          <i class="fa fa-question fa-lg"></i>
+        </button>
+        <button class="w3-btn w3-blue-grey w3-round-large" onclick="openModal('tip-me-modal')">
+          <i class="fa fa-dollar"></i>/<i class="fa fa-coffee"></i>
         </button>
     </div>
     </div>
@@ -84,6 +87,34 @@
     <footer class="w3-container w3-padding">
       <div class="w3-bar w3-center">
         <button class="w3-button w3-gray" onclick="closeModal('about-modal')">Close</button>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<div id="tip-me-modal" class="w3-modal">
+  <div class="w3-modal-content">
+    <header class="w3-container w3-blue-grey">
+      <span onclick="closeModal('tip-me-modal')" class="w3-button w3-display-topright">&times;</span>
+      <h2><i class="fa fa-dollar"></i>/<i class="fa fa-coffee"></i></i> Buy me a Coffee</h2>
+    </header>
+    <div class="w3-panel">
+      <p>Tips are appreciated but not required, if you feel like buying me a coffee, here's some easy ways to do that:</p>
+
+      <div class="w3-row">
+        <form action="https://www.paypal.com/donate" method="post" target="_top">
+          <input type="hidden" name="business" value="TLJKK5M72C8NS" />
+          <input type="hidden" name="item_name" value="sc-refinery-tracker" />
+          <input type="hidden" name="currency_code" value="USD" />
+          <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+          <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+          </form>          
+      </div>
+    </div>
+    
+    <footer class="w3-container w3-padding">
+      <div class="w3-bar w3-center">
+        <button class="w3-button w3-gray" onclick="closeModal('tip-me-modal')">Close</button>
       </div>
     </footer>
   </div>
@@ -170,7 +201,7 @@
 
       <div class="w3-row w3-section">
         <label class="w3-text"><b>Refinery Location</b></label>
-        <select class="w3-select w3-border w3-light-grey" name="location">
+        <select id="add-job-select-location" class="w3-select w3-border w3-light-grey" name="location">
           <option value="" disabled selected>Choose Refinery</option>
           <option value="ARC-L1">ARC-L1</option>
           <option value="CRU-L1">CRU-L1</option>

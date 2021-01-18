@@ -114,8 +114,17 @@ export default class RunView {
   }
 
   isValidEntry(runEntry) {
-    // TODO validate
+    // TODO move to better location and use a change listener
 
-    return false;
+    var selecter = document.getElementById("add-job-select-location");
+    if (!runEntry.location) {
+      if (!selecter.classList.contains("w3-border-red")) {
+        selecter.classList.add("w3-border-red");
+      }
+      return false;
+    }
+
+    selecter.classList.remove("w3-border-red");
+    return true;
   }
 }

@@ -1,7 +1,13 @@
 Things to do:
 
-1. Form validation (pre submit?)
+1. Form validation - on change
+ * Currently it is on submit
+
 7. restructure source? 
+
+
+
+1. TIP check at top
 
 
 ## Restruct

@@ -25,9 +25,18 @@ var currentRefreshFn;
 export function submitJobEntry() {
   var form = document.getElementById("add-job-form");
   var inputs = form.querySelectorAll("input");
+
   var obj = {};
   for (var i = 0; i < inputs.length; i++) {
     var item = inputs.item(i);
+    if (item.name) {
+      obj[item.name] = item.value;
+    }
+  }
+
+  var selects = form.querySelectorAll("select");
+  for (var i = 0; i < selects.length; i++) {
+    var item = selects.item(i);
     if (item.name) {
       obj[item.name] = item.value;
     }
@@ -47,6 +56,10 @@ export function submitJobEntry() {
     durationStr += obj["duration.seconds"] + "s";
   }
   durationStr = durationStr.trim();
+  // if nothing was entered
+  if (durationStr == "") {
+    durationStr = "0s";
+  }
 
   var runEntry = new RunEntry(
     obj["name"],
