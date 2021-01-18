@@ -20,43 +20,26 @@
 </script>
 
 <div class="w3-container" id="welcome">
-  <p>Welcome</p>
-
-  <!-- Trigger/Open the Modal -->
-<button onclick="document.getElementById('id01').style.display='block'"
-class="w3-button">Open Modal</button>
-
-<!-- The Modal -->
-<div id="id01" class="w3-modal">
-  <div class="w3-modal-content">
-    <div class="w3-container">
-      <span onclick="document.getElementById('id01').style.display='none'"
-      class="w3-button w3-display-topright">&times;</span>
-      <p>Some text in the Modal..</p>
-      <p>Some text in the Modal..</p>
-    </div>
-  </div>
-</div>
+  <h2>About</h2>
+  <p>The Refinery Tracker will remember refinery jobs for you. All data is preserved locally through the usage of cookies and local storage</p>
+  <h2>Get Started</h2>
+  <p>Start by selecting a Username to tie your jobs to. Then use the "Add Refinery Job" button to start tracking Refinery Jobs.</p>
 </div>
 
 <div class="w3-container" id="user-selection">
-  <p>Select user here</p>
-</div>
-
-<div class="w3-container">
-  <button class="w3-button w3-black"  onclick="openModal('input-form-modal')">Add Refinery Event</button>
+  <p>Displaying refinery jobs for </p>
 </div>
 
 <!-- todo use login form: https://www.w3schools.com/w3css/w3css_modal.asp-->
 <div id="input-form-modal" class="w3-modal">
   <div class="w3-modal-content" id="input-form-parent">
     <div class="w3-container w3-teal">
-      <h2>Input Form</h2>
+      <h2>Refinery Job</h2>
       <span onclick="closeModal('input-form-modal')" class="w3-button w3-display-topright">&times;</span>
     </div>
     
     <form class="w3-container" id="entry-form">
-      <label class="w3-text-teal"><b>Refinery Location</b></label>
+      <label class="w3-text-teal"><b>Location</b></label>
       <select class="w3-select" name="location">
         <option value="" disabled selected>Choose Refinery</option>
         <option value="ARC-L1">ARC-L1</option>
@@ -77,11 +60,14 @@ class="w3-button">Open Modal</button>
   </div>
 </div>
 
-<div class="w3-container">
+<div class="w3-container w3-margin">
+  <div class="w3-container">
+    <button class="w3-button w3-black"  onclick="openModal('input-form-modal')">Add Refinery Job</button>
+  </div>
   <table id="runs-table" class="w3-table w3-bordered w3-striped">
     <thead>
       <!-- todo sortable -->
-      <tr class="w3-teal">
+      <tr>
         <th>Location</th>
         <th>Duration</th>
         <th>Time Remaining</th>
