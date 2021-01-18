@@ -1,14 +1,18 @@
 import { toDurationString } from "./durationParser";
+import { removeChildren} from './elementUtils';
 
 export default class RunView {
-  layout(runs) {
+  constructor(runController) {
+    this.runController = runController;
+  }
+
+  layout() {
+    var runs = this.runController.fetch();
+
     var table = document.getElementById("runs-table");
 
     var tableBody = table.getElementsByTagName("tbody")[0];
-
-    while (tableBody.firstChild) {
-      tableBody.firstChild.remove();
-    }
+    removeChildren(tableBody);
 
     runs.forEach((run) => {
       var row = document.createElement("tr");
@@ -52,7 +56,6 @@ export default class RunView {
       // TODO actions
 
       tableBody.appendChild(row);
-      console.log(run.uuid);
     });
   }
 }

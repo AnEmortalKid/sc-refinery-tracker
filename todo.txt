@@ -1,17 +1,30 @@
-
-
 Things to do:
 
 
-1. Duration transformer from "21d 3m" to seconds
-2. Refinery Locations drop down
-
 3. Form validation (pre submit?)
 
+
 4. Table re-arrengament (entry time | yield | status (ticker??) | actions)
+5. finish actions / wiring runs
+
+6. Layout Enhancements
+
+7. restructure source? 
+
+## Initial Load
+
+- Remove 'refinery table' until a user is selected (no add run button to null);
+
+## Restruct
 
 
-## Users
 
-"Name" -> "RefineryData"
+src/app.js
+
+src/runs/
+src/users/
+
+### App
+
+Expose view/controller for each thing?
 

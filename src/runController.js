@@ -3,8 +3,9 @@
  */
 import Run from "./run";
 import { v4 as uuidv4 } from "uuid";
-import CookieJar from "./cookieJar";
 import { toSeconds } from "./durationParser";
+
+const runsKey = "mining_tracker.runs";
 
 function toRun(runEntry) {
   var entryTime = new Date();
@@ -24,39 +25,67 @@ function toRun(runEntry) {
   return run;
 }
 
-function loadRuns() {
-  var raw = localStorage.getItem("mining_tracker.runs");
-
-  if (!raw) {
-    return [];
+function storeRuns(userName, runData) {
+  var rawRunData = localStorage.getItem(runsKey);
+  var allRuns = {};
+  if(rawRunData) {
+    allRuns = JSON.parse(rawRunData);
   }
 
-  if (raw === "") {
-    return [];
+  allRuns[userName] = runData;
+  localStorage.setItem(runsKey, JSON.stringify(allRuns));
+}
+
+function removeRunData(userName) {
+  var rawRunData = localStorage.getItem(runsKey);
+  var allRuns = {};
+  if(rawRunData) {
+    allRuns = JSON.parse(rawRunData);
   }
 
-  var runs = JSON.parse(raw);
-  return runs;
+  delete allRuns[userName];
+  localStorage.setItem(runsKey, JSON.stringify(allRuns));
 }
 
-function storeRuns(runData) {
-  localStorage.setItem("mining_tracker.runs", JSON.stringify(runData));
-}
+export default class RunController {
+  constructor(userController) {
+    this.runs = [];
+    this.userController = userController;
+  }
+ 
+  loadRuns()
+  {
+    var current = this.userController.getCurrentUser();
 
-class RunController {
-  constructor() {
-    if (!RunController.instance) {
-      // TODO eventually make pluggable storage
-      this.runs = loadRuns();
-      RunController.instance = this;
+    if(!current) {
+      this.runs = [];
+      return;
     }
 
-    return RunController.instance;
+    var raw = localStorage.getItem(runsKey);
+    if(!raw) {
+      this.runs = [];
+      return;
+    }
+
+    var allRuns = JSON.parse(raw);
+    if(!allRuns[current])
+    {
+      this.runs = [];
+    }
+    else {
+      this.runs = allRuns[current];
+    }
   }
 
   store(runEntry) {
     this.runs.push(toRun(runEntry));
-    storeRuns(this.runs);
+    //safe guard against myself
+    var current = this.userController.getCurrentUser();
+    if(current) {
+      storeRuns(current, this.runs);
+    }
+    // ELSE this should have been disabled
   }
 
   fetch() {
@@ -66,8 +95,9 @@ class RunController {
   remove(runId) {
     // remove
   }
-}
 
-export function get() {
-  return new RunController();
+  removeAllRuns(userName) {
+    this.runs = [];
+    removeRunData(userName);
+  }
 }
