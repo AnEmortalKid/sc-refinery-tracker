@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack",
     "test": "jest --coverage",
-    "prettier": "./node_modules/.bin/prettier --write src/**/*.js"
+    "prettier": "./node_modules/.bin/prettier --write .",
+    "prettier:check": "./node_modules/.bin/prettier --check ."
   },
   "repository": {
     "type": "git",
