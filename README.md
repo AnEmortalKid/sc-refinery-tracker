@@ -2,7 +2,10 @@
 
 The Refinery Tracker keeps track of your refinery jobs in StarCitizen
 
-See in action: http://anemortalkid.github.io/starcitizen/mining_tracker/
+See in action:
+
+LIVE: http://anemortalkid.github.io/starcitizen/mining_tracker/
+DEV: https://anemortalkid.github.io/sc-refinery-tracker/
 
 ## Data
 
