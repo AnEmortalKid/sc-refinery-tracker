@@ -23,7 +23,7 @@ function partToSeconds(part) {
 
   // hope it is a seconds string
   var numb = part.replace("s", "");
-  return numb;
+  return parseInt(numb);
 }
 
 export function toDurationString(seconds) {
