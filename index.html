@@ -12,6 +12,16 @@
   function closeModal(modalId) {
     document.getElementById(modalId).style.display = 'none'
   }
+
+  function toggleDetails(id) {
+  var x = document.getElementById(id);
+  if(x.classList.contains("w3-show")) {
+    x.classList.remove("w3-show");
+  }
+  else {
+    x.classList.add("w3-show");
+  }
+}
 </script>
 
 <body>
@@ -234,7 +244,7 @@
       </div>
 
       <div class="w3-row w3-section">
-        <label class="w3-text"><b>Expected Yield</b></label>
+        <label class="w3-text"><b>Expected Yield Units</b></label>
         <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0" name="yieldAmount">
       </div>
     </form>
@@ -286,9 +296,9 @@
         <th>Location</th>
         <th>Duration</th>
         <th>Time Remaining</th>
-        <th>Yield</th>
+        <th>Yield Units</th>
         <th>Status</th>
-        <th>Action</th>
+        <th>Actions</th>
       </tr>
   </thead>
   <tbody>
@@ -300,13 +310,13 @@
       <td>15h 22m 3s</td>
       <td>1500</td>
       <td>
-        <span class="w3-tag w3-orange">In Progress</span>
+        <span class="w3-tag w3-padding-small w3-round w3-amber w3-center">In Progress</span>
       </td>
       <td>
         <div class="w3-bar">
-          <button class="w3-btn w3-red w3-round-xlarge" onclick>
-            <i class="fa fa-trash fa-lg"></i>
-          </button>
+          <button class="w3-btn w3-blue-grey w3-round-xlarge"><i class="fa fa-cube"></i></button>
+          <button class="w3-btn w3-blue w3-round-xlarge"><i class="fa fa-pencil-square-o fa-lg"></i></button>
+          <button class="w3-btn w3-red w3-round-xlarge"><i class="fa fa-trash fa-lg"></i></button>
         </div>
       </td>
     </tr>
