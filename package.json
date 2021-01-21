@@ -21,6 +21,7 @@
   "homepage": "https://github.com/AnEmortalKid/anemortalkid.github.io#readme",
   "devDependencies": {
     "@babel/preset-env": "^7.12.11",
+    "copy-webpack-plugin": "^7.0.0",
     "css-loader": "^5.0.1",
     "express": "^4.17.1",
     "file-loader": "^6.2.0",
@@ -28,7 +29,7 @@
     "path": "^0.12.7",
     "prettier": "^2.2.1",
     "style-loader": "^2.0.0",
-    "webpack": "^5.15.0",
+    "webpack": "^5.16.0",
     "webpack-cli": "^4.3.1"
   },
   "dependencies": {

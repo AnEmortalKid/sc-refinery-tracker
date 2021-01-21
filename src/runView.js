@@ -94,11 +94,12 @@ export default class RunView {
       yieldData.textContent = run.yieldAmount;
       row.appendChild(yieldData);
 
+      // <span class="w3-tag w3-padding-small w3-round w3-orange w3-center">In Progress</span>
       var status = document.createElement("td");
       var statusTag = document.createElement("span");
-      statusTag.classList = ["w3-tag"];
+      statusTag.classList.add("w3-tag", "w3-padding-small", "w3-round");
       if (remainingSeconds > 1) {
-        statusTag.classList.add("w3-orange");
+        statusTag.classList.add("w3-amber");
         statusTag.textContent = "In Progress";
       } else {
         statusTag.classList.add("w3-green");
