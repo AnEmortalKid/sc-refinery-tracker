@@ -28,10 +28,10 @@ describe("toSeconds", () => {
 describe("toDurationString", () => {
   test("< 0", () => {
     expect(toDurationString(-1)).toBe("");
-  })
+  });
   test("0", () => {
     expect(toDurationString(0)).toBe("");
-  })
+  });
   test("seconds only", () => {
     var seconds = 25;
     expect(toDurationString(seconds)).toBe("25s");
@@ -49,45 +49,44 @@ describe("toDurationString", () => {
     var seconds = 59 * 60;
     expect(toDurationString(seconds)).toBe("59m");
   });
-  
+
   test("59m 59s", () => {
-    var seconds = (59 * 60) + 59;
+    var seconds = 59 * 60 + 59;
     expect(toDurationString(seconds)).toBe("59m 59s");
   });
 
   test("1 hour", () => {
-    var seconds = (60 * 60)
+    var seconds = 60 * 60;
     expect(toDurationString(seconds)).toBe("1h");
   });
 
-  
   test("1 hour 59m 59s", () => {
-    var seconds = (1 * 60 * 60) + (59 * 60) + 59
+    var seconds = 1 * 60 * 60 + 59 * 60 + 59;
     expect(toDurationString(seconds)).toBe("1h 59m 59s");
   });
 
   test("3 hours", () => {
-    var seconds = (3 * 60 * 60) ;
+    var seconds = 3 * 60 * 60;
     expect(toDurationString(seconds)).toBe("3h");
   });
 
   test("23h 59m 59s", () => {
-    var seconds = (23 * 60 * 60)  + (59 * 60) + 59;
+    var seconds = 23 * 60 * 60 + 59 * 60 + 59;
     expect(toDurationString(seconds)).toBe("23h 59m 59s");
   });
 
   test("24h becomes 1d", () => {
-  var seconds = (24 * 60 * 60);
+    var seconds = 24 * 60 * 60;
     expect(toDurationString(seconds)).toBe("1d");
   });
 
   test("over a day", () => {
-    var seconds = (25 * 60 * 60);
-      expect(toDurationString(seconds)).toBe("1d 1h");
-    });
+    var seconds = 25 * 60 * 60;
+    expect(toDurationString(seconds)).toBe("1d 1h");
+  });
 
-    test("under 2 days", () => {
-      var seconds = (48 * 60 * 60) -1;
-      expect(toDurationString(seconds)).toBe("1d 23h 59m 59s");
-    });
+  test("under 2 days", () => {
+    var seconds = 48 * 60 * 60 - 1;
+    expect(toDurationString(seconds)).toBe("1d 23h 59m 59s");
+  });
 });
