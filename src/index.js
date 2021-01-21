@@ -12,6 +12,10 @@ import Settings from "./settings/settings";
 import SettingsController from "./settings/settingsController";
 import SettingsView from "./settings/settingsView";
 
+import Controls from "./controls/controls";
+
+export const controls = new Controls();
+
 const userController = new UserController();
 const userView = new UserView(userController);
 
@@ -137,7 +141,7 @@ export function confirmRemoveAllJobs() {
 
 export function prepareRemoveUser() {
   userView.prepareRemoveModal();
-  openModal("remove-user-form-modal");
+  controls.openModal("remove-user-form-modal");
 }
 
 export function removeRun(runId) {
@@ -147,7 +151,7 @@ export function removeRun(runId) {
 
 export function prepareSettingsModal() {
   settingsView.prepareSettingsModal();
-  openModal("settings-modal");
+  controls.openModal("settings-modal");
 }
 
 export function applySettings() {

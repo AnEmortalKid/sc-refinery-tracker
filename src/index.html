@@ -4,26 +4,6 @@
 <head>
 </head>
 
-<script>
-  function openModal(modalId) {
-    document.getElementById(modalId).style.display = 'block';
-  }
-
-  function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none'
-  }
-
-  function toggleDetails(id) {
-  var x = document.getElementById(id);
-  if(x.classList.contains("w3-show")) {
-    x.classList.remove("w3-show");
-  }
-  else {
-    x.classList.add("w3-show");
-  }
-}
-</script>
-
 <body>
   <div id="header">
     <header class="w3-container w3-blue-grey">
@@ -37,10 +17,10 @@
         <button class="w3-btn w3-blue-grey w3-round-large" onclick="location.href ='https://github.com/AnEmortalKid/sc-refinery-tracker'">
           <i class="fa fa-github fa-lg"></i>
         </button>
-        <button class="w3-btn w3-blue-grey w3-round-large" onclick="openModal('about-modal')">
+        <button class="w3-btn w3-blue-grey w3-round-large" onclick="app.controls.openModal('about-modal')">
           <i class="fa fa-question fa-lg"></i>
         </button>
-        <button class="w3-btn w3-blue-grey w3-round-large" onclick="openModal('tip-me-modal')">
+        <button class="w3-btn w3-blue-grey w3-round-large" onclick="app.controls.openModal('tip-me-modal')">
           <i class="fa fa-dollar"></i>/<i class="fa fa-coffee"></i>
         </button>
     </div>
@@ -50,7 +30,7 @@
 <div id="settings-modal" class="w3-modal">
   <div class="w3-modal-content">
     <header class="w3-container w3-blue-grey">
-      <span onclick="closeModal('settings-modal')" class="w3-button w3-display-topright">&times;</span>
+      <span onclick="app.controls.closeModal('settings-modal')" class="w3-button w3-display-topright">&times;</span>
       <h2><i class="fa fa-cog"></i> <span id="user-settings-header-placeholder">User</span>'s Settings</h2>
     </header>
     
@@ -64,7 +44,7 @@
     <footer class="w3-container w3-padding">
       <div class="w3-bar w3-center">
         <button class="w3-btn w3-blue" onclick="app.applySettings()">Apply</button>
-        <button class="w3-button w3-gray" onclick="closeModal('settings-modal')">Close</button>
+        <button class="w3-button w3-gray" onclick="app.controls.closeModal('settings-modal')">Close</button>
       </div>
     </footer>
   </div>
@@ -73,7 +53,7 @@
 <div id="about-modal" class="w3-modal">
   <div class="w3-modal-content">
     <header class="w3-container w3-blue-grey">
-      <span onclick="closeModal('about-modal')" class="w3-button w3-display-topright">&times;</span>
+      <span onclick="app.controls.closeModal('about-modal')" class="w3-button w3-display-topright">&times;</span>
       <h2><i class="fa fa-question"></i> About</h2>
     </header>
     <div class="w3-panel">
@@ -96,7 +76,7 @@
     
     <footer class="w3-container w3-padding">
       <div class="w3-bar w3-center">
-        <button class="w3-button w3-gray" onclick="closeModal('about-modal')">Close</button>
+        <button class="w3-button w3-gray" onclick="app.controls.closeModal('about-modal')">Close</button>
       </div>
     </footer>
   </div>
@@ -105,7 +85,7 @@
 <div id="tip-me-modal" class="w3-modal">
   <div class="w3-modal-content">
     <header class="w3-container w3-blue-grey">
-      <span onclick="closeModal('tip-me-modal')" class="w3-button w3-display-topright">&times;</span>
+      <span onclick="app.controls.closeModal('tip-me-modal')" class="w3-button w3-display-topright">&times;</span>
       <h2><i class="fa fa-dollar"></i>/<i class="fa fa-coffee"></i></i> Buy me a Coffee</h2>
     </header>
     <div class="w3-panel">
@@ -124,7 +104,7 @@
     
     <footer class="w3-container w3-padding">
       <div class="w3-bar w3-center">
-        <button class="w3-button w3-gray" onclick="closeModal('tip-me-modal')">Close</button>
+        <button class="w3-button w3-gray" onclick="app.controls.closeModal('tip-me-modal')">Close</button>
       </div>
     </footer>
   </div>
@@ -133,7 +113,7 @@
 <div id="add-user-form-modal" class="w3-modal">
   <div class="w3-modal-content" id="add-user-form-parent">
     <header class="w3-container w3-blue-gray">
-      <span onclick="closeModal('add-user-form-modal')"
+      <span onclick="app.controls.closeModal('add-user-form-modal')"
       class="w3-button w3-display-topright">&times;</span>
       <h2><i class="fa fa-user-plus"></i></i> Add User</h2>
     </header>
@@ -148,7 +128,7 @@
     <footer class="w3-container w3-padding">
       <div class="w3-bar w3-center">
         <button class="w3-btn w3-blue" onclick="app.addUser()">Confirm</button>
-        <button class="w3-button w3-gray" onclick="closeModal('add-user-form-modal')">Cancel</button>
+        <button class="w3-button w3-gray" onclick="app.controls.closeModal('add-user-form-modal')">Cancel</button>
       </div>
     </footer>
   </div>
@@ -157,7 +137,7 @@
 <div id="remove-user-form-modal" class="w3-modal">
   <div class="w3-modal-content  w3-pale-red" id="remove-user-form-parent">
     <header class="w3-container w3-red">
-      <span onclick="closeModal('remove-user-form-modal')" class="w3-button w3-display-topright">&times;</span>
+      <span onclick="app.controls.closeModal('remove-user-form-modal')" class="w3-button w3-display-topright">&times;</span>
       <h2><i class="fa fa-user-times"></i> Remove <span id="remove-user-header-placeholder">User</span>?</h2>
     </header>
     <div class="w3-panel">
@@ -167,7 +147,7 @@
     <footer class="w3-container w3-padding">
       <div class="w3-bar w3-center">
         <button class="w3-button w3-red" onclick="app.confirmRemoveUser()">Confirm</button>
-        <button class="w3-button w3-gray" onclick="closeModal('remove-user-form-modal')">Cancel</button>
+        <button class="w3-button w3-gray" onclick="app.controls.closeModal('remove-user-form-modal')">Cancel</button>
       </div>
     </footer>
   </div>
@@ -185,7 +165,7 @@
     </div>
     <div class="w3-half">
       <div class="w3-bar">
-        <button class="w3-button w3-blue w3-round-large" onclick="openModal('add-user-form-modal')">Create User</button>
+        <button class="w3-button w3-blue w3-round-large" onclick="app.controls.openModal('add-user-form-modal')">Create User</button>
         <button class="w3-button w3-red w3-round-large" id="remove-user-btn" onclick="app.prepareRemoveUser()">Remove User</button>
       </div>
     </div>
@@ -196,7 +176,7 @@
   
   <div class="w3-modal-content"  id="add-job-form-content">
     <header class="w3-container w3-blue-gray">
-      <span onclick="closeModal('add-job-modal')"
+      <span onclick="app.controls.closeModal('add-job-modal')"
       class="w3-button w3-display-topright">&times;</span>
       <h2><i class="fa fa-plus-square"></i></i> Add Refinery Job</h2>
     </header>
@@ -253,7 +233,7 @@
   <footer class="w3-container w3-padding">
     <div class="w3-bar w3-center">
       <button class="w3-button w3-blue" onclick="app.submitJobEntry()">Confirm</button>
-      <button class="w3-button w3-gray" onclick="closeModal('add-job-modal')">Cancel</button>
+      <button class="w3-button w3-gray" onclick="app.controls.closeModal('add-job-modal')">Cancel</button>
     </div>
   </footer>
   </div>
@@ -262,7 +242,7 @@
 <div id="remove-all-jobs-modal" class="w3-modal">
   <div class="w3-modal-content  w3-pale-red" id="remove-all-jobs-form-parent">
     <div class="w3-container w3-red">
-      <span onclick="closeModal('remove-all-jobs-modal')" class="w3-button w3-display-topright">&times;</span>
+      <span onclick="app.controls.closeModal('remove-all-jobs-modal')" class="w3-button w3-display-topright">&times;</span>
       <h2><i class="fa fa-minus-square"></i> Remove All Jobs</span></h2>
     </div>
     <div class="w3-panel">
@@ -271,7 +251,7 @@
     <footer class="w3-container w3-padding">
       <div class="w3-bar w3-center">
         <button class="w3-button w3-red" onclick="app.confirmRemoveAllJobs()">Confirm</button>
-        <button class="w3-button w3-gray" onclick="closeModal('remove-all-jobs-modal')">Cancel</button>
+        <button class="w3-button w3-gray" onclick="app.controls.closeModal('remove-all-jobs-modal')">Cancel</button>
       </div>
     </footer>
   </div>
@@ -284,8 +264,8 @@
   </div>
 
   <div class="w3-margin-top w3-margin-bottom">
-    <button class="w3-button w3-blue w3-round-large"  onclick="openModal('add-job-modal')">Add Job</button>
-    <button id="remove-all-jobs-btn" class="w3-button w3-red w3-round-large" onclick="openModal('remove-all-jobs-modal')">Remove All</button>
+    <button class="w3-button w3-blue w3-round-large"  onclick="app.controls.openModal('add-job-modal')">Add Job</button>
+    <button id="remove-all-jobs-btn" class="w3-button w3-red w3-round-large" onclick="app.controls.openModal('remove-all-jobs-modal')">Remove All</button>
   </div>
 
   <!-- todo make sortable -->

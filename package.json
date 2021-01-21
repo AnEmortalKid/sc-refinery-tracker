@@ -7,7 +7,8 @@
     "build": "webpack",
     "test": "jest --coverage",
     "prettier": "./node_modules/.bin/prettier --write .",
-    "prettier:check": "./node_modules/.bin/prettier --check ."
+    "prettier:check": "./node_modules/.bin/prettier --check .",
+    "start:dev": "webpack serve"
   },
   "repository": {
     "type": "git",
@@ -30,7 +31,8 @@
     "prettier": "^2.2.1",
     "style-loader": "^2.0.0",
     "webpack": "^5.16.0",
-    "webpack-cli": "^4.3.1"
+    "webpack-cli": "^4.3.1",
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
     "font-awesome": "^4.7.0",
