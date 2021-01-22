@@ -1,0 +1,23 @@
+<div id="settings-modal" class="w3-modal">
+    <div class="w3-modal-content">
+      <header class="w3-container w3-blue-grey">
+        <span onclick="app.controls.closeModal('settings-modal')" class="w3-button w3-display-topright">&times;</span>
+        <h2><i class="fa fa-cog"></i> <span id="user-settings-header-placeholder">User</span>'s Settings</h2>
+      </header>
+      
+      <form class="w3-container" id="settings-form">
+        <div class="w3-row w3-section">
+          <label class="w3-text"><b>Refresh Interval in Seconds</b></label>
+          <input class="w3-input w3-border w3-light-grey" type="number" name="refresh.interval" min="0">
+        </div>
+      </form>
+  
+      <footer class="w3-container w3-padding">
+        <div class="w3-bar w3-center">
+          <button class="w3-btn w3-blue" onclick="app.applySettings()">Apply</button>
+          <button class="w3-button w3-gray" onclick="app.controls.closeModal('settings-modal')">Close</button>
+        </div>
+      </footer>
+    </div>
+  </div>
+  
