@@ -1,6 +1,13 @@
 export default class Controls {
   openModal(modalId) {
-    document.getElementById(modalId).style.display = "block";
+    var modal = document.getElementById(modalId);
+    modal.style.display = "block";
+
+    // if it has a form, focus the first element
+    var inputs = modal.querySelectorAll("input");
+    if (inputs.length > 0) {
+      inputs[0].focus();
+    }
   }
 
   closeModal(modalId) {
