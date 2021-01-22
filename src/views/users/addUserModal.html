@@ -1,0 +1,23 @@
+<div id="add-user-form-modal" class="w3-modal">
+    <div class="w3-modal-content" id="add-user-form-parent">
+      <header class="w3-container w3-blue-gray">
+        <span onclick="app.controls.closeModal('add-user-form-modal')"
+        class="w3-button w3-display-topright">&times;</span>
+        <h2><i class="fa fa-user-plus"></i></i> Add User</h2>
+      </header>
+      
+      <form class="w3-container" id="user-form">
+        <div class="w3-row w3-section">
+          <label class="w3-text"><b>Username</b></label>
+          <input class="w3-input w3-border w3-light-grey" type="text" name="username" placeholder="Name of the user">
+        </div>
+      </form>
+  
+      <footer class="w3-container w3-padding">
+        <div class="w3-bar w3-center">
+          <button class="w3-btn w3-blue" onclick="app.addUser()">Confirm</button>
+          <button class="w3-button w3-gray" onclick="app.controls.closeModal('add-user-form-modal')">Cancel</button>
+        </div>
+      </footer>
+    </div>
+  </div>

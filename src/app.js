@@ -12,6 +12,10 @@ import Settings from "./settings/settings";
 import SettingsController from "./settings/settingsController";
 import SettingsView from "./settings/settingsView";
 
+import Controls from "./controls/controls";
+
+export const controls = new Controls();
+
 const userController = new UserController();
 const userView = new UserView(userController);
 
@@ -70,7 +74,7 @@ export function submitJobEntry() {
 
   if (runView.isValidEntry(runEntry)) {
     runController.store(runEntry);
-    closeModal("add-job-modal");
+    controls.closeModal("add-job-modal");
     runView.layout();
   } else {
     // TODO SHAKE IT
@@ -104,7 +108,7 @@ export function addUser() {
     synchronizeSettings();
   }
 
-  closeModal("add-user-form-modal");
+  controls.closeModal("add-user-form-modal");
 }
 
 export function onUserChange() {
@@ -126,18 +130,18 @@ export function confirmRemoveUser() {
   settingsView.layout();
   synchronizeSettings();
 
-  closeModal("remove-user-form-modal");
+  controls.closeModal("remove-user-form-modal");
 }
 
 export function confirmRemoveAllJobs() {
   runController.removeAllRuns(userController.getCurrentUser());
   runView.layout();
-  closeModal("remove-all-jobs-modal");
+  controls.closeModal("remove-all-jobs-modal");
 }
 
 export function prepareRemoveUser() {
   userView.prepareRemoveModal();
-  openModal("remove-user-form-modal");
+  controls.openModal("remove-user-form-modal");
 }
 
 export function removeRun(runId) {
@@ -147,7 +151,7 @@ export function removeRun(runId) {
 
 export function prepareSettingsModal() {
   settingsView.prepareSettingsModal();
-  openModal("settings-modal");
+  controls.openModal("settings-modal");
 }
 
 export function applySettings() {
@@ -164,7 +168,7 @@ export function applySettings() {
   var newSettings = new Settings(obj["refresh.interval"]);
   settingsController.saveSettings(newSettings);
   synchronizeSettings();
-  closeModal("settings-modal");
+  controls.closeModal("settings-modal");
 }
 
 function synchronizeSettings() {

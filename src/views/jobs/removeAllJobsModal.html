@@ -1,0 +1,17 @@
+<div id="remove-all-jobs-modal" class="w3-modal">
+  <div class="w3-modal-content  w3-pale-red" id="remove-all-jobs-form-parent">
+    <div class="w3-container w3-red">
+      <span onclick="app.controls.closeModal('remove-all-jobs-modal')" class="w3-button w3-display-topright">&times;</span>
+      <h2><i class="fa fa-minus-square"></i> Remove All Jobs</span></h2>
+    </div>
+    <div class="w3-panel">
+      <p>This will remove all the refinery jobs for the user. Are you sure?</p>
+    </div>
+    <footer class="w3-container w3-padding">
+      <div class="w3-bar w3-center">
+        <button class="w3-button w3-red" onclick="app.confirmRemoveAllJobs()">Confirm</button>
+        <button class="w3-button w3-gray" onclick="app.controls.closeModal('remove-all-jobs-modal')">Cancel</button>
+      </div>
+    </footer>
+  </div>
+</div>
