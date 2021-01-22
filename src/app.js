@@ -94,7 +94,7 @@ export function addUser() {
 
   var userName = obj["username"];
 
-  // TODO perhaps return something?
+  // TODO highlight red
   if (!userController.hasUser(userName)) {
     userController.storeUser(userName);
     // immediately switch
@@ -108,6 +108,7 @@ export function addUser() {
     synchronizeSettings();
   }
 
+  // TODO return correct control
   controls.closeModal("add-user-form-modal");
 }
 
@@ -184,6 +185,8 @@ function synchronizeSettings() {
 }
 
 export function startApp() {
+  controls.setEscapeClosesModals();
+
   userView.layout();
   runController.loadRuns();
   runView.layout();

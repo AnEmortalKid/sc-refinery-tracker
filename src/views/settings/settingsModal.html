@@ -5,10 +5,12 @@
         <h2><i class="fa fa-cog"></i> <span id="user-settings-header-placeholder">User</span>'s Settings</h2>
       </header>
       
-      <form class="w3-container" id="settings-form">
+      <form class="w3-container" id="settings-form" onsubmit="app.applySettings(); return false;">
         <div class="w3-row w3-section">
           <label class="w3-text"><b>Refresh Interval in Seconds</b></label>
           <input class="w3-input w3-border w3-light-grey" type="number" name="refresh.interval" min="0">
+
+          <input type="submit" hidden>
         </div>
       </form>
   
