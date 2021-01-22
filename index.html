@@ -15,7 +15,7 @@
       <button id="user-settings-modal-btn" class="w3-btn w3-blue-grey w3-round-large w3-disabled" onclick="app.prepareSettingsModal()">
         <i class="fa fa-cog fa-lg"></i>
       </button>
-      <button class="w3-btn w3-blue-grey w3-round-large" onclick="location.href ='https://github.com/AnEmortalKid/sc-refinery-tracker'">
+      <button class="w3-btn w3-blue-grey w3-round-large" target="_blank" onclick="window.open('https://github.com/AnEmortalKid/sc-refinery-tracker', '_blank')">
         <i class="fa fa-github fa-lg"></i>
       </button>
       <button class="w3-btn w3-blue-grey w3-round-large" onclick="app.controls.openModal('about-modal')">
@@ -36,10 +36,12 @@
         <h2><i class="fa fa-cog"></i> <span id="user-settings-header-placeholder">User</span>'s Settings</h2>
       </header>
       
-      <form class="w3-container" id="settings-form">
+      <form class="w3-container" id="settings-form" onsubmit="app.applySettings(); return false;">
         <div class="w3-row w3-section">
           <label class="w3-text"><b>Refresh Interval in Seconds</b></label>
           <input class="w3-input w3-border w3-light-grey" type="number" name="refresh.interval" min="0">
+
+          <input type="submit" hidden>
         </div>
       </form>
   
@@ -112,28 +114,31 @@
   </div>
 
   <div id="add-user-form-modal" class="w3-modal">
-    <div class="w3-modal-content" id="add-user-form-parent">
-      <header class="w3-container w3-blue-gray">
-        <span onclick="app.controls.closeModal('add-user-form-modal')"
-        class="w3-button w3-display-topright">&times;</span>
-        <h2><i class="fa fa-user-plus"></i></i> Add User</h2>
-      </header>
-      
-      <form class="w3-container" id="user-form">
-        <div class="w3-row w3-section">
-          <label class="w3-text"><b>Username</b></label>
-          <input class="w3-input w3-border w3-light-grey" type="text" name="username" placeholder="Name of the user">
-        </div>
-      </form>
-  
-      <footer class="w3-container w3-padding">
-        <div class="w3-bar w3-center">
-          <button class="w3-btn w3-blue" onclick="app.addUser()">Confirm</button>
-          <button class="w3-button w3-gray" onclick="app.controls.closeModal('add-user-form-modal')">Cancel</button>
-        </div>
-      </footer>
-    </div>
+  <div class="w3-modal-content" id="add-user-form-parent">
+    <header class="w3-container w3-blue-gray">
+      <span onclick="app.controls.closeModal('add-user-form-modal')"
+      class="w3-button w3-display-topright">&times;</span>
+      <h2><i class="fa fa-user-plus"></i></i> Add User</h2>
+    </header>
+    
+    <form class="w3-container" id="user-form" onsubmit="app.addUser(); return false;">
+      <div class="w3-row w3-section">
+        <label class="w3-text"><b>Username</b></label>
+        <input id="user-form.username" class="w3-input w3-border w3-light-grey" type="text" name="username" placeholder="Name of the user">
+
+        <input type="submit" hidden>
+      </div>
+    </form>
+
+    <footer class="w3-container w3-padding">
+      <div class="w3-bar w3-center">
+        <button class="w3-btn w3-blue" onclick="app.addUser()">Confirm</button>
+        <button class="w3-button w3-gray" onclick="app.controls.closeModal('add-user-form-modal')">Cancel</button>
+      </div>
+    </footer>
   </div>
+</div>
+
   <div id="remove-user-form-modal" class="w3-modal">
     <div class="w3-modal-content  w3-pale-red" id="remove-user-form-parent">
       <header class="w3-container w3-red">
@@ -175,70 +180,73 @@
 
   <div id="add-job-modal" class="w3-modal">
   
-    <div class="w3-modal-content"  id="add-job-form-content">
-      <header class="w3-container w3-blue-gray">
-        <span onclick="app.controls.closeModal('add-job-modal')"
-        class="w3-button w3-display-topright">&times;</span>
-        <h2><i class="fa fa-plus-square"></i></i> Add Refinery Job</h2>
-      </header>
-      
-    <div class="w3-panel">
-      <form class="w3-container" id="add-job-form">
-  
-        <div class="w3-row w3-section">
-          <label class="w3-text"><b>Name</b></label>
-          <input class="w3-input w3-border w3-light-grey" type="text" name="name" placeholder="Something to remember this job by">
-        </div>
-  
-        <div class="w3-row w3-section">
-          <label class="w3-text"><b>Refinery Location</b></label>
-          <select id="add-job-select-location" class="w3-select w3-border w3-light-grey" name="location">
-            <option value="" disabled selected>Choose Refinery</option>
-            <option value="ARC-L1">ARC-L1</option>
-            <option value="CRU-L1">CRU-L1</option>
-            <option value="HUR-L1">HUR-L1</option>
-            <option value="HUR-L2">HUR-L2</option>
-            <option value="MIC-L1">MIC-L1</option>
-          </select>
-        </div>
-      
-        <div class="w3-row w3-section">
-          <label class="w3-text"><b>Expected Duration</b></label>
-          <div class="w3-row-padding">
-            <div class="w3-quarter">
-              <label>Days</label>
-              <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0" name="duration.days">
-            </div>
-            <div class="w3-quarter">
-              <label>Hours</label>
-              <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0"  name="duration.hours">
-            </div>
-            <div class="w3-quarter">
-              <label>Minutes</label>
-              <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0"  min="0" name="duration.minutes">
-            </div>
-            <div class="w3-quarter">
-              <label>Seconds</label>
-              <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0"  name="duration.seconds">
-            </div>
+  <div class="w3-modal-content"  id="add-job-form-content">
+    <header class="w3-container w3-blue-gray">
+      <span onclick="app.controls.closeModal('add-job-modal')"
+      class="w3-button w3-display-topright">&times;</span>
+      <h2><i class="fa fa-plus-square"></i></i> Add Refinery Job</h2>
+    </header>
+    
+  <div class="w3-panel">
+    <form class="w3-container" id="add-job-form" onsubmit="app.submitJobEntry(); return false;">
+
+      <div class="w3-row w3-section">
+        <label class="w3-text"><b>Name</b></label>
+        <input class="w3-input w3-border w3-light-grey" type="text" name="name" placeholder="Something to remember this job by">
+      </div>
+
+      <div class="w3-row w3-section">
+        <label class="w3-text"><b>Refinery Location</b></label>
+        <select id="add-job-select-location" class="w3-select w3-border w3-light-grey" name="location">
+          <option value="" disabled selected>Choose Refinery</option>
+          <option value="ARC-L1">ARC-L1</option>
+          <option value="CRU-L1">CRU-L1</option>
+          <option value="HUR-L1">HUR-L1</option>
+          <option value="HUR-L2">HUR-L2</option>
+          <option value="MIC-L1">MIC-L1</option>
+        </select>
+      </div>
+    
+      <div class="w3-row w3-section">
+        <label class="w3-text"><b>Expected Duration</b></label>
+        <div class="w3-row-padding">
+          <div class="w3-quarter">
+            <label>Days</label>
+            <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0" name="duration.days">
+          </div>
+          <div class="w3-quarter">
+            <label>Hours</label>
+            <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0"  name="duration.hours">
+          </div>
+          <div class="w3-quarter">
+            <label>Minutes</label>
+            <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0"  min="0" name="duration.minutes">
+          </div>
+          <div class="w3-quarter">
+            <label>Seconds</label>
+            <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0"  name="duration.seconds">
           </div>
         </div>
-  
-        <div class="w3-row w3-section">
-          <label class="w3-text"><b>Expected Yield Units</b></label>
-          <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0" name="yieldAmount">
-        </div>
-      </form>
-    </div>
-  
-    <footer class="w3-container w3-padding">
-      <div class="w3-bar w3-center">
-        <button class="w3-button w3-blue" onclick="app.submitJobEntry()">Confirm</button>
-        <button class="w3-button w3-gray" onclick="app.controls.closeModal('add-job-modal')">Cancel</button>
       </div>
-    </footer>
-    </div>
+
+      <div class="w3-row w3-section">
+        <label class="w3-text"><b>Expected Yield Units</b></label>
+        <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0" name="yieldAmount">
+      </div>
+
+      <input type="submit" hidden>
+    </form>
   </div>
+
+  <footer class="w3-container w3-padding">
+    <div class="w3-bar w3-center">
+      <button class="w3-button w3-blue" onclick="app.submitJobEntry()">Confirm</button>
+      <button class="w3-button w3-gray" onclick="app.controls.closeModal('add-job-modal')">Cancel</button>
+    </div>
+  </footer>
+  </div>
+</div>
+
   <div id="remove-all-jobs-modal" class="w3-modal">
   <div class="w3-modal-content  w3-pale-red" id="remove-all-jobs-form-parent">
     <div class="w3-container w3-red">
@@ -308,39 +316,5 @@
 <script src="main.js"></script></body>
 <script src="main.js"></script>
 <script>app.startApp()</script>
-
-<!-- <table class="w3-table w3-bordered w3-striped">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Location</th>
-        <th>Duration</th>
-        <th>Time Remaining</th>
-        <th>Yield Units</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-  </thead>
-  <tbody>
-    <!-- placeholder -->
-    <tr>
-      <td>Borase/Laranite</td>
-      <td>CRU-L1</td>
-      <td>21d 43m</td>
-      <td>15h 22m 3s</td>
-      <td>1500</td>
-      <td>
-        <span class="w3-tag w3-padding-small w3-round w3-amber w3-center">In Progress</span>
-      </td>
-      <td>
-        <div class="w3-bar">
-          <button class="w3-btn w3-blue-grey w3-round-xlarge"><i class="fa fa-cube"></i></button>
-          <button class="w3-btn w3-blue w3-round-xlarge"><i class="fa fa-pencil-square-o fa-lg"></i></button>
-          <button class="w3-btn w3-red w3-round-xlarge"><i class="fa fa-trash fa-lg"></i></button>
-        </div>
-      </td>
-    </tr>
-  </tbody>
-  </table> -->
 
 </html>
