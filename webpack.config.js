@@ -20,7 +20,7 @@ module.exports = {
     //   ],
     // }),
     new HtmlWebpackPlugin({
-      template: "./src/index.html",
+      template: "./src/app.html",
     }),
   ],
   module: {

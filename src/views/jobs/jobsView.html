@@ -1,0 +1,46 @@
+<div class="w3-container w3-padding w3-margin w3-border-blue-gray w3-border" id="refinery-tracker-container">
+  
+    <div class="w3-center">
+      <h2>Jobs</h2>
+    </div>
+  
+    <div class="w3-margin-top w3-margin-bottom">
+      <button class="w3-button w3-blue w3-round-large"  onclick="app.controls.openModal('add-job-modal')">Add Job</button>
+      <button id="remove-all-jobs-btn" class="w3-button w3-red w3-round-large" onclick="app.controls.openModal('remove-all-jobs-modal')">Remove All</button>
+    </div>
+  
+    <!-- todo make sortable -->
+    <table id="runs-table" class="w3-table w3-bordered w3-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Duration</th>
+          <th>Time Remaining</th>
+          <th>Yield Units</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+      <!-- placeholder -->
+      <tr>
+        <td>Borase/Laranite</td>
+        <td>CRU-L1</td>
+        <td>21d 43m</td>
+        <td>15h 22m 3s</td>
+        <td>1500</td>
+        <td>
+          <span class="w3-tag w3-padding-small w3-round w3-amber w3-center">In Progress</span>
+        </td>
+        <td>
+          <div class="w3-bar">
+            <button class="w3-btn w3-blue-grey w3-round-xlarge"><i class="fa fa-cube"></i></button>
+            <button class="w3-btn w3-blue w3-round-xlarge"><i class="fa fa-pencil-square-o fa-lg"></i></button>
+            <button class="w3-btn w3-red w3-round-xlarge"><i class="fa fa-trash fa-lg"></i></button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    </table>
+  </div>

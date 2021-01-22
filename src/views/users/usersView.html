@@ -1,0 +1,18 @@
+<div class="w3-container w3-padding w3-margin">
+    <div class="w3-center">
+      <h2>User</h2>
+    </div>
+    <div class="w3-row-padding">
+      <div class="w3-half">
+        <select id="user-selection" class="w3-select w3-border" name="user"  onchange="app.onUserChange()">
+          <option value="" disabled selected>No users available. Create a new User.</option>
+        </select>
+      </div>
+      <div class="w3-half">
+        <div class="w3-bar">
+          <button class="w3-button w3-blue w3-round-large" onclick="app.controls.openModal('add-user-form-modal')">Create User</button>
+          <button class="w3-button w3-red w3-round-large" id="remove-user-btn" onclick="app.prepareRemoveUser()">Remove User</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+  <div id="header-view">
+    <%= require('html-loader!./views/header.html') %>
+  </div>
+
+  <%= require('html-loader!./views/settings/settingsModal.html') %>
+  <%= require('html-loader!./views/aboutModal.html') %>
+  <%= require('html-loader!./views/tipMeModal.html') %>
+
+  <%= require('html-loader!./views/users/addUserModal.html') %>
+  <%= require('html-loader!./views/users/removeUserModal.html') %>
+  <div id="user-view">
+    <%= require('html-loader!./views/users/usersView.html') %>  
+  </div>
+
+  <%= require('html-loader!./views/jobs/addJobModal.html') %>
+  <%= require('html-loader!./views/jobs/removeAllJobsModal.html') %>
+
+  <div id="jobs-view">
+    <%= require('html-loader!./views/jobs/jobsView.html') %>
+  </div>
+
+</body>
+<script src="main.js"></script>
+<script>app.startApp()</script>
+
+<%= require('html-loader!./views/tableView.html') %>
+
+</html>

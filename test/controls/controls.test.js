@@ -4,6 +4,11 @@
 import Controls from "../../src/controls/controls";
 
 const controls = new Controls();
+
+beforeEach(() => {
+  document.body.innerHTML = "";
+});
+
 test("closeModal", () => {
   var created = document.createElement("div");
   created.setAttribute("id", "closable");
