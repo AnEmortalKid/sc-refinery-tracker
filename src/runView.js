@@ -47,12 +47,14 @@ export default class RunView {
     }
 
     document.getElementById("refinery-tracker-container").hidden = false;
+    document.getElementById("runs-table-footer").hidden = false;
 
     var runs = this.runController.fetch();
     if (runs.length == 0) {
       document
         .getElementById("remove-all-jobs-btn")
         .classList.add("w3-disabled");
+      document.getElementById("runs-table-footer").hidden = true;
     } else {
       document
         .getElementById("remove-all-jobs-btn")
@@ -64,6 +66,7 @@ export default class RunView {
     var tableBody = table.getElementsByTagName("tbody")[0];
     removeChildren(tableBody);
 
+    var yieldTotal = 0;
     runs.forEach((run) => {
       var row = document.createElement("tr");
 
@@ -93,6 +96,7 @@ export default class RunView {
       var yieldData = document.createElement("td");
       yieldData.textContent = run.yieldAmount;
       row.appendChild(yieldData);
+      yieldTotal += parseInt(run.yieldAmount);
 
       // <span class="w3-tag w3-padding-small w3-round w3-orange w3-center">In Progress</span>
       var status = document.createElement("td");
@@ -112,6 +116,9 @@ export default class RunView {
 
       tableBody.appendChild(row);
     });
+
+    // set footer
+    document.getElementById("runs-table-footer-yield").textContent = yieldTotal;
   }
 
   isValidEntry(runEntry) {
