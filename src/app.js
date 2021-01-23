@@ -66,6 +66,7 @@ export function submitJobEntry() {
     durationStr = "0s";
   }
 
+  // TODO form validation
   // flex on mode
   var entryCheckBox = document.getElementById("add-job-form.entryMode");
   // has materials
@@ -85,13 +86,14 @@ export function submitJobEntry() {
       materialsEntered[select.value] = materialInput.value;
       total += parseInt(materialInput.value);
     }
+    yieldAmount = total;
   }
 
   var runEntry = new RunEntry(
     obj["name"],
     obj["location"],
     durationStr,
-    total,
+    yieldAmount,
     materialsEntered
   );
 
