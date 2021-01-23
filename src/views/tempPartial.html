@@ -1,0 +1,162 @@
+<div id="temp">
+    <form class="w3-container" >
+
+        <div class="w3-row w3-section">
+          <label class="w3-text"><b>Name</b></label>
+          <input class="w3-input w3-border w3-light-grey" type="text" name="name" placeholder="Something to remember this job by">
+        </div>
+  
+        <div class="w3-row w3-section">
+          <label class="w3-text"><b>Refinery Location</b></label>
+          <select class="w3-select w3-border w3-light-grey" name="location">
+            <option value="" disabled selected>Choose Refinery</option>
+            <option value="ARC-L1">ARC-L1</option>
+            <option value="CRU-L1">CRU-L1</option>
+            <option value="HUR-L1">HUR-L1</option>
+            <option value="HUR-L2">HUR-L2</option>
+            <option value="MIC-L1">MIC-L1</option>
+          </select>
+        </div>
+      
+        <div class="w3-row w3-section">
+          <label class="w3-text"><b>Expected Duration</b></label>
+          <div class="w3-row-padding">
+            <div class="w3-quarter">
+              <label>Days</label>
+              <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0" name="duration.days">
+            </div>
+            <div class="w3-quarter">
+              <label>Hours</label>
+              <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0"  name="duration.hours">
+            </div>
+            <div class="w3-quarter">
+              <label>Minutes</label>
+              <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0"  min="0" name="duration.minutes">
+            </div>
+            <div class="w3-quarter">
+              <label>Seconds</label>
+              <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0"  name="duration.seconds">
+            </div>
+          </div>
+        </div>
+        
+        <div id="entry-mode-parent">
+            <input id="ckbox" class="w3-check" type="checkbox" onclick="swapMode()" >
+            <label>Enter Materials</label>
+            
+            <div class="w3-row w3-section" id="yield-units">
+                <label class="w3-text"><b>Expected Yield Units</b></label>
+                <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0" name="yieldAmount">
+            </div>
+            <div class="w3-row w3-section" id="material-units" hidden>
+                <label class="w3-text"><b>Materials</b></label>
+                <button class="w3-btn w3-blue-grey w3-round-large" onclick="addMaterialEntry(); return false;">
+                    <i class="fa fa-plus fa-sm"></i>
+                </button>
+                <div id="materials-container" class="w3-row-padding">
+                    <div class="w3-row w3-section" id="material-single-initial">
+                        <div class="w3-third">
+                            <select class="w3-select w3-border w3-light-grey">
+                                <!-- todo make this dynamic once we add more materials -->
+                                <option value="Quantainium">Quantainium</option>
+                                <option value="Bexalite">Bexalite</option>
+                                <option value="Taranite">Taranite</option>
+                                <option value="Borase">Borase</option>
+                                <option value="Laranite">Laranite</option>
+                                <option value="Agricium">Agricium</option>
+                                <option value="Hephaestanite">Hephaestanite</option>
+                                <option value="Titanium">Titanium</option>
+                                <option value="Diamond">Diamond</option>
+                                <option value="Gold">Gold</option>
+                                <option value="Copper">Copper</option>
+                                <option value="Beryl">Beryl</option>
+                                <option value="Tungsten">Tungsten</option>
+                                <option value="Corundum">Corundum</option>
+                                <option value="Quartz">Quartz</option>
+                                <option value="Aluminium">Aluminium</option>
+                            </select>
+                        </div>
+                        <div class="w3-third w3-row-padding">
+                            <div class="w3-half">
+                                <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0" name="material.0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  
+        <input type="submit" hidden>
+      </form>
+</div>
+
+<script>
+    function swapMode() {
+        var ckbox = document.getElementById('ckbox')
+        var yieldRow = document.getElementById('yield-units')
+        var materialRow = document.getElementById('material-units')
+        var checked = ckbox.checked;
+        yieldRow.hidden = ckbox.checked;
+        materialRow.hidden = !ckbox.checked;
+    }
+
+    function addMaterialEntry() {
+        var container = document.getElementById('materials-container');
+
+        var rowCounter = container.children.length;
+        rowCounter++;
+        
+        var rowId = new Date().getTime();
+        var row = document.createElement('div');
+        row.classList.add("w3-row", "w3-section");
+        row.id = rowId;
+
+        var selectDiv = document.createElement('div');
+        selectDiv.classList.add("w3-third");
+
+        var select = document.createElement('select');
+        select.classList.add("w3-select", "w3-border", "w3-light-grey");
+
+        var foo = ["Quantainium","Bexalite","Taranite","Borase","Laranite","Agricium","Hephaestanite","Titanium","Diamond","Gold","Copper","Beryl","Tungsten","Corundum","Quartz","Aluminium",];
+        
+        for(var i=0; i < foo.length; i ++) {
+            var option = document.createElement('option');
+            option.value=foo[i];
+            option.text=foo[i];
+            select.appendChild(option);
+        }
+        selectDiv.appendChild(select);
+
+        var materialEntryDiv = document.createElement("div");
+        materialEntryDiv.classList.add("w3-third", "w3-row-padding");
+
+        var materialInputDiv = document.createElement("div");
+        materialInputDiv.classList.add("w3-half");
+        var materialInput = document.createElement('input');
+        materialInput.classList.add("w3-input", "w3-border", "w3-light-grey");
+        materialInput.type="number";
+        materialInput.placeholder=0;
+        materialInput.min = 0;
+        materialInput.name = "material."+rowCounter;
+        materialInputDiv.appendChild(materialInput);
+
+        var removeMaterialDiv = document.createElement("div");
+        removeMaterialDiv.classList.add("w3-half");
+
+        var removeButton = document.createElement("button");
+        removeButton.classList.add("w3-btn", "w3-blue-grey", "w3-round-large");
+        removeButton.onclick = () => document.getElementById(rowId).remove();
+
+        var icon = document.createElement("i");
+        icon.classList.add("fa", "fa-minus");
+        removeButton.appendChild(icon);
+        removeMaterialDiv.appendChild(removeButton);
+
+        materialEntryDiv.appendChild(materialInputDiv);
+        materialEntryDiv.appendChild(removeMaterialDiv);
+
+        row.appendChild(selectDiv);
+        row.appendChild(materialEntryDiv);
+        container.appendChild(row);
+    }
+</script>

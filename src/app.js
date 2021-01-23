@@ -13,6 +13,7 @@ import SettingsController from "./settings/settingsController";
 import SettingsView from "./settings/settingsView";
 
 import Controls from "./controls/controls";
+import { getMaterialsList } from "./model/materials";
 
 export const controls = new Controls();
 
@@ -65,13 +66,36 @@ export function submitJobEntry() {
     durationStr = "0s";
   }
 
+  // flex on mode
+  var entryCheckBox = document.getElementById("add-job-form.entryMode");
+  // has materials
+  var yieldAmount = obj["yieldAmount"];
+  var materialsEntered = {};
+  if (entryCheckBox.checked) {
+    // compute yield amount and build materials
+    var materialContainer = document.getElementById("material-units");
+
+    // get parent / get select
+    var materialInputs = materialContainer.querySelectorAll("input");
+    var total = 0;
+    for (var i = 0; i < materialInputs.length; i++) {
+      var materialInput = materialInputs[i];
+      // TODO build this id
+      var select = document.getElementById("select." + materialInput.name);
+      materialsEntered[select.value] = materialInput.value;
+      total += parseInt(materialInput.value);
+    }
+  }
+
   var runEntry = new RunEntry(
     obj["name"],
     obj["location"],
     durationStr,
-    obj["yieldAmount"]
+    total,
+    materialsEntered
   );
 
+  // TODO validate form prior to entry
   if (runView.isValidEntry(runEntry)) {
     runController.store(runEntry);
     controls.closeModal("add-job-modal");
@@ -182,6 +206,10 @@ function synchronizeSettings() {
       runView.layout();
     }, userSettings.refreshRateSeconds * 1000);
   }
+}
+
+export function matery() {
+  console.log(getMaterialsList());
 }
 
 export function startApp() {
