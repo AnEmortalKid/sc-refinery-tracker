@@ -14,11 +14,16 @@ import SettingsView from "./settings/settingsView";
 
 import Controls from "./controls/controls";
 import { getMaterialsList } from "./model/materials";
+import JobEntryController from "./jobs/jobEntryController";
+import JobEntryView from "./jobs/jobEntryView";
 
 export const controls = new Controls();
 
 const userController = new UserController();
 const userView = new UserView(userController);
+
+const jobEntryView = new JobEntryView();
+export const jobEntry = new JobEntryController(jobEntryView);
 
 const runController = new RunController(userController);
 const runView = new RunView(userController, runController);
@@ -69,20 +74,19 @@ export function submitJobEntry() {
   // TODO form validation
   // flex on mode
   var entryCheckBox = document.getElementById("add-job-form.entryMode");
-  // has materials
+
+  // override yield amount if we have materials
   var yieldAmount = obj["yieldAmount"];
   var materialsEntered = {};
   if (entryCheckBox.checked) {
     // compute yield amount and build materials
     var materialContainer = document.getElementById("material-units");
 
-    // get parent / get select
     var materialInputs = materialContainer.querySelectorAll("input");
     var total = 0;
     for (var i = 0; i < materialInputs.length; i++) {
       var materialInput = materialInputs[i];
-      // TODO build this id
-      var select = document.getElementById("select." + materialInput.name);
+      var select = document.getElementById(materialInput.dataset.selectId);
       materialsEntered[select.value] = materialInput.value;
       total += parseInt(materialInput.value);
     }
