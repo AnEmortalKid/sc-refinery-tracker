@@ -8,7 +8,7 @@
     </header>
     
   <div class="w3-panel">
-    <form class="w3-container" id="add-job-form" onsubmit="app.submitJobEntry(); return false;">
+    <form class="w3-container" id="add-job-form">
 
       <div class="w3-row w3-section">
         <label class="w3-text"><b>Name</b></label>
@@ -59,7 +59,7 @@
         </div>
         <div class="w3-row w3-section" id="material-units" hidden>
             <label class="w3-text"><b>Materials</b></label>
-            <button class="w3-btn w3-blue-grey w3-round-large" onclick="app.jobEntry.addMaterialEntry(); return false;">
+            <button class="w3-btn w3-blue-grey w3-round-large" type="button" onclick="app.jobEntry.addMaterialEntryOption(); return false;">
                 <i class="fa fa-plus fa-sm"></i>
             </button>
             <div id="materials-container" class="w3-row-padding">
@@ -73,7 +73,7 @@
 
   <footer class="w3-container w3-padding">
     <div class="w3-bar w3-center">
-      <button class="w3-button w3-blue" onclick="app.submitJobEntry()">Confirm</button>
+      <button id="add-job-form-confirm-btn" type="submit" class="w3-button w3-blue">Confirm</button>
       <button class="w3-button w3-gray" onclick="app.controls.closeModal('add-job-modal')">Cancel</button>
     </div>
   </footer>
