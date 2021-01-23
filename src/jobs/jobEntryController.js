@@ -21,11 +21,12 @@ export default class JobEntryController {
 
   /**
    * Handles the submission of a job entry
-   * @param {object} jobEntry 
+   * @param {object} jobEntry
    */
   handleJobEntry(jobEntry) {
     // convert entry data to Run
     // this.model.addRun();
-    console.log('handleJobEntry');
+    console.log("handleJobEntry");
+    console.log(JSON.stringify(jobEntry));
   }
 }

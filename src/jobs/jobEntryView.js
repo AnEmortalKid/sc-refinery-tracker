@@ -79,10 +79,10 @@ export default class JobEntryView {
 
     if (toggleState) {
       var container = document.getElementById("materials-container");
-      
+
       // if there's no material entries, create the first one
       if (container.children.length < 1) {
-          // create option without ability to remove
+        // create option without ability to remove
         this.addMaterialOption(false);
       }
     }
@@ -105,26 +105,40 @@ export default class JobEntryView {
   }
 
   _getFormData() {
-
     var form = document.getElementById("add-job-form");
-  var inputs = form.querySelectorAll("input");
+    var inputs = form.querySelectorAll("input");
 
-  var obj = {};
-  for (var i = 0; i < inputs.length; i++) {
-    var item = inputs.item(i);
-    if (item.name) {
-      obj[item.name] = item.value;
+    var obj = {};
+    for (var i = 0; i < inputs.length; i++) {
+      var item = inputs.item(i);
+      if (item.name) {
+        obj[item.name] = item.value;
+      }
     }
-  }
 
-  var selects = form.querySelectorAll("select");
-  for (var i = 0; i < selects.length; i++) {
-    var item = selects.item(i);
-    if (item.name) {
-      obj[item.name] = item.value;
+    var selects = form.querySelectorAll("select");
+    for (var i = 0; i < selects.length; i++) {
+      var item = selects.item(i);
+      if (item.name) {
+        obj[item.name] = item.value;
+      }
     }
-  }
 
+    // pass materials if available
+    var entryCheckBox = document.getElementById("add-job-form.entryMode");
+    var materialsEntered = {};
+    if (entryCheckBox.checked) {
+      var materialContainer = document.getElementById("material-units");
+      var materialInputs = materialContainer.querySelectorAll("input");
+      for (var i = 0; i < materialInputs.length; i++) {
+        var materialInput = materialInputs[i];
+        var select = document.getElementById(materialInput.dataset.selectId);
+        materialsEntered[select.value] = parseInt(materialInput.value);
+      }
+    }
+    obj.materials = materialsEntered;
+
+    return obj;
   }
 
   /**
@@ -132,21 +146,19 @@ export default class JobEntryView {
    * @param {function} handler a callback to call with the data for the form
    */
   bindSubmitJob(handler) {
-    this.form.addEventListener('submit', event => {
-      console.log('submit');
+    var submissionAction = (event) => {
+      console.log("submit");
       event.preventDefault();
+      handler(this._getFormData());
+    };
 
-      // todo get form data
-      handler({});
-    });
-
-    // var btn = document.getElementById('add-job-form-confirm-btn');
-    // btn.addEventListener('click', event => {
-    //   console.log('OUCH');
-    // });
+    this.form.addEventListener("submit", submissionAction);
+    var btn = document.getElementById("add-job-form-confirm-btn");
+    btn.addEventListener("click", submissionAction);
   }
 
   closeForm() {
     // todo app.controls.close
+    // todo change to bindCloseForm
   }
 }
