@@ -15,14 +15,14 @@ export default class JobModel {
     var allData = JSON.parse(localStorage.getItem(dataKey)) || {};
 
     allData[user] = runs;
-    localStorage.setItem(dataKey, JSON.stringify(allRuns));
+    localStorage.setItem(dataKey, JSON.stringify(allData));
   }
 
   _deleteData(user) {
     var allData = JSON.parse(localStorage.getItem(dataKey)) || {};
 
     delete allData[user];
-    localStorage.setItem(dataKey, JSON.stringify(allRuns));
+    localStorage.setItem(dataKey, JSON.stringify(allData));
   }
 
   _loadData(user) {
@@ -50,7 +50,7 @@ export default class JobModel {
   }
 
   delete(jobId) {
-    this.jobs = this.jobs.filter((job) => job.uuid === jobId);
+    this.jobs = this.jobs.filter((job) => job.uuid !== jobId);
     this._commit(this.user, this.jobs);
   }
 
