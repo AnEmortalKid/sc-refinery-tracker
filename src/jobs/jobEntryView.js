@@ -192,4 +192,18 @@ export default class JobEntryView {
 
     return obj;
   }
+
+  markLocationInvalid() {
+    // TODO enable/disable confirm based on validation
+
+    // TODO a change listener on the selection form should
+    // callback to controller.onSelectLocationChange
+
+    // TODO a change listner on each material select form should
+    // callback to controller and pass ALL materials data (even dupes)?
+    var selecter = document.getElementById("add-job-select-location");
+    if (!selecter.classList.contains("w3-border-red")) {
+      selecter.classList.add("w3-border-red");
+    }
+  }
 }
