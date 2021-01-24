@@ -104,6 +104,58 @@ export default class JobEntryView {
     container.appendChild(row);
   }
 
+  bindToggleMaterialsMode(handler) {
+    document
+      .getElementById("add-job-form-entryMode")
+      .addEventListener("click", (event) => {
+        handler(event);
+      });
+  }
+
+  bindAddMaterial(handler) {
+    document
+      .getElementById("add-job-form-add-material")
+      .addEventListener("click", (event) => {
+        event.preventDefault();
+        handler();
+      });
+  }
+
+  /**
+   * Binds the submission of the Job to the given handler
+   * @param {function} handler a callback to call with the data for the form
+   */
+  bindSubmitJob(handler) {
+    var submissionAction = (event) => {
+      event.preventDefault();
+      handler(this._getFormData());
+    };
+
+    this.form.addEventListener("submit", submissionAction);
+    var btn = document.getElementById("add-job-form-confirm-btn");
+    btn.addEventListener("click", submissionAction);
+  }
+
+  bindCancelEntryForm(handler) {
+    var cancelAction = (event) => {
+      event.preventDefault();
+      handler();
+    };
+
+    /*
+     * a bit silly to have the view call the controller to call the view,
+     * but it is up to the controller to tell us when to close
+     */
+    var cancelBtn = document.getElementById("add-job-form-cancel-btn");
+    cancelBtn.addEventListener("click", cancelAction);
+    var xBtn = document.getElementById("add-job-modal-close-button");
+    xBtn.addEventListener("click", cancelAction);
+  }
+
+  closeEntryModal() {
+    app.controls.closeModal("add-job-modal");
+  }
+
   _getFormData() {
     var form = document.getElementById("add-job-form");
     var inputs = form.querySelectorAll("input");
@@ -125,9 +177,9 @@ export default class JobEntryView {
     }
 
     // pass materials if available
-    var entryCheckBox = document.getElementById("add-job-form.entryMode");
-    var materialsEntered = {};
+    var entryCheckBox = document.getElementById("add-job-form-entryMode");
     if (entryCheckBox.checked) {
+      var materialsEntered = {};
       var materialContainer = document.getElementById("material-units");
       var materialInputs = materialContainer.querySelectorAll("input");
       for (var i = 0; i < materialInputs.length; i++) {
@@ -135,30 +187,9 @@ export default class JobEntryView {
         var select = document.getElementById(materialInput.dataset.selectId);
         materialsEntered[select.value] = parseInt(materialInput.value);
       }
+      obj.materials = materialsEntered;
     }
-    obj.materials = materialsEntered;
 
     return obj;
-  }
-
-  /**
-   * Binds the submission of the Job to the given handler
-   * @param {function} handler a callback to call with the data for the form
-   */
-  bindSubmitJob(handler) {
-    var submissionAction = (event) => {
-      console.log("submit");
-      event.preventDefault();
-      handler(this._getFormData());
-    };
-
-    this.form.addEventListener("submit", submissionAction);
-    var btn = document.getElementById("add-job-form-confirm-btn");
-    btn.addEventListener("click", submissionAction);
-  }
-
-  closeForm() {
-    // todo app.controls.close
-    // todo change to bindCloseForm
   }
 }

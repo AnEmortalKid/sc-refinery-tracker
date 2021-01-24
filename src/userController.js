@@ -9,6 +9,12 @@ export default class UserController {
     } else {
       this.users = [];
     }
+
+    this.user = localStorage.getItem(currentUserKey) || null;
+
+    this.onUserChangeListeners = [];
+
+    // TODO on startup, do a load();
   }
 
   storeUser(userName) {
@@ -21,7 +27,12 @@ export default class UserController {
   }
 
   setUser(userName) {
+    this.user = userName;
     localStorage.setItem(currentUserKey, userName);
+
+    this.onUserChangeListeners.forEach((listener) => {
+      listener(userName);
+    });
   }
 
   removeUser(userName) {
@@ -32,13 +43,18 @@ export default class UserController {
     localStorage.setItem(usersDataKey, JSON.stringify(this.users));
     // clear out
     localStorage.removeItem(currentUserKey);
+    this.user = null;
   }
 
   getCurrentUser() {
-    return localStorage.getItem(currentUserKey);
+    return this.user;
   }
 
   getUsers() {
     return this.users;
+  }
+
+  registerOnUserChangeListener(callback) {
+    this.onUserChangeListeners.push(callback);
   }
 }

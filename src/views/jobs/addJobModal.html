@@ -2,8 +2,7 @@
   
   <div class="w3-modal-content"  id="add-job-form-content">
     <header class="w3-container w3-blue-gray">
-      <span onclick="app.controls.closeModal('add-job-modal')"
-      class="w3-button w3-display-topright">&times;</span>
+      <span id="add-job-modal-close-button" class="w3-button w3-display-topright">&times;</span>
       <h2><i class="fa fa-plus-square"></i></i> Add Refinery Job</h2>
     </header>
     
@@ -50,7 +49,7 @@
       </div>
 
       <div id="entry-mode-parent">
-        <input id="add-job-form.entryMode" class="w3-check" type="checkbox" onclick="app.jobEntry.toggleMaterialEntryMode()" >
+        <input id="add-job-form-entryMode" class="w3-check" type="checkbox" >
         <label>Enter Materials</label>
         
         <div class="w3-row w3-section" id="yield-units">
@@ -59,7 +58,7 @@
         </div>
         <div class="w3-row w3-section" id="material-units" hidden>
             <label class="w3-text"><b>Materials</b></label>
-            <button class="w3-btn w3-blue-grey w3-round-large" type="button" onclick="app.jobEntry.addMaterialEntryOption(); return false;">
+            <button id="add-job-form-add-material" class="w3-btn w3-blue-grey w3-round-large" type="button">
                 <i class="fa fa-plus fa-sm"></i>
             </button>
             <div id="materials-container" class="w3-row-padding">
@@ -74,7 +73,7 @@
   <footer class="w3-container w3-padding">
     <div class="w3-bar w3-center">
       <button id="add-job-form-confirm-btn" class="w3-button w3-blue">Confirm</button>
-      <button class="w3-button w3-gray" onclick="app.controls.closeModal('add-job-modal')">Cancel</button>
+      <button id="add-job-form-cancel-btn" class="w3-button w3-gray">Cancel</button>
     </div>
   </footer>
   </div>

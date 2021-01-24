@@ -14,6 +14,8 @@ import SettingsView from "./settings/settingsView";
 
 import Controls from "./controls/controls";
 import { getMaterialsList } from "./model/materials";
+
+import JobModel from "./jobs/jobModel";
 import JobEntryController from "./jobs/jobEntryController";
 import JobEntryView from "./jobs/jobEntryView";
 
@@ -22,8 +24,9 @@ export const controls = new Controls();
 const userController = new UserController();
 const userView = new UserView(userController);
 
+const jobModel = new JobModel();
 const jobEntryView = new JobEntryView();
-export const jobEntry = new JobEntryController(jobEntryView);
+export const jobEntry = new JobEntryController(jobModel, jobEntryView);
 
 const runController = new RunController(userController);
 const runView = new RunView(userController, runController);
@@ -226,4 +229,11 @@ export function startApp() {
   runView.layout();
   settingsView.layout();
   synchronizeSettings();
+
+  // cheap way of initializing the state everywhere
+  jobModel.load(userController.getCurrentUser());
+
+  // listen to updates from now on
+  // TODo this should probably be on a userModel
+  userController.registerOnUserChangeListener(jobModel.load.bind(jobModel));
 }
