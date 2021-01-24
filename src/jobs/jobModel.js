@@ -10,6 +10,8 @@ export default class JobModel {
   }
 
   _commit(user, runs) {
+    var jsonData = localStorage.getItem(dataKey);
+
     var allData = JSON.parse(localStorage.getItem(dataKey)) || {};
 
     allData[user] = runs;

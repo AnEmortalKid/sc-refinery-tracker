@@ -6,7 +6,7 @@ export default class Run {
    * @param {String} duration a duration representation e.g 1d 1m
    * @param {int} durationSeconds amount of seconds
    * @param {int} yieldAmount amount of all materials combined
-   * @param {date} entryTime time when this Run should be recorded
+   * @param {Date} entryTime time when this Run should be recorded
    * @param {object} materials a dictionary of materials to units
    */
   constructor(
