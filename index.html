@@ -182,13 +182,12 @@
   
   <div class="w3-modal-content"  id="add-job-form-content">
     <header class="w3-container w3-blue-gray">
-      <span onclick="app.controls.closeModal('add-job-modal')"
-      class="w3-button w3-display-topright">&times;</span>
+      <span id="add-job-modal-close-button" class="w3-button w3-display-topright">&times;</span>
       <h2><i class="fa fa-plus-square"></i></i> Add Refinery Job</h2>
     </header>
     
   <div class="w3-panel">
-    <form class="w3-container" id="add-job-form" onsubmit="app.submitJobEntry(); return false;">
+    <form class="w3-container" id="add-job-form">
 
       <div class="w3-row w3-section">
         <label class="w3-text"><b>Name</b></label>
@@ -197,7 +196,7 @@
 
       <div class="w3-row w3-section">
         <label class="w3-text"><b>Refinery Location</b></label>
-        <select id="add-job-select-location" class="w3-select w3-border w3-light-grey" name="location">
+        <select id="add-job-select-location" class="w3-select w3-border w3-light-grey w3-border-red" name="location">
           <option value="" disabled selected>Choose Refinery</option>
           <option value="ARC-L1">ARC-L1</option>
           <option value="CRU-L1">CRU-L1</option>
@@ -229,10 +228,23 @@
         </div>
       </div>
 
-      <div class="w3-row w3-section">
-        <label class="w3-text"><b>Expected Yield Units</b></label>
-        <input class="w3-input w3-border w3-light-grey" type="number" placeholder="0" min="0" name="yieldAmount">
-      </div>
+      <div id="entry-mode-parent">
+        <input id="add-job-form-entryMode" class="w3-check" type="checkbox" >
+        <label>Enter Materials</label>
+        
+        <div class="w3-row w3-section" id="yield-units">
+            <label class="w3-text"><b>Expected Yield Units</b></label>
+            <input class="w3-input w3-border w3-light-grey" type="number" min="0"  value="0" name="yieldAmount">
+        </div>
+        <div class="w3-row w3-section" id="material-units" hidden>
+            <label class="w3-text"><b>Materials</b></label>
+            <button id="add-job-form-add-material" class="w3-btn w3-blue-grey w3-round-large" type="button">
+                <i class="fa fa-plus fa-sm"></i>
+            </button>
+            <div id="materials-container" class="w3-row-padding">
+            </div>
+        </div>
+    </div>
 
       <input type="submit" hidden>
     </form>
@@ -240,8 +252,8 @@
 
   <footer class="w3-container w3-padding">
     <div class="w3-bar w3-center">
-      <button class="w3-button w3-blue" onclick="app.submitJobEntry()">Confirm</button>
-      <button class="w3-button w3-gray" onclick="app.controls.closeModal('add-job-modal')">Cancel</button>
+      <button id="add-job-form-confirm-btn" class="w3-button w3-blue w3-disabled" disabled>Confirm</button>
+      <button id="add-job-form-cancel-btn" class="w3-button w3-gray">Cancel</button>
     </div>
   </footer>
   </div>
@@ -324,7 +336,8 @@
   </div>
   </div>
 
-<script src="main.js"></script></body>
+</body>
+
 <script src="main.js"></script>
 <script>app.startApp()</script>
 
