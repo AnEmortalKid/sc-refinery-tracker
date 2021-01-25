@@ -16,6 +16,7 @@ export default class JobEntryController {
       this.toggleMaterialEntryMode.bind(this)
     );
     this.jobEntryView.bindAddMaterial(this.addMaterialEntryOption.bind(this));
+    this.jobEntryView.bindOnFormDataChange(this.onFormChange.bind(this));
   }
 
   /**
@@ -79,16 +80,16 @@ export default class JobEntryController {
     return run;
   }
 
+  onFormChange(jobEntry) {
+    var valid = this._validateEntry(jobEntry);
+    this.jobEntryView.toggleSubmitButton(valid);
+  }
+
   /**
    * Handles the submission of a job entry
    * @param {object} jobEntry
    */
   handleJobEntry(jobEntry) {
-    // convert entry data to Run
-    // this.model.addRun();
-    console.log("handleJobEntry");
-    console.log(JSON.stringify(jobEntry));
-
     var valid = this._validateEntry(jobEntry);
     if (valid) {
       // make new run  and add it

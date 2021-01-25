@@ -152,6 +152,15 @@ export default class JobEntryView {
     xBtn.addEventListener("click", cancelAction);
   }
 
+  bindOnFormDataChange(handler) {
+    var changeAction = (event) => {
+      handler(this._getFormData());
+    };
+
+    var selectLocation = document.getElementById("add-job-select-location");
+    selectLocation.addEventListener("change", changeAction);
+  }
+
   closeEntryModal() {
     app.controls.closeModal("add-job-modal");
   }
@@ -191,6 +200,17 @@ export default class JobEntryView {
     }
 
     return obj;
+  }
+
+  toggleSubmitButton(enabled) {
+    var submitButton = document.getElementById("add-job-form-confirm-btn");
+    if (enabled) {
+      submitButton.disabled = false;
+      submitButton.classList.remove("w3-disabled");
+    } else {
+      submitButton.disabled = true;
+      submitButton.classList.add("w3-disabled");
+    }
   }
 
   markLocationInvalid() {
