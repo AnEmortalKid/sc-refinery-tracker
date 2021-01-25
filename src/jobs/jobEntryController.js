@@ -26,24 +26,90 @@ export default class JobEntryController {
     this.jobEntryView.toggleMaterialEntryMode(event.target.checked);
   }
 
+  /**
+   * Adds an input row to specify a material type and material inputs
+   */
   addMaterialEntryOption() {
     this.jobEntryView.addMaterialOption();
   }
 
+  /**
+   * Indicates a cancel button was pressed
+   */
   handleCancelJobEntry() {
     this.jobEntryView.closeEntryModal();
   }
 
+  /**
+   * Handles form changes
+   *
+   * @param {Object} jobEntry a dictionary containing the current values on the form
+   */
+  onFormChange(jobEntry) {
+    var valid = this._validateEntry(jobEntry);
+    this.jobEntryView.toggleSubmitButton(valid);
+  }
+
+  /**
+   * Handles the submission of a job entry
+   * @param {object} jobEntry
+   */
+  handleJobEntry(jobEntry) {
+    var valid = this._validateEntry(jobEntry);
+    if (valid) {
+      // make new run  and add it
+
+      this.jobModel.add(this._createRun(jobEntry));
+      // TODO display alert SUCCESS!
+      this.jobEntryView.closeEntryModal();
+    }
+  }
+
+  /**
+   * Validates that the form data is correct and has the required fields
+   *
+   * @param {Object} jobEntry object
+   */
   _validateEntry(jobEntry) {
     var valid = true;
     if (!jobEntry["location"]) {
-      this.jobEntryView.markLocationInvalid();
+      this.jobEntryView.markLocationValidity(false);
       valid = false;
+    } else {
+      this.jobEntryView.markLocationValidity(true);
+    }
+
+    var materialEntries = jobEntry.materialEntries;
+    if (materialEntries) {
+      var seenMaterials = [];
+      for (var i = 0; i < materialEntries.length; i++) {
+        var materialEntry = materialEntries[i];
+
+        // don't allow duplicate materials
+        var materialName = materialEntry.name;
+        if (seenMaterials.indexOf(materialName) !== -1) {
+          this.jobEntryView.markMaterialEntryValidity(
+            materialEntry.selectId,
+            false
+          );
+          valid = false;
+        } else {
+          seenMaterials.push(materialName);
+          this.jobEntryView.markMaterialEntryValidity(
+            materialEntry.selectId,
+            true
+          );
+        }
+      }
     }
 
     return valid;
   }
 
+  /**
+   * Creates a Run object from the form data
+   * @param {Object} jobEntry form data
+   */
   _createRun(jobEntry) {
     var durationStr = "";
     if (jobEntry["duration.days"] > 0) {
@@ -64,8 +130,19 @@ export default class JobEntryController {
       durationStr = "0s";
     }
 
-    var yieldAmount = jobEntry.yieldAmount;
-    // TODO materials
+    var yieldAmount = parseInt(jobEntry.yieldAmount) || 0;
+
+    var materials = null;
+    var materialEntries = jobEntry.materialEntries;
+    if (materialEntries) {
+      materials = {};
+      yieldAmount = 0;
+      for (var i = 0; i < materialEntries.length; i++) {
+        var materialEntry = materialEntries[i];
+        materials[materialEntry.name] = materialEntry.value;
+        yieldAmount += materialEntry.value;
+      }
+    }
 
     var uuid = uuidv4();
     var run = new Run(
@@ -75,28 +152,9 @@ export default class JobEntryController {
       durationStr,
       toSeconds(durationStr),
       yieldAmount,
-      new Date()
+      new Date(),
+      materials
     );
     return run;
-  }
-
-  onFormChange(jobEntry) {
-    var valid = this._validateEntry(jobEntry);
-    this.jobEntryView.toggleSubmitButton(valid);
-  }
-
-  /**
-   * Handles the submission of a job entry
-   * @param {object} jobEntry
-   */
-  handleJobEntry(jobEntry) {
-    var valid = this._validateEntry(jobEntry);
-    if (valid) {
-      // make new run  and add it
-
-      this.jobModel.add(this._createRun(jobEntry));
-      // TODO display alert SUCCESS!
-      this.jobEntryView.closeEntryModal();
-    }
   }
 }

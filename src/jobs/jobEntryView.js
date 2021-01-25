@@ -1,12 +1,14 @@
 import { getMaterialsList } from "../model/materials";
 
-function createMaterialSelect(id) {
+function createMaterialSelect(id, onChangeAction) {
   var selectDiv = document.createElement("div");
   selectDiv.classList.add("w3-third");
 
   var select = document.createElement("select");
   select.classList.add("w3-select", "w3-border", "w3-light-grey");
   select.id = "materials-select-" + id;
+
+  select.addEventListener("change", onChangeAction);
 
   var materialList = getMaterialsList();
   for (var i = 0; i < materialList.length; i++) {
@@ -21,14 +23,17 @@ function createMaterialSelect(id) {
   return selectDiv;
 }
 
-function createRemoveMaterialInput(id) {
+function createRemoveMaterialInput(id, onChangeAction) {
   var removeMaterialDiv = document.createElement("div");
   removeMaterialDiv.classList.add("w3-half");
 
   var removeButton = document.createElement("button");
   removeButton.classList.add("w3-btn", "w3-blue-grey", "w3-round-large");
   removeButton.type = "button";
-  removeButton.onclick = () => document.getElementById(id).remove();
+  removeButton.onclick = () => {
+    document.getElementById(id).remove();
+    onChangeAction();
+  };
 
   var icon = document.createElement("i");
   icon.classList.add("fa", "fa-minus");
@@ -38,7 +43,12 @@ function createRemoveMaterialInput(id) {
   return removeMaterialDiv;
 }
 
-function createMaterialInputValue(id, selectId, removable = true) {
+function createMaterialInputValue(
+  id,
+  selectId,
+  onChangeAction,
+  removable = true
+) {
   var materialEntryDiv = document.createElement("div");
   materialEntryDiv.classList.add("w3-third", "w3-row-padding");
 
@@ -56,7 +66,7 @@ function createMaterialInputValue(id, selectId, removable = true) {
   materialEntryDiv.appendChild(materialInputDiv);
 
   if (removable) {
-    var removeMaterialDiv = createRemoveMaterialInput(id);
+    var removeMaterialDiv = createRemoveMaterialInput(id, onChangeAction);
     materialEntryDiv.appendChild(removeMaterialDiv);
   }
 
@@ -70,6 +80,10 @@ export default class JobEntryView {
     this.form = document.getElementById("add-job-form");
   }
 
+  /**
+   * Toggles between allowing material details or bulk yield amount
+   * @param {boolean} toggleState whether the materials entry should be enabled or not
+   */
   toggleMaterialEntryMode(toggleState) {
     var yieldRow = document.getElementById("yield-units");
     var materialRow = document.getElementById("material-units");
@@ -86,8 +100,15 @@ export default class JobEntryView {
         this.addMaterialOption(false);
       }
     }
+
+    // notify the form changed
+    this.onChangeAction();
   }
 
+  /**
+   * Adds a new row to specify a material's type and quantity
+   * @param {boolean} removable whether this row should be removable or not
+   */
   addMaterialOption(removable = true) {
     var container = document.getElementById("materials-container");
 
@@ -96,14 +117,39 @@ export default class JobEntryView {
     row.classList.add("w3-row", "w3-section");
     row.id = rowId;
 
-    var selectDiv = createMaterialSelect(rowId);
+    var selectDiv = createMaterialSelect(rowId, this.onChangeAction);
     row.appendChild(selectDiv);
     row.appendChild(
-      createMaterialInputValue(rowId, selectDiv.dataset.selectId, removable)
+      createMaterialInputValue(
+        rowId,
+        selectDiv.dataset.selectId,
+        this.onChangeAction,
+        removable
+      )
     );
     container.appendChild(row);
+
+    // notify the form changed
+    this.onChangeAction();
   }
 
+  /**
+   * Sets the function to call when the form changes its state
+   * @param {function} handler a function to call with the form data
+   */
+  bindOnFormDataChange(handler) {
+    this.onChangeAction = (event) => {
+      handler(this._getFormData());
+    };
+
+    var selectLocation = document.getElementById("add-job-select-location");
+    selectLocation.addEventListener("change", this.onChangeAction);
+  }
+
+  /**
+   * Sets the function to call when the material's mode checkbox is triggered
+   * @param {function} handler a function to call with the event
+   */
   bindToggleMaterialsMode(handler) {
     document
       .getElementById("add-job-form-entryMode")
@@ -112,6 +158,10 @@ export default class JobEntryView {
       });
   }
 
+  /**
+   * Sets the function to call when the add materials button is clicked
+   * @param {function} handler a function to call when the 'Add Materials' button is clicked
+   */
   bindAddMaterial(handler) {
     document
       .getElementById("add-job-form-add-material")
@@ -136,6 +186,10 @@ export default class JobEntryView {
     btn.addEventListener("click", submissionAction);
   }
 
+  /**
+   * Binds the cancelling of the form to the given handler
+   * @param {function} handler a callback to call when a cancel event is received
+   */
   bindCancelEntryForm(handler) {
     var cancelAction = (event) => {
       event.preventDefault();
@@ -152,17 +206,54 @@ export default class JobEntryView {
     xBtn.addEventListener("click", cancelAction);
   }
 
-  bindOnFormDataChange(handler) {
-    var changeAction = (event) => {
-      handler(this._getFormData());
-    };
-
-    var selectLocation = document.getElementById("add-job-select-location");
-    selectLocation.addEventListener("change", changeAction);
-  }
-
+  /**
+   * Closes the modal
+   */
   closeEntryModal() {
     app.controls.closeModal("add-job-modal");
+  }
+
+  /**
+   * Enables/Disables the Submit button
+   * @param {boolean} enabled whether the submit button should be enabled or not
+   */
+  toggleSubmitButton(enabled) {
+    var submitButton = document.getElementById("add-job-form-confirm-btn");
+    if (enabled) {
+      submitButton.disabled = false;
+      submitButton.classList.remove("w3-disabled");
+    } else {
+      submitButton.disabled = true;
+      submitButton.classList.add("w3-disabled");
+    }
+  }
+
+  /**
+   * Toggles the validity of the location selection box
+   * @param {boolean} validity whether the location value is valid or not
+   */
+  markLocationValidity(validity) {
+    var selecter = document.getElementById("add-job-select-location");
+    if (validity) {
+      selecter.classList.remove("w3-border-red");
+    } else {
+      selecter.classList.add("w3-border-red");
+    }
+  }
+
+  /**
+   * Toggles the validity of the specified material selection box
+   * @param {string} selectId the identifier of the select
+   * @param {boolean} validity whether the material selection
+   *
+   */
+  markMaterialEntryValidity(selectId, validity) {
+    var selection = document.getElementById(selectId);
+    if (validity) {
+      selection.classList.remove("w3-border-red");
+    } else {
+      selection.classList.add("w3-border-red");
+    }
   }
 
   _getFormData() {
@@ -188,42 +279,22 @@ export default class JobEntryView {
     // pass materials if available
     var entryCheckBox = document.getElementById("add-job-form-entryMode");
     if (entryCheckBox.checked) {
-      var materialsEntered = {};
+      var materialEntries = [];
       var materialContainer = document.getElementById("material-units");
       var materialInputs = materialContainer.querySelectorAll("input");
       for (var i = 0; i < materialInputs.length; i++) {
         var materialInput = materialInputs[i];
         var select = document.getElementById(materialInput.dataset.selectId);
-        materialsEntered[select.value] = parseInt(materialInput.value);
+
+        materialEntries.push({
+          name: select.value,
+          value: parseInt(materialInput.value),
+          selectId: materialInput.dataset.selectId,
+        });
       }
-      obj.materials = materialsEntered;
+      obj.materialEntries = materialEntries;
     }
 
     return obj;
-  }
-
-  toggleSubmitButton(enabled) {
-    var submitButton = document.getElementById("add-job-form-confirm-btn");
-    if (enabled) {
-      submitButton.disabled = false;
-      submitButton.classList.remove("w3-disabled");
-    } else {
-      submitButton.disabled = true;
-      submitButton.classList.add("w3-disabled");
-    }
-  }
-
-  markLocationInvalid() {
-    // TODO enable/disable confirm based on validation
-
-    // TODO a change listener on the selection form should
-    // callback to controller.onSelectLocationChange
-
-    // TODO a change listner on each material select form should
-    // callback to controller and pass ALL materials data (even dupes)?
-    var selecter = document.getElementById("add-job-select-location");
-    if (!selecter.classList.contains("w3-border-red")) {
-      selecter.classList.add("w3-border-red");
-    }
   }
 }

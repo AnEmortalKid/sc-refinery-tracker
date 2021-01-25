@@ -13,7 +13,6 @@ import SettingsController from "./settings/settingsController";
 import SettingsView from "./settings/settingsView";
 
 import Controls from "./controls/controls";
-import { getMaterialsList } from "./model/materials";
 
 import JobModel from "./jobs/jobModel";
 import JobEntryController from "./jobs/jobEntryController";
@@ -34,85 +33,6 @@ const runView = new RunView(userController, runController);
 const settingsController = new SettingsController(userController);
 const settingsView = new SettingsView(userController, settingsController);
 var currentRefreshFn;
-
-export function submitJobEntry() {
-  var form = document.getElementById("add-job-form");
-  var inputs = form.querySelectorAll("input");
-
-  var obj = {};
-  for (var i = 0; i < inputs.length; i++) {
-    var item = inputs.item(i);
-    if (item.name) {
-      obj[item.name] = item.value;
-    }
-  }
-
-  var selects = form.querySelectorAll("select");
-  for (var i = 0; i < selects.length; i++) {
-    var item = selects.item(i);
-    if (item.name) {
-      obj[item.name] = item.value;
-    }
-  }
-
-  var durationStr = "";
-  if (obj["duration.days"] > 0) {
-    durationStr += obj["duration.days"] + "d ";
-  }
-  if (obj["duration.hours"] > 0) {
-    durationStr += obj["duration.hours"] + "h ";
-  }
-  if (obj["duration.minutes"] > 0) {
-    durationStr += obj["duration.minutes"] + "m ";
-  }
-  if (obj["duration.seconds"] > 0) {
-    durationStr += obj["duration.seconds"] + "s";
-  }
-  durationStr = durationStr.trim();
-  // if nothing was entered
-  if (durationStr == "") {
-    durationStr = "0s";
-  }
-
-  // TODO form validation
-  // flex on mode
-  var entryCheckBox = document.getElementById("add-job-form.entryMode");
-
-  // override yield amount if we have materials
-  var yieldAmount = obj["yieldAmount"];
-  var materialsEntered = {};
-  if (entryCheckBox.checked) {
-    // compute yield amount and build materials
-    var materialContainer = document.getElementById("material-units");
-
-    var materialInputs = materialContainer.querySelectorAll("input");
-    var total = 0;
-    for (var i = 0; i < materialInputs.length; i++) {
-      var materialInput = materialInputs[i];
-      var select = document.getElementById(materialInput.dataset.selectId);
-      materialsEntered[select.value] = materialInput.value;
-      total += parseInt(materialInput.value);
-    }
-    yieldAmount = total;
-  }
-
-  var runEntry = new RunEntry(
-    obj["name"],
-    obj["location"],
-    durationStr,
-    yieldAmount,
-    materialsEntered
-  );
-
-  // TODO validate form prior to entry
-  if (runView.isValidEntry(runEntry)) {
-    runController.store(runEntry);
-    controls.closeModal("add-job-modal");
-    runView.layout();
-  } else {
-    // TODO SHAKE IT
-  }
-}
 
 export function addUser() {
   var form = document.getElementById("user-form");
@@ -217,8 +137,9 @@ function synchronizeSettings() {
   }
 }
 
-export function matery() {
-  console.log(getMaterialsList());
+function refreshJobsView(runs) {
+  runController.loadRuns();
+  runView.layout();
 }
 
 export function startApp() {
@@ -237,4 +158,6 @@ export function startApp() {
   // TODo this should probably be on a userModel
   // the new jobController would then register on this and trigger downstream calls
   userController.registerOnUserChangeListener(jobModel.load.bind(jobModel));
+  // TODO newer job controller would be the one that binds itself to the job model
+  jobModel.registerOnJobChangeListener((runs) => refreshJobsView(runs));
 }

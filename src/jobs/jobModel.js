@@ -7,15 +7,21 @@ export default class JobModel {
   constructor() {
     this.user = null;
     this.jobs = [];
+    this.onJobChangeListeners = [];
+  }
+
+  _notifyJobsChanged() {
+    this.onJobChangeListeners.forEach((listener) => {
+      listener(this.jobs);
+    });
   }
 
   _commit(user, runs) {
-    var jsonData = localStorage.getItem(dataKey);
-
     var allData = JSON.parse(localStorage.getItem(dataKey)) || {};
 
     allData[user] = runs;
     localStorage.setItem(dataKey, JSON.stringify(allData));
+    this._notifyJobsChanged();
   }
 
   _deleteData(user) {
@@ -23,6 +29,7 @@ export default class JobModel {
 
     delete allData[user];
     localStorage.setItem(dataKey, JSON.stringify(allData));
+    this._notifyJobsChanged();
   }
 
   _loadData(user) {
@@ -33,11 +40,14 @@ export default class JobModel {
   load(user) {
     this.user = user;
     this.jobs = this._loadData(user);
+    this._notifyJobsChanged();
   }
 
+  // TODO this might not actually be needed
   clear() {
     this.user = null;
     this.jobs = [];
+    this._notifyJobsChanged();
   }
 
   add(job) {
@@ -60,4 +70,8 @@ export default class JobModel {
   }
 
   // TODO edit(job)
+
+  registerOnJobChangeListener(callback) {
+    this.onJobChangeListeners.push(callback);
+  }
 }
