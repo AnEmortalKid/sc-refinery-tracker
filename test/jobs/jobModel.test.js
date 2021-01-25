@@ -3,8 +3,6 @@ import Run from "../../src/run";
 
 const key = "mining_tracker.runs";
 
-// {"local":[{"uuid":"68e64d5a-99e6-47c9-8df3-8fad78edee8f","name":"","location":"HUR-L1","duration":"0s","durationSeconds":0,"yieldAmount":"1515","entryTime":"2021-01-22T05:40:02.354Z"}]}
-
 afterEach(() => {
   localStorage.clear();
 });
