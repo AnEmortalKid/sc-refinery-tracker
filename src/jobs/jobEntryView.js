@@ -207,6 +207,13 @@ export default class JobEntryView {
   }
 
   /**
+   *
+   */
+  openEntryModal() {
+    app.controls.openModal("add-job-modal");
+  }
+
+  /**
    * Closes the modal
    */
   closeEntryModal() {

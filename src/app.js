@@ -18,6 +18,10 @@ import JobModel from "./jobs/jobModel";
 import JobEntryController from "./jobs/jobEntryController";
 import JobEntryView from "./jobs/jobEntryView";
 
+import JobsView from "./jobs/jobView";
+import JobController from "./jobs/jobController";
+import JobView from "./jobs/jobView";
+
 export const controls = new Controls();
 
 const userController = new UserController();
@@ -26,6 +30,9 @@ const userView = new UserView(userController);
 const jobModel = new JobModel();
 const jobEntryView = new JobEntryView();
 export const jobEntry = new JobEntryController(jobModel, jobEntryView);
+
+const jobView = new JobView();
+const jobController = new JobController(jobModel, jobView, jobEntry);
 
 const runController = new RunController(userController);
 const runView = new RunView(userController, runController);
@@ -160,4 +167,7 @@ export function startApp() {
   userController.registerOnUserChangeListener(jobModel.load.bind(jobModel));
   // TODO newer job controller would be the one that binds itself to the job model
   jobModel.registerOnJobChangeListener((runs) => refreshJobsView(runs));
+  jobModel.registerOnJobChangeListener(
+    jobController.onJobChangeHandler.bind(jobController)
+  );
 }
