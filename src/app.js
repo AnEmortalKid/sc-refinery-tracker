@@ -14,10 +14,18 @@ import SettingsView from "./settings/settingsView";
 
 import Controls from "./controls/controls";
 
+import JobModel from "./jobs/jobModel";
+import JobEntryController from "./jobs/jobEntryController";
+import JobEntryView from "./jobs/jobEntryView";
+
 export const controls = new Controls();
 
 const userController = new UserController();
 const userView = new UserView(userController);
+
+const jobModel = new JobModel();
+const jobEntryView = new JobEntryView();
+export const jobEntry = new JobEntryController(jobModel, jobEntryView);
 
 const runController = new RunController(userController);
 const runView = new RunView(userController, runController);
@@ -25,61 +33,6 @@ const runView = new RunView(userController, runController);
 const settingsController = new SettingsController(userController);
 const settingsView = new SettingsView(userController, settingsController);
 var currentRefreshFn;
-
-export function submitJobEntry() {
-  var form = document.getElementById("add-job-form");
-  var inputs = form.querySelectorAll("input");
-
-  var obj = {};
-  for (var i = 0; i < inputs.length; i++) {
-    var item = inputs.item(i);
-    if (item.name) {
-      obj[item.name] = item.value;
-    }
-  }
-
-  var selects = form.querySelectorAll("select");
-  for (var i = 0; i < selects.length; i++) {
-    var item = selects.item(i);
-    if (item.name) {
-      obj[item.name] = item.value;
-    }
-  }
-
-  var durationStr = "";
-  if (obj["duration.days"] > 0) {
-    durationStr += obj["duration.days"] + "d ";
-  }
-  if (obj["duration.hours"] > 0) {
-    durationStr += obj["duration.hours"] + "h ";
-  }
-  if (obj["duration.minutes"] > 0) {
-    durationStr += obj["duration.minutes"] + "m ";
-  }
-  if (obj["duration.seconds"] > 0) {
-    durationStr += obj["duration.seconds"] + "s";
-  }
-  durationStr = durationStr.trim();
-  // if nothing was entered
-  if (durationStr == "") {
-    durationStr = "0s";
-  }
-
-  var runEntry = new RunEntry(
-    obj["name"],
-    obj["location"],
-    durationStr,
-    obj["yieldAmount"]
-  );
-
-  if (runView.isValidEntry(runEntry)) {
-    runController.store(runEntry);
-    controls.closeModal("add-job-modal");
-    runView.layout();
-  } else {
-    // TODO SHAKE IT
-  }
-}
 
 export function addUser() {
   var form = document.getElementById("user-form");
@@ -184,6 +137,11 @@ function synchronizeSettings() {
   }
 }
 
+function refreshJobsView(runs) {
+  runController.loadRuns();
+  runView.layout();
+}
+
 export function startApp() {
   controls.setEscapeClosesModals();
 
@@ -192,4 +150,14 @@ export function startApp() {
   runView.layout();
   settingsView.layout();
   synchronizeSettings();
+
+  // cheap way of initializing the state everywhere
+  jobModel.load(userController.getCurrentUser());
+
+  // listen to updates from now on
+  // TODo this should probably be on a userModel
+  // the new jobController would then register on this and trigger downstream calls
+  userController.registerOnUserChangeListener(jobModel.load.bind(jobModel));
+  // TODO newer job controller would be the one that binds itself to the job model
+  jobModel.registerOnJobChangeListener((runs) => refreshJobsView(runs));
 }

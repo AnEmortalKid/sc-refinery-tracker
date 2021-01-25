@@ -20,7 +20,8 @@ function toRun(runEntry) {
     runEntry.duration,
     durationSeconds,
     runEntry.yieldAmount,
-    entryTime
+    entryTime,
+    runEntry.materials
   );
 
   return run;
