@@ -95,7 +95,9 @@ export default class JobView {
 
   _createActionsRow(job) {
     var row = document.createElement("td");
-    row.classList.add("w3-bar");
+
+    var rowDiv = document.createElement("div");
+    rowDiv.classList.add("w3-bar");
 
     var removeJobButton = document.createElement("button");
     removeJobButton.classList.add("w3-btn", "w3-red", "w3-round-xlarge");
@@ -107,8 +109,9 @@ export default class JobView {
     removeIcon.classList.add("fa", "fa-trash", "fa-lg");
     removeJobButton.appendChild(removeIcon);
 
-    row.append(removeJobButton);
+    rowDiv.append(removeJobButton);
 
+    row.appendChild(rowDiv);
     return row;
   }
 
@@ -134,7 +137,6 @@ export default class JobView {
   }
 
   /**
-   *
    * @param {Run} job
    */
   _createJobRow(job) {
@@ -176,6 +178,10 @@ export default class JobView {
     return row;
   }
 
+  /**
+   * Displays the given jobs
+   * @param {Run[]} jobs
+   */
   showJobs(jobs) {
     if (!jobs) {
       // hide it all
@@ -218,6 +224,10 @@ export default class JobView {
     yieldTotalColumn.textContent = yieldTotal;
   }
 
+  /**
+   * Updates the status portions of the given jobs
+   * @param {Run[]} jobs
+   */
   updateJobStatus(jobs) {
     for (var i = 0; i < jobs.length; i++) {
       var job = jobs[i];

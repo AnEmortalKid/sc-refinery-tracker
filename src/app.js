@@ -1,9 +1,6 @@
 import "./assets/w3/css/w3.css";
 import "font-awesome/css/font-awesome.css";
 
-import RunView from "./runView";
-import RunController from "./runController";
-
 import UserController from "./userController";
 import UserView from "./userView";
 
@@ -32,9 +29,6 @@ export const jobEntry = new JobEntryController(jobModel, jobEntryView);
 const jobView = new JobView();
 const jobController = new JobController(jobModel, jobView, jobEntry);
 
-// const runController = new RunController(userController);
-// const runView = new RunView(userController, runController);
-
 const settingsController = new SettingsController(userController);
 const settingsView = new SettingsView(userController, settingsController);
 var currentRefreshFn;
@@ -59,9 +53,6 @@ export function addUser() {
     userController.setUser(userName);
     userView.layout();
 
-    // runController.loadRuns();
-    // runView.layout();
-
     settingsView.layout();
     synchronizeSettings();
   }
@@ -75,9 +66,6 @@ export function onUserChange() {
 
   settingsView.layout();
   synchronizeSettings();
-
-  // runController.loadRuns();
-  // runView.layout();
 }
 
 export function confirmRemoveUser() {

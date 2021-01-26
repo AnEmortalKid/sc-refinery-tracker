@@ -2,7 +2,6 @@
  * Component that manages Refinery Jobs
  */
 export default class JobController {
-  // TODO add job entry controller
   constructor(jobModel, jobView, jobEntryController) {
     this.jobModel = jobModel;
     this.jobView = jobView;
@@ -21,6 +20,10 @@ export default class JobController {
     );
   }
 
+  /**
+   * Callback to be notified when the state of jobs change
+   * @param {Run[]} jobs
+   */
   onJobChangeHandler(jobs) {
     this.jobView.showJobs(jobs);
   }
@@ -33,23 +36,38 @@ export default class JobController {
     this.jobView.updateJobStatus(jobs);
   }
 
+  /**
+   * Handles the result of clicking the Add Job button
+   */
   handleAddJob() {
     this.jobEntryController.prepareEntryJobModal();
   }
 
+  /**
+   * Handles the result of clicking the Remove All button
+   */
   handleRemoveAllJobs() {
     this.jobView.openRemoveAllModal();
   }
 
+  /**
+   * Handles the result of confirming the Remove All Modal
+   */
   handleRemoveAllJobsConfirm() {
     this.jobModel.deleteAll();
     this.jobView.closeRemoveAllModal();
   }
 
+  /**
+   * Handles the result of canceling the Remove All Modal
+   */
   handleRemoveAllJobsCancel() {
     this.jobView.closeRemoveAllModal();
   }
 
+  /**
+   * Handles the result of clicking the trash icon on a job row
+   */
   handleRemoveJob(jobId) {
     this.jobModel.delete(jobId);
   }
