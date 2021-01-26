@@ -50,6 +50,7 @@ export default class RunView {
     document.getElementById("runs-table-footer").hidden = false;
 
     var runs = this.runController.fetch();
+    document.getElementById("remove-all-jobs-btn").disabled = runs.length == 0;
     if (runs.length == 0) {
       document
         .getElementById("remove-all-jobs-btn")

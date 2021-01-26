@@ -2,7 +2,6 @@ import "./assets/w3/css/w3.css";
 import "font-awesome/css/font-awesome.css";
 
 import RunView from "./runView";
-import RunEntry from "./runEntry";
 import RunController from "./runController";
 
 import UserController from "./userController";
@@ -18,7 +17,6 @@ import JobModel from "./jobs/jobModel";
 import JobEntryController from "./jobs/jobEntryController";
 import JobEntryView from "./jobs/jobEntryView";
 
-import JobsView from "./jobs/jobView";
 import JobController from "./jobs/jobController";
 import JobView from "./jobs/jobView";
 
@@ -34,8 +32,8 @@ export const jobEntry = new JobEntryController(jobModel, jobEntryView);
 const jobView = new JobView();
 const jobController = new JobController(jobModel, jobView, jobEntry);
 
-const runController = new RunController(userController);
-const runView = new RunView(userController, runController);
+// const runController = new RunController(userController);
+// const runView = new RunView(userController, runController);
 
 const settingsController = new SettingsController(userController);
 const settingsView = new SettingsView(userController, settingsController);
@@ -61,8 +59,8 @@ export function addUser() {
     userController.setUser(userName);
     userView.layout();
 
-    runController.loadRuns();
-    runView.layout();
+    // runController.loadRuns();
+    // runView.layout();
 
     settingsView.layout();
     synchronizeSettings();
@@ -78,36 +76,25 @@ export function onUserChange() {
   settingsView.layout();
   synchronizeSettings();
 
-  runController.loadRuns();
-  runView.layout();
+  // runController.loadRuns();
+  // runView.layout();
 }
 
 export function confirmRemoveUser() {
-  runController.removeAllRuns(userController.getCurrentUser());
+  // runController.removeAllRuns(userController.getCurrentUser());
   userController.removeUser(userController.getCurrentUser());
 
   userView.layout();
-  runView.layout();
+  // runView.layout();
   settingsView.layout();
   synchronizeSettings();
 
   controls.closeModal("remove-user-form-modal");
 }
 
-export function confirmRemoveAllJobs() {
-  runController.removeAllRuns(userController.getCurrentUser());
-  runView.layout();
-  controls.closeModal("remove-all-jobs-modal");
-}
-
 export function prepareRemoveUser() {
   userView.prepareRemoveModal();
   controls.openModal("remove-user-form-modal");
-}
-
-export function removeRun(runId) {
-  runController.remove(runId);
-  runView.layout();
 }
 
 export function prepareSettingsModal() {
@@ -144,17 +131,10 @@ function synchronizeSettings() {
   }
 }
 
-function refreshJobsView(runs) {
-  runController.loadRuns();
-  runView.layout();
-}
-
 export function startApp() {
   controls.setEscapeClosesModals();
 
   userView.layout();
-  runController.loadRuns();
-  runView.layout();
   settingsView.layout();
   synchronizeSettings();
 
@@ -165,9 +145,4 @@ export function startApp() {
   // TODo this should probably be on a userModel
   // the new jobController would then register on this and trigger downstream calls
   userController.registerOnUserChangeListener(jobModel.load.bind(jobModel));
-  // TODO newer job controller would be the one that binds itself to the job model
-  jobModel.registerOnJobChangeListener((runs) => refreshJobsView(runs));
-  jobModel.registerOnJobChangeListener(
-    jobController.onJobChangeHandler.bind(jobController)
-  );
 }

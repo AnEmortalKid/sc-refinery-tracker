@@ -1,4 +1,4 @@
-<div class="w3-container w3-padding w3-margin w3-border-blue-gray w3-border" id="refinery-tracker-container">
+<div class="w3-container w3-padding w3-margin w3-border-blue-gray w3-border" id="jobs-view-container">
   
     <div class="w3-center">
       <h2>Jobs</h2>
@@ -6,11 +6,11 @@
   
     <div class="w3-margin-top w3-margin-bottom">
       <button id="add-job-btn" class="w3-button w3-blue w3-round-large">Add Job</button>
-      <button id="remove-all-jobs-btn" class="w3-button w3-red w3-round-large" onclick="app.controls.openModal('remove-all-jobs-modal')">Remove All</button>
+      <button id="remove-all-jobs-btn" class="w3-button w3-red w3-round-large" disabled>Remove All</button>
     </div>
   
     <!-- todo make sortable -->
-    <table id="runs-table" class="w3-table w3-bordered w3-striped w3-centered">
+    <table id="jobs-table" class="w3-table w3-bordered w3-striped w3-centered">
       <thead>
         <tr>
           <th>Name</th>
@@ -42,13 +42,13 @@
         </td>
       </tr>
     </tbody>
-    <tfoot class="w3-topbar" id="runs-table-footer">
+    <tfoot class="w3-topbar" id="jobs-table-footer">
       <tr>
        <td></td> 
        <td></td>
        <td></td> 
        <td></td> 
-       <td id="runs-table-footer-yield"></td> 
+       <td id="jobs-table-footer-yield"></td> 
        <td></td> 
        <td></td> 
       </tr>
