@@ -25,6 +25,14 @@ export default class JobController {
     this.jobView.showJobs(jobs);
   }
 
+  /**
+   * Refreshes the status components of all jobs
+   */
+  refreshJobStatus() {
+    var jobs = this.jobModel.getAll();
+    this.jobView.updateJobStatus(jobs);
+  }
+
   handleAddJob() {
     this.jobEntryController.prepareEntryJobModal();
   }

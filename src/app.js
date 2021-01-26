@@ -126,7 +126,7 @@ function synchronizeSettings() {
   }
   if (userSettings.refreshRateSeconds > 0) {
     currentRefreshFn = window.setInterval(function () {
-      runView.layout();
+      jobController.refreshJobStatus();
     }, userSettings.refreshRateSeconds * 1000);
   }
 }

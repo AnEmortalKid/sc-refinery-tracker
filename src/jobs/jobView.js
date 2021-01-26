@@ -45,12 +45,7 @@ export default class JobView {
    * @param {*} handler a handler to invoke when the remove job button is pressed
    */
   bindRemoveJob(handler) {
-    var action = (event) => {
-      // todo get event id somehow
-      handler(event.target.dataset.jobId);
-    };
-
-    this.removeJobAction = action;
+    this.removeJobHandler = handler;
   }
 
   /**
@@ -98,38 +93,51 @@ export default class JobView {
     app.controls.closeModal("remove-all-jobs-modal");
   }
 
+  _createActionsRow(job) {
+    var row = document.createElement("td");
+    row.classList.add("w3-bar");
+
+    var removeJobButton = document.createElement("button");
+    removeJobButton.classList.add("w3-btn", "w3-red", "w3-round-xlarge");
+    removeJobButton.addEventListener("click", () =>
+      this.removeJobHandler(job.uuid)
+    );
+
+    var removeIcon = document.createElement("i");
+    removeIcon.classList.add("fa", "fa-trash", "fa-lg");
+    removeJobButton.appendChild(removeIcon);
+
+    row.append(removeJobButton);
+
+    return row;
+  }
+
+  _getTimeRemaining(job) {
+    var nowSeconds = Math.round(new Date().getTime() / 1000);
+    var entrySeconds = Math.round(new Date(job.entryTime).getTime() / 1000);
+    var ellapsedSeconds = nowSeconds - entrySeconds;
+    return job.durationSeconds - ellapsedSeconds;
+  }
+
+  _setSpanStatus(span, remainingSeconds) {
+    if (remainingSeconds > 0) {
+      span.classList.add("w3-amber");
+      span.textContent = "In Progress";
+    } else {
+      span.classList.add("w3-green");
+      span.textContent = "Done";
+    }
+  }
+
+  _setTimeRemaining(column, remainingSeconds) {
+    column.textContent = toDurationString(remainingSeconds);
+  }
+
   /**
-   * 
-   * @param {Run} job 
+   *
+   * @param {Run} job
    */
   _createJobRow(job) {
-  //   <tr>
-  //   <th>Name</th>
-  //   <th>Location</th>
-  //   <th>Duration</th>
-  //   <th>Time Remaining</th>
-  //   <th>Yield Units</th>
-  //   <th>Status</th>
-  //   <th>Actions</th>
-  // </tr>
-    //   <tr>
-    //   <td>Borase/Laranite</td>
-    //   <td>CRU-L1</td>
-    //   <td>21d 43m</td>
-    //   <td>15h 22m 3s</td>
-    //   <td>1500</td>
-    //   <td>
-    //     <span class="w3-tag w3-padding-small w3-round w3-amber w3-center">In Progress</span>
-    //   </td>
-    //   <td>
-    //     <div class="w3-bar">
-    //       <button class="w3-btn w3-blue-grey w3-round-xlarge"><i class="fa fa-cube"></i></button>
-    //       <button class="w3-btn w3-blue w3-round-xlarge"><i class="fa fa-pencil-square-o fa-lg"></i></button>
-    //       <button class="w3-btn w3-red w3-round-xlarge"><i class="fa fa-trash fa-lg"></i></button>
-    //     </div>
-    //   </td>
-    // </tr>
-
     var row = document.createElement("tr");
     row.dataset.jobId = job.uuid;
 
@@ -141,43 +149,57 @@ export default class JobView {
     location.textContent = job.location;
     row.appendChild(location);
 
-    var duration = document.createElement('td');
+    var duration = document.createElement("td");
     duration.textContent = job.duration;
     row.appendChild(duration);
 
-    // TODO compute time remaining
-    var timeRemaining = document.createElement('td');
-    timeRemaining.textContent = toDurationString(job.durationSeconds);
+    var remainingSeconds = this._getTimeRemaining(job);
+    var timeRemaining = document.createElement("td");
+    timeRemaining.id = "job-remaining-" + job.uuid;
+    this._setTimeRemaining(timeRemaining, remainingSeconds);
     row.appendChild(timeRemaining);
 
-    var yieldUnits = document.createElement('td');
+    var yieldUnits = document.createElement("td");
     yieldUnits.textContent = job.yieldAmount;
     row.appendChild(yieldUnits);
 
-    // TODO row.appendChild(_createActionBar(job));
+    var status = document.createElement("td");
+    var statusSpan = document.createElement("span");
+    statusSpan.classList.add("w3-tag", "w3-padding-small");
+    statusSpan.id = "job-status-" + job.uuid;
+    this._setSpanStatus(statusSpan, remainingSeconds);
 
+    status.appendChild(statusSpan);
+    row.appendChild(status);
+
+    row.appendChild(this._createActionsRow(job));
     return row;
   }
 
   showJobs(jobs) {
-    // TODO handle null
-
-    var jobCount = jobs.length;
+    if (!jobs) {
+      // hide it all
+      document.getElementById("jobs-view-container").hidden = true;
+      return;
+    }
+    document.getElementById("jobs-view-container").hidden = false;
 
     var tableBody = document.getElementById("jobs-table-body");
     removeChildren(tableBody);
-    // remove all
 
     var removeAllButton = document.getElementById("remove-all-jobs-btn");
+    var footer = document.getElementById("jobs-table-footer");
+    var jobCount = jobs.length;
     if (jobCount == 0) {
       removeAllButton.disabled = true;
       removeAllButton.classList.add("w3-disabled");
+      footer.hidden = true;
       return;
     }
-    // we have jobs, enable the button
+    // we have jobs, enable the ui
     removeAllButton.disabled = false;
     removeAllButton.classList.remove("w3-disabled");
-
+    footer.hidden = false;
 
     // layout rows
     for (var i = 0; i < jobCount; i++) {
@@ -186,9 +208,26 @@ export default class JobView {
       // TODO create materials row
     }
 
+    var yieldTotal = 0;
+    for (var i = 0; i < jobCount; i++) {
+      yieldTotal += jobs[i].yieldAmount;
+    }
+
     // setup footer
+    var yieldTotalColumn = document.getElementById("jobs-table-footer-yield");
+    yieldTotalColumn.textContent = yieldTotal;
   }
 
-  // TODO
-  //  add a function here to update time remaining and status only
+  updateJobStatus(jobs) {
+    for (var i = 0; i < jobs.length; i++) {
+      var job = jobs[i];
+
+      var remainingSeconds = this._getTimeRemaining(job);
+      var spanCol = document.getElementById("job-status-" + job.uuid);
+      this._setSpanStatus(spanCol, remainingSeconds);
+
+      var timeLeftCol = document.getElementById("job-remaining-" + job.uuid);
+      this._setTimeRemaining(timeLeftCol, remainingSeconds);
+    }
+  }
 }
