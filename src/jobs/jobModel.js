@@ -65,7 +65,7 @@ export default class JobModel {
   }
 
   deleteAll() {
-    this.runs = [];
+    this.jobs = [];
     this._deleteData(this.user);
   }
 

@@ -1,7 +1,9 @@
 <div id="remove-all-jobs-modal" class="w3-modal">
   <div class="w3-modal-content  w3-pale-red" id="remove-all-jobs-form-parent">
     <div class="w3-container w3-red">
-      <span onclick="app.controls.closeModal('remove-all-jobs-modal')" class="w3-button w3-display-topright">&times;</span>
+      <button id="remove-all-jobs-modal-close-button" class="w3-button w3-red w3-round-large w3-display-topright">
+        <i class="fa fa-times fa-lg"></i>
+      </button>
       <h2><i class="fa fa-minus-square"></i> Remove All Jobs</span></h2>
     </div>
     <div class="w3-panel">
@@ -9,8 +11,8 @@
     </div>
     <footer class="w3-container w3-padding">
       <div class="w3-bar w3-center">
-        <button class="w3-button w3-red" onclick="app.confirmRemoveAllJobs()">Confirm</button>
-        <button class="w3-button w3-gray" onclick="app.controls.closeModal('remove-all-jobs-modal')">Cancel</button>
+        <button id="remove-all-jobs-confirm-btn" class="w3-button w3-red w3-round-large">Confirm</button>
+        <button id="remove-all-jobs-cancel-btn" class="w3-button w3-gray w3-round-large">Cancel</button>
       </div>
     </footer>
   </div>

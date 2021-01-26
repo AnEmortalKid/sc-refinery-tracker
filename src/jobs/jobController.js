@@ -1,0 +1,74 @@
+/**
+ * Component that manages Refinery Jobs
+ */
+export default class JobController {
+  constructor(jobModel, jobView, jobEntryController) {
+    this.jobModel = jobModel;
+    this.jobView = jobView;
+    this.jobEntryController = jobEntryController;
+
+    this.jobView.bindAddJob(this.handleAddJob.bind(this));
+    this.jobView.bindRemoveJob(this.handleRemoveJob.bind(this));
+    this.jobView.bindRemoveAllJobs(this.handleRemoveAllJobs.bind(this));
+    this.jobView.bindRemoveAllConfirm(
+      this.handleRemoveAllJobsConfirm.bind(this)
+    );
+    this.jobView.bindRemoveAllCancel(this.handleRemoveAllJobsCancel.bind(this));
+
+    this.jobModel.registerOnJobChangeListener(
+      this.onJobChangeHandler.bind(this)
+    );
+  }
+
+  /**
+   * Callback to be notified when the state of jobs change
+   * @param {Run[]} jobs
+   */
+  onJobChangeHandler(jobs) {
+    this.jobView.showJobs(jobs);
+  }
+
+  /**
+   * Refreshes the status components of all jobs
+   */
+  refreshJobStatus() {
+    var jobs = this.jobModel.getAll();
+    this.jobView.updateJobStatus(jobs);
+  }
+
+  /**
+   * Handles the result of clicking the Add Job button
+   */
+  handleAddJob() {
+    this.jobEntryController.prepareEntryJobModal();
+  }
+
+  /**
+   * Handles the result of clicking the Remove All button
+   */
+  handleRemoveAllJobs() {
+    this.jobView.openRemoveAllModal();
+  }
+
+  /**
+   * Handles the result of confirming the Remove All Modal
+   */
+  handleRemoveAllJobsConfirm() {
+    this.jobModel.deleteAll();
+    this.jobView.closeRemoveAllModal();
+  }
+
+  /**
+   * Handles the result of canceling the Remove All Modal
+   */
+  handleRemoveAllJobsCancel() {
+    this.jobView.closeRemoveAllModal();
+  }
+
+  /**
+   * Handles the result of clicking the trash icon on a job row
+   */
+  handleRemoveJob(jobId) {
+    this.jobModel.delete(jobId);
+  }
+}

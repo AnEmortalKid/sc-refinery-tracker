@@ -65,6 +65,11 @@ export default class JobEntryController {
     }
   }
 
+  prepareEntryJobModal() {
+    // if we needed to set any state OR edit the state, we'd do it here in the future
+    this.jobEntryView.openEntryModal();
+  }
+
   /**
    * Validates that the form data is correct and has the required fields
    *

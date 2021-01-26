@@ -150,7 +150,7 @@ describe("deleteAll", () => {
 
     model.deleteAll();
 
-    expect(model.runs).toEqual([]);
+    expect(model.jobs).toEqual([]);
 
     // also should remove from storage
     var rawData = localStorage.getItem(key);
