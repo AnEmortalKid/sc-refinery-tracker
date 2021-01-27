@@ -134,5 +134,7 @@ export function startApp() {
   // listen to updates from now on
   // TODo this should probably be on a userModel
   // the new jobController would then register on this and trigger downstream calls
-  userModel.registerOnUserChangeListener(jobModel.load.bind(jobModel));
+  userModel.registerOnUserChangeListener(
+    jobController.onUserChangeHandler.bind(jobController)
+  );
 }

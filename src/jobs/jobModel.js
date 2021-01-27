@@ -33,24 +33,26 @@ export default class JobModel {
   }
 
   _loadData(user) {
-    if (!user) {
-      return null;
-    }
-
     var allData = JSON.parse(localStorage.getItem(dataKey)) || {};
     return allData[user] || [];
   }
 
+  /**
+   * Loads data for the given user
+   * @param {User} user the name of the user, cannot be null
+   */
   load(user) {
     this.user = user;
     this.jobs = this._loadData(user);
     this._notifyJobsChanged();
   }
 
-  // TODO this might not actually be needed
+  /**
+   * Clears the currently loaded data, load should be called prior to re-interacting with this model
+   */
   clear() {
     this.user = null;
-    this.jobs = [];
+    this.jobs = null;
     this._notifyJobsChanged();
   }
 

@@ -29,6 +29,18 @@ export default class JobController {
   }
 
   /**
+   * Callback to be notified when the current user changes
+   * @param {String} the name of the user
+   */
+  onUserChangeHandler(currentUser) {
+    if (currentUser) {
+      this.jobModel.load(currentUser);
+    } else {
+      this.jobModel.clear();
+    }
+  }
+
+  /**
    * Refreshes the status components of all jobs
    */
   refreshJobStatus() {

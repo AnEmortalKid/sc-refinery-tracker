@@ -21,7 +21,7 @@ export default class UserModel {
     if (this.currentUser) {
       localStorage.setItem(currentUserKey, this.currentUser);
     } else {
-      localStorage.clear(currentUserKey);
+      localStorage.removeItem(currentUserKey);
     }
 
     localStorage.setItem(usersDataKey, JSON.stringify(this.users));
