@@ -1,60 +1,34 @@
-const usersDataKey = "mining_tracker.users";
-const currentUserKey = "mining_tracker.user";
-
 export default class UserController {
-  constructor() {
-    var userData = localStorage.getItem(usersDataKey);
-    if (userData) {
-      this.users = JSON.parse(userData);
-    } else {
-      this.users = [];
-    }
-
-    this.user = localStorage.getItem(currentUserKey) || null;
-
-    this.onUserChangeListeners = [];
-
+  constructor(userModel) {
+    this.userModel = userModel;
     // TODO on startup, do a load();
   }
 
   storeUser(userName) {
-    this.users.push(userName);
-    localStorage.setItem(usersDataKey, JSON.stringify(this.users));
+    this.userModel.add(userName);
   }
 
   hasUser(userName) {
-    return this.users.includes(userName);
+    return this.userModel.exists(userName);
   }
 
   setUser(userName) {
-    this.user = userName;
-    localStorage.setItem(currentUserKey, userName);
-
-    this.onUserChangeListeners.forEach((listener) => {
-      listener(userName);
-    });
+    this.userModel.setCurrent(userName);
   }
 
   removeUser(userName) {
-    const index = this.users.indexOf(userName);
-    if (index > -1) {
-      this.users.splice(index, 1);
+    var current = this.userModel.getCurrent();
+    this.userModel.delete(userName);
+    if (userName === current) {
+      this.userModel.clearCurrent();
     }
-    localStorage.setItem(usersDataKey, JSON.stringify(this.users));
-    // clear out
-    localStorage.removeItem(currentUserKey);
-    this.user = null;
   }
 
   getCurrentUser() {
-    return this.user;
+    return this.userModel.getCurrent();
   }
 
   getUsers() {
-    return this.users;
-  }
-
-  registerOnUserChangeListener(callback) {
-    this.onUserChangeListeners.push(callback);
+    return this.userModel.getAll();
   }
 }

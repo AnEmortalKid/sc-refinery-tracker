@@ -33,6 +33,10 @@ export default class JobModel {
   }
 
   _loadData(user) {
+    if (!user) {
+      return null;
+    }
+
     var allData = JSON.parse(localStorage.getItem(dataKey)) || {};
     return allData[user] || [];
   }

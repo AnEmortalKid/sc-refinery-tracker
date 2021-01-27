@@ -7,13 +7,19 @@ const currentUserKey = "mining_tracker.user";
 export default class UserModel {
   constructor() {
     this.users = JSON.parse(localStorage.getItem(usersDataKey)) || [];
-    this.user = localStorage.getItem(currentUserKey) || null;
+    this.currentUser = localStorage.getItem(currentUserKey) || null;
     this.onUserChangeListeners = [];
   }
 
+  _fireNotification(newUser) {
+    this.onUserChangeListeners.forEach((listener) => {
+      listener(newUser);
+    });
+  }
+
   _commit() {
-    if (this.user) {
-      localStorage.setItem(currentUserKey, this.user);
+    if (this.currentUser) {
+      localStorage.setItem(currentUserKey, this.currentUser);
     } else {
       localStorage.clear(currentUserKey);
     }
@@ -37,7 +43,7 @@ export default class UserModel {
    * @param {String} userName the name of the user
    */
   delete(userName) {
-    this.users = this.users.filter(item => item !== userName);
+    this.users = this.users.filter((item) => item !== userName);
     this._commit();
   }
 
@@ -45,24 +51,47 @@ export default class UserModel {
    * Determines whether the user exists or not
    * @param {String} userName the name of the user
    */
-  exists(userName) {}
+  exists(userName) {
+    return this.users.includes(userName);
+  }
+
+  /**
+   * returns all users
+   */
+  getAll() {
+    return this.users;
+  }
 
   /**
    * Sets the User specified by the name as the selected user
    * @param {String} userName  the name of the user
    */
-  setCurrent(userName) {}
+  setCurrent(userName) {
+    if (this.currentUser !== userName) {
+      this.currentUser = userName;
+      this._commit();
+
+      this._fireNotification(userName);
+    }
+  }
 
   /**
    * Gets the currently selected user
    * @param {String} userName  the name of the user
    */
-  getCurrent() {}
+  getCurrent() {
+    return this.currentUser;
+  }
 
   /**
    * Clears the currently selected user
    */
-  clearCurrent() {}
+  clearCurrent() {
+    this.currentUser = null;
+    this._commit();
+
+    this._fireNotification(null);
+  }
 
   registerOnUserChangeListener(callback) {
     this.onUserChangeListeners.push(callback);
