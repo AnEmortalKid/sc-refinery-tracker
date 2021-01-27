@@ -1,6 +1,7 @@
 import "./assets/w3/css/w3.css";
 import "font-awesome/css/font-awesome.css";
 
+import UserModel from "./users/userModel";
 import UserController from "./userController";
 import UserView from "./userView";
 
@@ -19,7 +20,8 @@ import JobView from "./jobs/jobView";
 
 export const controls = new Controls();
 
-const userController = new UserController();
+const userModel = new UserModel();
+const userController = new UserController(userModel);
 const userView = new UserView(userController);
 
 const jobModel = new JobModel();
@@ -132,5 +134,7 @@ export function startApp() {
   // listen to updates from now on
   // TODo this should probably be on a userModel
   // the new jobController would then register on this and trigger downstream calls
-  userController.registerOnUserChangeListener(jobModel.load.bind(jobModel));
+  userModel.registerOnUserChangeListener(
+    jobController.onUserChangeHandler.bind(jobController)
+  );
 }

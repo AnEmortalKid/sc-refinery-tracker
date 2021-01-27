@@ -65,7 +65,7 @@ describe("clear", () => {
     model.clear();
 
     expect(model.user).toBe(null);
-    expect(model.jobs).toEqual([]);
+    expect(model.jobs).toEqual(null);
   });
 });
 

@@ -229,6 +229,11 @@ export default class JobView {
    * @param {Run[]} jobs
    */
   updateJobStatus(jobs) {
+    if (!jobs) {
+      // the ui will not be displayed, do nothing
+      return;
+    }
+
     for (var i = 0; i < jobs.length; i++) {
       var job = jobs[i];
 
