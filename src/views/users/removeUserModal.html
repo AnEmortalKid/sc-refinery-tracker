@@ -1,7 +1,9 @@
 <div id="remove-user-form-modal" class="w3-modal">
     <div class="w3-modal-content  w3-pale-red" id="remove-user-form-parent">
       <header class="w3-container w3-red">
-        <span onclick="app.controls.closeModal('remove-user-form-modal')" class="w3-button w3-display-topright">&times;</span>
+        <button id="remove-user-modal-close-button" class="w3-button w3-red w3-round-large w3-display-topright">
+          <i class="fa fa-times fa-lg"></i>
+        </button>
         <h2><i class="fa fa-user-times"></i> Remove <span id="remove-user-header-placeholder">User</span>?</h2>
       </header>
       <div class="w3-panel">
@@ -10,8 +12,8 @@
       
       <footer class="w3-container w3-padding">
         <div class="w3-bar w3-center">
-          <button class="w3-button w3-red" onclick="app.confirmRemoveUser()">Confirm</button>
-          <button class="w3-button w3-gray" onclick="app.controls.closeModal('remove-user-form-modal')">Cancel</button>
+          <button id="remove-user-form-confirm-btn" class="w3-button w3-red">Confirm</button>
+          <button id="remove-user-form-cancel-btn" class="w3-button w3-gray">Cancel</button>
         </div>
       </footer>
     </div>

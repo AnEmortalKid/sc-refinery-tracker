@@ -1,14 +1,14 @@
 const buttonId = "user-settings-modal-btn";
 
 export default class SettingsView {
-  constructor(userController, settingsController) {
-    this.userController = userController;
+  constructor(userModel, settingsController) {
+    this.userModel = userModel;
     this.settingsController = settingsController;
   }
 
   layout() {
     var button = document.getElementById(buttonId);
-    if (!this.userController.getCurrentUser()) {
+    if (!this.userModel.getCurrent()) {
       // nothing selected, disable our button
       if (!button.classList.contains("w3-disabled")) {
         button.classList.add("w3-disabled");
@@ -19,13 +19,13 @@ export default class SettingsView {
   }
 
   prepareSettingsModal() {
-    if (!this.userController.getCurrentUser()) {
+    if (!this.userModel.getCurrent()) {
       return;
     }
 
     document.getElementById(
       "user-settings-header-placeholder"
-    ).textContent = this.userController.getCurrentUser();
+    ).textContent = this.userModel.getCurrent();
 
     var currentSettings = this.settingsController.getUserSettings();
     var form = document.getElementById("settings-form");

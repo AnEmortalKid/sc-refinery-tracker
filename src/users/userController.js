@@ -5,60 +5,65 @@ export default class UserController {
 
     this.userView.bindAddUser(this.handleAddUser.bind(this));
     this.userView.bindConfirmAddUser(this.submitAddUser.bind(this));
+    this.userView.bindCancelAddUserForm(this.handleAddUserCancel.bind(this));
 
     this.userView.bindRemoveUser(this.handleRemoveUser.bind(this));
-
+    this.userView.bindConfirmRemoveUser(
+      this.handleConfirmRemoveUser.bind(this)
+    );
+    this.userView.bindCancelRemoveUser(this.handleRemoveUserCancel.bind(this));
     this.userView.bindOnUserChange(this.handleOnUserChange.bind(this));
 
-    // TODO on startup, do a load();
+    this._renderUsers();
+  }
+
+  _renderUsers() {
+    this.userView.showUsers(
+      this.userModel.getAll(),
+      this.userModel.getCurrent()
+    );
   }
 
   handleAddUser() {
-    app.controls.openModal("add-user-form-modal");
+    this.userView.openAddUserModal();
   }
 
-  submitAddUser(userName) {
-    this.userModel.add(userName);
+  submitAddUser(data) {
+    var userName = data["username"];
+
     // set the newly added user as the current
+    this.userModel.add(userName);
     this.userModel.setCurrent(userName);
 
-    app.controls.closeModal("add-user-form-modal");
-    // downstream layout
+    this.userView.closeAddUserModal();
+    this._renderUsers();
+  }
+
+  handleAddUserCancel() {
+    this.userView.closeAddUserModal();
   }
 
   handleRemoveUser() {
-    app.controls.openModal("remove-user-form-modal");
+    this.userView.openRemoveUserModal();
+  }
+
+  handleConfirmRemoveUser(userName) {
+    this.userModel.delete(userName);
+    this.userModel.clearCurrent();
+
+    this.userView.closeRemoveUserModal();
+    this.userView.showUsers(
+      this.userModel.getAll(),
+      this.userModel.getCurrent()
+    );
+  }
+
+  handleRemoveUserCancel() {
+    this.userView.closeRemoveUserModal();
   }
 
   handleOnUserChange(userName) {
-    console.log(`user:${userName}`);
-  }
-
-  storeUser(userName) {
-    this.userModel.add(userName);
-  }
-
-  hasUser(userName) {
-    return this.userModel.exists(userName);
-  }
-
-  setUser(userName) {
     this.userModel.setCurrent(userName);
-  }
-
-  removeUser(userName) {
-    var current = this.userModel.getCurrent();
-    this.userModel.delete(userName);
-    if (userName === current) {
-      this.userModel.clearCurrent();
-    }
-  }
-
-  getCurrentUser() {
-    return this.userModel.getCurrent();
-  }
-
-  getUsers() {
-    return this.userModel.getAll();
+    this.userView.updateButtons(userName);
   }
 }

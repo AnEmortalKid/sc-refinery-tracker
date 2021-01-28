@@ -159,3 +159,25 @@ describe("deleteAll", () => {
     expect(allData).not.toHaveProperty("user1");
   });
 });
+
+describe("deleteAllForUser", () => {
+  test("only clears user", () => {
+    var run1 = new Run("id1", "name", "location", "1m", 60, 100, new Date());
+    var run2 = new Run("id2", "name", "location", "1m", 60, 200, new Date());
+    var run3 = new Run("id3", "name", "location", "1m", 60, 300, new Date());
+
+    var val = JSON.stringify({ user1: [run1, run3], user2: [run2] });
+    localStorage.setItem(key, val);
+
+    const model = new JobModel();
+
+    model.deleteAllForUser("user1");
+
+    // should remove from storage
+    var rawData = localStorage.getItem(key);
+    var allData = JSON.parse(rawData);
+
+    expect(allData).not.toHaveProperty("user1");
+    expect(allData).toHaveProperty("user2");
+  });
+});
