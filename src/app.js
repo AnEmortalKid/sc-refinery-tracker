@@ -2,8 +2,8 @@ import "./assets/w3/css/w3.css";
 import "font-awesome/css/font-awesome.css";
 
 import UserModel from "./users/userModel";
-import UserController from "./userController";
-import UserView from "./userView";
+import UserController from "./users/userController";
+import UserView from "./users/userView";
 
 import Settings from "./settings/settings";
 import SettingsController from "./settings/settingsController";
@@ -21,8 +21,8 @@ import JobView from "./jobs/jobView";
 export const controls = new Controls();
 
 const userModel = new UserModel();
-const userController = new UserController(userModel);
-const userView = new UserView(userController);
+const userView = new UserView();
+const userController = new UserController(userModel, userView);
 
 const jobModel = new JobModel();
 const jobEntryView = new JobEntryView();
@@ -31,61 +31,9 @@ export const jobEntry = new JobEntryController(jobModel, jobEntryView);
 const jobView = new JobView();
 const jobController = new JobController(jobModel, jobView, jobEntry);
 
-const settingsController = new SettingsController(userController);
-const settingsView = new SettingsView(userController, settingsController);
+const settingsController = new SettingsController(userModel);
+const settingsView = new SettingsView(userModel, settingsController);
 var currentRefreshFn;
-
-export function addUser() {
-  var form = document.getElementById("user-form");
-  var inputs = form.querySelectorAll("input");
-  var obj = {};
-  for (var i = 0; i < inputs.length; i++) {
-    var item = inputs.item(i);
-    if (item.name) {
-      obj[item.name] = item.value;
-    }
-  }
-
-  var userName = obj["username"];
-
-  // TODO highlight red
-  if (!userController.hasUser(userName)) {
-    userController.storeUser(userName);
-    // immediately switch
-    userController.setUser(userName);
-    userView.layout();
-
-    settingsView.layout();
-    synchronizeSettings();
-  }
-
-  // TODO return correct control
-  controls.closeModal("add-user-form-modal");
-}
-
-export function onUserChange() {
-  userView.onUserChange();
-
-  settingsView.layout();
-  synchronizeSettings();
-}
-
-export function confirmRemoveUser() {
-  // runController.removeAllRuns(userController.getCurrentUser());
-  userController.removeUser(userController.getCurrentUser());
-
-  userView.layout();
-  // runView.layout();
-  settingsView.layout();
-  synchronizeSettings();
-
-  controls.closeModal("remove-user-form-modal");
-}
-
-export function prepareRemoveUser() {
-  userView.prepareRemoveModal();
-  controls.openModal("remove-user-form-modal");
-}
 
 export function prepareSettingsModal() {
   settingsView.prepareSettingsModal();
@@ -124,17 +72,21 @@ function synchronizeSettings() {
 export function startApp() {
   controls.setEscapeClosesModals();
 
-  userView.layout();
   settingsView.layout();
   synchronizeSettings();
 
   // cheap way of initializing the state everywhere
-  jobModel.load(userController.getCurrentUser());
+  jobModel.load(userModel.getCurrent());
 
-  // listen to updates from now on
-  // TODo this should probably be on a userModel
-  // the new jobController would then register on this and trigger downstream calls
   userModel.registerOnUserChangeListener(
     jobController.onUserChangeHandler.bind(jobController)
   );
+  userModel.registerOnUserDeletedListener(
+    jobController.onUserDeletedHandler.bind(jobController)
+  );
+
+  userModel.registerOnUserChangeListener(() => {
+    settingsView.layout();
+    synchronizeSettings();
+  });
 }

@@ -18,7 +18,6 @@ export default class JobView {
    * @param {function} handler a handler to invoke when the add job button is pressed
    */
   bindAddJob(handler) {
-    //onclick="app.controls.openModal('add-job-modal')"
     var action = (event) => {
       handler();
     };

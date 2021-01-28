@@ -75,6 +75,11 @@ export default class JobModel {
     this._deleteData(this.user);
   }
 
+  deleteAllForUser(user) {
+    // TODO if this.user === user?
+    this._deleteData(user);
+  }
+
   // TODO edit(job)
 
   registerOnJobChangeListener(callback) {

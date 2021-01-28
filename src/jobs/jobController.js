@@ -40,6 +40,12 @@ export default class JobController {
     }
   }
 
+  onUserDeletedHandler(deleted) {
+    if (deleted) {
+      this.jobModel.deleteAllForUser(deleted);
+    }
+  }
+
   /**
    * Refreshes the status components of all jobs
    */

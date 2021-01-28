@@ -9,11 +9,18 @@ export default class UserModel {
     this.users = JSON.parse(localStorage.getItem(usersDataKey)) || [];
     this.currentUser = localStorage.getItem(currentUserKey) || null;
     this.onUserChangeListeners = [];
+    this.onUserDeletedListeners = [];
   }
 
-  _fireNotification(newUser) {
+  _fireUserChange(newUser) {
     this.onUserChangeListeners.forEach((listener) => {
       listener(newUser);
+    });
+  }
+
+  _fireDeleteChange(deleted) {
+    this.onUserDeletedListeners.forEach((listener) => {
+      listener(deleted);
     });
   }
 
@@ -45,6 +52,7 @@ export default class UserModel {
   delete(userName) {
     this.users = this.users.filter((item) => item !== userName);
     this._commit();
+    this._fireDeleteChange(userName);
   }
 
   /**
@@ -71,7 +79,7 @@ export default class UserModel {
       this.currentUser = userName;
       this._commit();
 
-      this._fireNotification(userName);
+      this._fireUserChange(userName);
     }
   }
 
@@ -90,10 +98,14 @@ export default class UserModel {
     this.currentUser = null;
     this._commit();
 
-    this._fireNotification(null);
+    this._fireUserChange(null);
   }
 
   registerOnUserChangeListener(callback) {
     this.onUserChangeListeners.push(callback);
+  }
+
+  registerOnUserDeletedListener(callback) {
+    this.onUserDeletedListeners.push(callback);
   }
 }

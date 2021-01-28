@@ -30,8 +30,8 @@ function removeUserSettings(userName) {
 }
 
 export default class SettingsController {
-  constructor(userController) {
-    this.userController = userController;
+  constructor(userModel) {
+    this.userModel = userModel;
   }
 
   getUserSettings() {
@@ -40,7 +40,7 @@ export default class SettingsController {
       return defaultSettings();
     }
 
-    var current = this.userController.getCurrentUser();
+    var current = this.userModel.getCurrent();
     var allSettings = JSON.parse(raw);
     if (!allSettings[current]) {
       return defaultSettings();
@@ -51,8 +51,8 @@ export default class SettingsController {
 
   saveSettings(settings) {
     // this modal should be disabled if no user selected eventually
-    if (this.userController.getCurrentUser()) {
-      storeSettings(this.userController.getCurrentUser(), settings);
+    if (this.userModel.getCurrent()) {
+      storeSettings(this.userModel.getCurrent(), settings);
     }
   }
 
