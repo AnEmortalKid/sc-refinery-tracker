@@ -65,7 +65,7 @@ export default class UserView {
       handler(this.userSelect.value);
     };
 
-    var btn = document.getElementById("remove-user-form-modal");
+    var btn = document.getElementById("remove-user-form-confirm-btn");
     btn.addEventListener("click", action);
   }
 
