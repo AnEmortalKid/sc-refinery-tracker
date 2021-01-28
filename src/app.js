@@ -2,8 +2,8 @@ import "./assets/w3/css/w3.css";
 import "font-awesome/css/font-awesome.css";
 
 import UserModel from "./users/userModel";
-import UserController from "./userController";
-import UserView from "./userView";
+import UserController from "./users/userController";
+import UserView from "./users/userView";
 
 import Settings from "./settings/settings";
 import SettingsController from "./settings/settingsController";
@@ -21,8 +21,8 @@ import JobView from "./jobs/jobView";
 export const controls = new Controls();
 
 const userModel = new UserModel();
-const userController = new UserController(userModel);
-const userView = new UserView(userController);
+const userView = new UserView();
+const userController = new UserController(userModel, userView);
 
 const jobModel = new JobModel();
 const jobEntryView = new JobEntryView();
@@ -53,7 +53,7 @@ export function addUser() {
     userController.storeUser(userName);
     // immediately switch
     userController.setUser(userName);
-    userView.layout();
+    //userView.layout();
 
     settingsView.layout();
     synchronizeSettings();
@@ -64,7 +64,7 @@ export function addUser() {
 }
 
 export function onUserChange() {
-  userView.onUserChange();
+  //userView.onUserChange();
 
   settingsView.layout();
   synchronizeSettings();
@@ -74,7 +74,7 @@ export function confirmRemoveUser() {
   // runController.removeAllRuns(userController.getCurrentUser());
   userController.removeUser(userController.getCurrentUser());
 
-  userView.layout();
+  //userView.layout();
   // runView.layout();
   settingsView.layout();
   synchronizeSettings();
@@ -83,7 +83,7 @@ export function confirmRemoveUser() {
 }
 
 export function prepareRemoveUser() {
-  userView.prepareRemoveModal();
+  //userView.prepareRemoveModal();
   controls.openModal("remove-user-form-modal");
 }
 
@@ -124,7 +124,7 @@ function synchronizeSettings() {
 export function startApp() {
   controls.setEscapeClosesModals();
 
-  userView.layout();
+  //userView.layout();
   settingsView.layout();
   synchronizeSettings();
 

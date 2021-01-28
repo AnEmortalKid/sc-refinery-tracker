@@ -9,7 +9,7 @@
     <form class="w3-container" id="user-form" onsubmit="app.addUser(); return false;">
       <div class="w3-row w3-section">
         <label class="w3-text"><b>Username</b></label>
-        <input id="user-form.username" class="w3-input w3-border w3-light-grey" type="text" name="username" placeholder="Name of the user">
+        <input id="user-form-username" class="w3-input w3-border w3-light-grey" type="text" name="username" placeholder="Name of the user">
 
         <input type="submit" hidden>
       </div>
@@ -17,7 +17,7 @@
 
     <footer class="w3-container w3-padding">
       <div class="w3-bar w3-center">
-        <button class="w3-btn w3-blue" onclick="app.addUser()">Confirm</button>
+        <button id="add-user-form-confirm-btn" class="w3-btn w3-blue">Confirm</button>
         <button class="w3-button w3-gray" onclick="app.controls.closeModal('add-user-form-modal')">Cancel</button>
       </div>
     </footer>
