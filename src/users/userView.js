@@ -15,9 +15,15 @@ function createPlaceholder() {
 export default class UserView {
   constructor() {
     this.addUserForm = document.getElementById("user-form");
+
+    this.addUserInput = document.getElementById("user-form-username");
     this.userSelect = document.getElementById("user-selection");
   }
 
+  /**
+   * Binds the event of clicking the Add User  button
+   * @param {function} handler a handler to invoke when the add user button is pressed
+   */
   bindAddUser(handler) {
     var action = (event) => {
       handler();
@@ -27,10 +33,14 @@ export default class UserView {
     btn.addEventListener("click", action);
   }
 
+  /**
+   * Binds the event of confirming the Add User modal
+   * @param {function} handler a handler to invoke when the confirmation button to add a user is pressed
+   */
   bindConfirmAddUser(handler) {
     var submissionAction = (event) => {
       event.preventDefault();
-      handler(this._getFormData());
+      handler(this.addUserInput.value);
     };
 
     this.addUserForm.addEventListener("submit", submissionAction);
@@ -38,6 +48,10 @@ export default class UserView {
     btn.addEventListener("click", submissionAction);
   }
 
+  /**
+   * Binds the event of canceling the Add User modal
+   * @param {function} handler a handler to invoke when the cancel button on the add user form
+   */
   bindCancelAddUserForm(handler) {
     var cancelAction = (event) => {
       event.preventDefault();
@@ -50,6 +64,10 @@ export default class UserView {
     xBtn.addEventListener("click", cancelAction);
   }
 
+  /**
+   * Binds the event of clicking the Remove User  button
+   * @param {function} handler a handler to invoke when the add user button is pressed
+   */
   bindRemoveUser(handler) {
     var action = (event) => {
       handler();
@@ -59,6 +77,10 @@ export default class UserView {
     btn.addEventListener("click", action);
   }
 
+  /**
+   * Binds the event of confirming the Remove User  modal
+   * @param {function} handler a handler to invoke when the remove user modal is confirmed
+   */
   bindConfirmRemoveUser(handler) {
     var action = (event) => {
       event.preventDefault();
@@ -69,6 +91,10 @@ export default class UserView {
     btn.addEventListener("click", action);
   }
 
+  /**
+   * Binds the event of canceling the Remove User modal
+   * @param {function} handler a handler to invoke when the Remove User modal is canceled
+   */
   bindCancelRemoveUser(handler) {
     var cancelAction = (event) => {
       event.preventDefault();
@@ -81,6 +107,10 @@ export default class UserView {
     xBtn.addEventListener("click", cancelAction);
   }
 
+  /**
+   * Binds the event of selecting a user
+   * @param {function} handler a function to invoke with the new user
+   */
   bindOnUserChange(handler) {
     var action = (event) => {
       handler(event.target.value);
@@ -88,21 +118,6 @@ export default class UserView {
 
     var select = document.getElementById("user-selection");
     select.addEventListener("change", action);
-  }
-
-  _getFormData() {
-    var form = document.getElementById("user-form");
-    var inputs = form.querySelectorAll("input");
-
-    var obj = {};
-    for (var i = 0; i < inputs.length; i++) {
-      var item = inputs.item(i);
-      if (item.name) {
-        obj[item.name] = item.value;
-      }
-    }
-
-    return obj;
   }
 
   /**
@@ -136,6 +151,10 @@ export default class UserView {
     app.controls.closeModal("remove-user-form-modal");
   }
 
+  /**
+   * Updates the state of the buttons depending on if there is a selected user or not
+   * @param {String} selected the name of the selected user
+   */
   updateButtons(selected) {
     var removeUserBtn = document.getElementById("remove-user-btn");
     if (!selected) {
@@ -147,6 +166,11 @@ export default class UserView {
     }
   }
 
+  /**
+   * Displays the available users
+   * @param {String[]} users the set of users
+   * @param {String} selected the name of the selected user
+   */
   showUsers(users, selected) {
     var selector = document.getElementById("user-selection");
     removeChildren(selector);

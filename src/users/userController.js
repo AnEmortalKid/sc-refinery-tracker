@@ -24,13 +24,17 @@ export default class UserController {
     );
   }
 
+  /**
+   * Handles the result of clicking the Add User button
+   */
   handleAddUser() {
     this.userView.openAddUserModal();
   }
 
-  submitAddUser(data) {
-    var userName = data["username"];
-
+  /**
+   * Handles the result of submitting the Add User form
+   */
+  submitAddUser(userName) {
     // set the newly added user as the current
     this.userModel.add(userName);
     this.userModel.setCurrent(userName);
@@ -39,14 +43,24 @@ export default class UserController {
     this._renderUsers();
   }
 
+  /**
+   * Handles the result of canceling the Add User Modal
+   */
   handleAddUserCancel() {
     this.userView.closeAddUserModal();
   }
 
+  /**
+   * Handles the result of clicking Remove User
+   */
   handleRemoveUser() {
-    this.userView.openRemoveUserModal();
+    this.userView.openRemoveUserModal(this.userModel.getCurrent());
   }
 
+  /**
+   * Handles the result of confirming user removal
+   * @param {String} userName the name of the user to remove
+   */
   handleConfirmRemoveUser(userName) {
     this.userModel.delete(userName);
     this.userModel.clearCurrent();
@@ -58,10 +72,17 @@ export default class UserController {
     );
   }
 
+  /**
+   * Handles the result of canceling the Remove User Modal
+   */
   handleRemoveUserCancel() {
     this.userView.closeRemoveUserModal();
   }
 
+  /**
+   * Handles the result of selecting a user
+   * @param {String} userName the selected user
+   */
   handleOnUserChange(userName) {
     this.userModel.setCurrent(userName);
     this.userView.updateButtons(userName);
