@@ -12,7 +12,7 @@
 </header>
   <div id="button-bar" class="w3-display-topright">
     <div class="w3-bar w3-padding">
-      <button id="user-settings-modal-btn" class="w3-btn w3-blue-grey w3-round-large w3-disabled" onclick="app.prepareSettingsModal()">
+      <button id="user-settings-modal-btn" class="w3-btn w3-blue-grey w3-round-large w3-disabled">
         <i class="fa fa-cog fa-lg"></i>
       </button>
       <button class="w3-btn w3-blue-grey w3-round-large" target="_blank" onclick="window.open('https://github.com/AnEmortalKid/sc-refinery-tracker', '_blank')">
@@ -32,11 +32,13 @@
   <div id="settings-modal" class="w3-modal">
     <div class="w3-modal-content">
       <header class="w3-container w3-blue-grey">
-        <span onclick="app.controls.closeModal('settings-modal')" class="w3-button w3-display-topright">&times;</span>
-        <h2><i class="fa fa-cog"></i> <span id="user-settings-header-placeholder">User</span>'s Settings</h2>
+        <button id="settings-close-button" class="w3-button w3-blue-grey w3-round-large w3-display-topright">
+          <i class="fa fa-times fa-lg"></i>
+        </button>
+        <h2><i class="fa fa-cog"></i> User <span id="user-settings-header-placeholder"></span>'s Settings</h2>
       </header>
       
-      <form class="w3-container" id="settings-form" onsubmit="app.applySettings(); return false;">
+      <form class="w3-container" id="settings-form">
         <div class="w3-row w3-section">
           <label class="w3-text"><b>Refresh Interval in Seconds</b></label>
           <input class="w3-input w3-border w3-light-grey" type="number" name="refresh.interval" min="0">
@@ -47,8 +49,8 @@
   
       <footer class="w3-container w3-padding">
         <div class="w3-bar w3-center">
-          <button class="w3-btn w3-blue" onclick="app.applySettings()">Apply</button>
-          <button class="w3-button w3-gray" onclick="app.controls.closeModal('settings-modal')">Close</button>
+          <button id="settings-confirm-btn" class="w3-btn w3-blue w3-round-large">Apply</button>
+          <button  id="settings-cancel-btn" class="w3-button w3-gray w3-round-large">Close</button>
         </div>
       </footer>
     </div>
