@@ -52,8 +52,8 @@ function synchronizeSettings(userSettings) {
 export function startApp() {
   controls.setEscapeClosesModals();
 
-  var current = userModel.getCurrent()
-  if(current) {
+  var current = userModel.getCurrent();
+  if (current) {
     synchronizeSettings(settingsModel.get(current));
   }
 
@@ -68,7 +68,5 @@ export function startApp() {
   userModel.registerOnUserChangeListener(
     settingsController.onUserChangeHandler.bind(settingsController)
   );
-  settingsModel.registerOnSettingsChangeListener(
-    synchronizeSettings
-  );
+  settingsModel.registerOnSettingsChangeListener(synchronizeSettings);
 }
