@@ -17,6 +17,7 @@ import JobEntryView from "./jobs/jobEntryView";
 
 import JobController from "./jobs/jobController";
 import JobView from "./jobs/jobView";
+import SettingsModel from "./settings/settingsModel";
 
 export const controls = new Controls();
 
@@ -31,34 +32,13 @@ export const jobEntry = new JobEntryController(jobModel, jobEntryView);
 const jobView = new JobView();
 const jobController = new JobController(jobModel, jobView, jobEntry);
 
-const settingsController = new SettingsController(userModel);
-const settingsView = new SettingsView(userModel, settingsController);
+const settingsModel = new SettingsModel();
+const settingsView = new SettingsView();
+const settingsController = new SettingsController(settingsModel, settingsView);
+
 var currentRefreshFn;
 
-export function prepareSettingsModal() {
-  settingsView.prepareSettingsModal();
-  controls.openModal("settings-modal");
-}
-
-export function applySettings() {
-  var form = document.getElementById("settings-form");
-  var inputs = form.querySelectorAll("input");
-  var obj = {};
-  for (var i = 0; i < inputs.length; i++) {
-    var item = inputs.item(i);
-    if (item.name) {
-      obj[item.name] = item.value;
-    }
-  }
-
-  var newSettings = new Settings(obj["refresh.interval"]);
-  settingsController.saveSettings(newSettings);
-  synchronizeSettings();
-  controls.closeModal("settings-modal");
-}
-
-function synchronizeSettings() {
-  var userSettings = settingsController.getUserSettings();
+function synchronizeSettings(userSettings) {
   if (currentRefreshFn) {
     window.clearInterval(currentRefreshFn);
   }
@@ -72,21 +52,21 @@ function synchronizeSettings() {
 export function startApp() {
   controls.setEscapeClosesModals();
 
-  settingsView.layout();
-  synchronizeSettings();
+  var current = userModel.getCurrent();
+  if (current) {
+    synchronizeSettings(settingsModel.get(current));
+  }
 
-  // cheap way of initializing the state everywhere
   jobModel.load(userModel.getCurrent());
-
+  settingsController.load(userModel.getCurrent());
   userModel.registerOnUserChangeListener(
     jobController.onUserChangeHandler.bind(jobController)
   );
   userModel.registerOnUserDeletedListener(
     jobController.onUserDeletedHandler.bind(jobController)
   );
-
-  userModel.registerOnUserChangeListener(() => {
-    settingsView.layout();
-    synchronizeSettings();
-  });
+  userModel.registerOnUserChangeListener(
+    settingsController.onUserChangeHandler.bind(settingsController)
+  );
+  settingsModel.registerOnSettingsChangeListener(synchronizeSettings);
 }
