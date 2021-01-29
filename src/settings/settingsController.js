@@ -1,64 +1,48 @@
 import Settings from "./settings";
 
-// dictionary by user name
-const settingsKey = "mining_tracker.user_settings";
-
-function defaultSettings() {
-  return new Settings(1);
-}
-
-function storeSettings(userName, settings) {
-  var rawSettingsData = localStorage.getItem(settingsKey);
-  var allSettings = {};
-  if (rawSettingsData) {
-    allSettings = JSON.parse(rawSettingsData);
-  }
-
-  allSettings[userName] = settings;
-  localStorage.setItem(settingsKey, JSON.stringify(allSettings));
-}
-
-function removeUserSettings(userName) {
-  var rawSettingsData = localStorage.getItem(settingsKey);
-  var allSettings = {};
-  if (rawSettingsData) {
-    allSettings = JSON.parse(rawSettingsData);
-  }
-
-  delete allSettings[userName];
-  localStorage.setItem(settingsKey, JSON.stringify(allSettings));
-}
-
 export default class SettingsController {
-  constructor(userModel) {
-    this.userModel = userModel;
+  constructor(settingsModel, settingsView) {
+    this.settingsModel = settingsModel;
+    this.settingsView = settingsView;
+
+    this.settingsView.bindOpenSettings(this.handleEditSettings.bind(this));
+    this.settingsView.bindConfirmSettings(
+      this.handleConfirmUpdateSettings.bind(this)
+    );
+    this.settingsView.bindCancelSettings(
+      this.handleCancelUpdateSettings.bind(this)
+    );
+
+    this.user = null;
   }
 
-  getUserSettings() {
-    var raw = localStorage.getItem(settingsKey);
-    if (!raw) {
-      return defaultSettings();
-    }
+  load(user) {
+    this.user = user;
+    this.settingsView.updateButtons(user);
+  }
 
-    var current = this.userModel.getCurrent();
-    var allSettings = JSON.parse(raw);
-    if (!allSettings[current]) {
-      return defaultSettings();
-    } else {
-      return allSettings[current];
+  onUserChangeHandler(user) {
+    this.user = user;
+    if (user != null) {
+      this.user = user;
     }
   }
 
-  saveSettings(settings) {
-    // this modal should be disabled if no user selected eventually
-    if (this.userModel.getCurrent()) {
-      storeSettings(this.userModel.getCurrent(), settings);
-    }
+  handleEditSettings() {
+    this.settingsView.openSettingsModal(
+      this.user,
+      this.settingsModel.get(this.user)
+    );
   }
 
-  removeSettings(userName) {
-    if (userName) {
-      removeUserSettings(userName);
-    }
+  handleConfirmUpdateSettings(formData) {
+    var settings = new Settings(formData["refresh.interval"]);
+
+    this.settingsModel.update(this.user, settings);
+    this.settingsView.closeSettingsModal();
+  }
+
+  handleCancelUpdateSettings() {
+    this.settingsView.closeSettingsModal();
   }
 }
