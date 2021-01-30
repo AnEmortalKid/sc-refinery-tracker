@@ -41,7 +41,7 @@
           </div>
         </td>
       </tr>
-      <tr  class="w3-white" id="details-1" hidden>
+      <tr  class="w3-white" id="details-1">
         <td>1</td>
         <td>2</td>
         <td>3</td>
@@ -96,7 +96,7 @@
           </div>
         </td>
       </tr>
-      <tr class="w3-light-grey" id="details-2" hidden>
+      <tr class="w3-light-grey" id="details-2">
         <td>1</td>
         <td>2</td>
         <td>3</td>
@@ -154,16 +154,16 @@
         var chevron = document.getElementById('chevron-'+rowId);
         var hidden = detailsRow.hidden
 
+        // down to expand, up to collapse
         if(hidden) {
-            chevron.classList.remove("fa-chevron-up");
-            chevron.classList.add("fa-chevron-down");
+            chevron.classList.add("fa-chevron-up");
+            chevron.classList.remove("fa-chevron-down");
             detailsRow.hidden = false;
         }
          else {
-            chevron.classList.remove("fa-chevron-down");
-            chevron.classList.add("fa-chevron-up");
+            chevron.classList.add("fa-chevron-down");
+            chevron.classList.remove("fa-chevron-up");
 
-            //down to go down, up to go up
             detailsRow.hidden = true;
          }
     }

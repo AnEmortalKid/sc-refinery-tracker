@@ -1,5 +1,6 @@
 import { removeChildren } from "../elementUtils";
 import { toDurationString } from "../durationParser";
+import { doc } from "prettier";
 
 /**
  * Component responsible for displaying a list of Refinery Jobs
@@ -79,6 +80,14 @@ export default class JobView {
   }
 
   /**
+   * Binds handler to notify when a click event happens on a collapse/expand icon for row
+   * @param {function} handler
+   */
+  bindToggleCollapseRow(handler) {
+    this.toggleDetailsHandler = handler;
+  }
+
+  /**
    * Open the Remove All Jobs Modal
    */
   openRemoveAllModal() {
@@ -135,6 +144,98 @@ export default class JobView {
     column.textContent = toDurationString(remainingSeconds);
   }
 
+  _createDetailsToggle(jobId) {
+    var span = document.createElement("span");
+
+    var icon = document.createElement("i");
+    icon.classList.add("fa", "fa-chevron-up", "w3-left", "w3-padding-small");
+    icon.id = "details-toggle-" + jobId;
+    span.appendChild(icon);
+    span.addEventListener("click", (event) => {
+      this.toggleDetailsHandler(jobId);
+    });
+
+    return span;
+  }
+
+  toggleDetailsRow(jobId) {
+    var detailsRow = document.getElementById("job-details-" + jobId);
+    var icon = document.getElementById("details-toggle-" + jobId);
+    var hidden = detailsRow.hidden;
+    if (hidden) {
+      // expand and add collapse icon
+      icon.classList.remove("fa-chevron-down");
+      icon.classList.add("fa-chevron-up");
+      detailsRow.hidden = false;
+    } else {
+      icon.classList.add("fa-chevron-down");
+      icon.classList.remove("fa-chevron-up");
+      detailsRow.hidden = true;
+    }
+  }
+
+  _createMaterialsHeader() {
+    var cellRow = document.createElement("div");
+    cellRow.classList.add("w3-cell-row");
+
+    var cell = document.createElement("div");
+    cell.classList.add("w3-cell", "w3-blue-grey");
+    var bold = document.createElement("strong");
+    bold.appendChild(document.createTextNode("Materials"));
+    cell.appendChild(bold);
+    cellRow.append(cell);
+
+    return cellRow;
+  }
+
+  _createMaterialCellRow(name, quantity) {
+    var cellRow = document.createElement("div");
+    cellRow.classList.add("w3-cell-row");
+
+    var nameCell = document.createElement("div");
+    nameCell.classList.add("w3-cell", "w3-left", "rf-material-data-padding");
+    var bold = document.createElement("strong");
+    bold.appendChild(document.createTextNode(name));
+    nameCell.appendChild(bold);
+    cellRow.appendChild(nameCell);
+
+    var quantityCell = document.createElement("div");
+    quantityCell.classList.add(
+      "w3-cell",
+      "w3-right",
+      "rf-material-data-padding"
+    );
+    var span = document.createElement("span");
+    span.appendChild(document.createTextNode(quantity));
+    quantityCell.appendChild(span);
+    cellRow.appendChild(quantityCell);
+
+    return cellRow;
+  }
+
+  _createDetailsRow(job) {
+    var detailsRow = document.createElement("tr");
+    detailsRow.id = "job-details-" + job.uuid;
+
+    // append tds for name,location,duration,time-remaining
+    detailsRow.appendChild(document.createElement("td"));
+    detailsRow.appendChild(document.createElement("td"));
+    detailsRow.appendChild(document.createElement("td"));
+    detailsRow.appendChild(document.createElement("td"));
+
+    var materialsCol = document.createElement("td");
+    materialsCol.colSpan = 2;
+    materialsCol.appendChild(this._createMaterialsHeader());
+    for (const [key, value] of Object.entries(job.materials)) {
+      materialsCol.appendChild(this._createMaterialCellRow(key, value));
+    }
+    detailsRow.appendChild(materialsCol);
+
+    // row for actions column
+    detailsRow.appendChild(document.createElement("td"));
+    return detailsRow;
+  }
+
   /**
    * @param {Run} job
    */
@@ -143,7 +244,10 @@ export default class JobView {
     row.dataset.jobId = job.uuid;
 
     var name = document.createElement("td");
-    name.textContent = job.name;
+    if (job.materials) {
+      name.appendChild(this._createDetailsToggle(job.uuid));
+    }
+    name.appendChild(document.createTextNode(job.name));
     row.appendChild(name);
 
     var location = document.createElement("td");
@@ -209,8 +313,20 @@ export default class JobView {
     // layout rows
     for (var i = 0; i < jobCount; i++) {
       var job = jobs[i];
-      tableBody.appendChild(this._createJobRow(job));
-      // TODO create materials row
+      // create a stripped effect
+      var colorClass = i % 2 == 0 ? "w3-white" : "w3-light-grey";
+
+      var jobRow = this._createJobRow(job);
+      jobRow.classList.add(colorClass);
+
+      tableBody.appendChild(jobRow);
+
+      // TODO check if null or empty or no keys
+      if (job.materials) {
+        var detailsRow = this._createDetailsRow(job);
+        detailsRow.classList.add(colorClass);
+        tableBody.appendChild(detailsRow);
+      }
     }
 
     var yieldTotal = 0;
