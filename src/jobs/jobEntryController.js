@@ -1,6 +1,6 @@
 import Run from "../run";
 import { v4 as uuidv4 } from "uuid";
-import { toSeconds } from "../durationParser";
+import { toSeconds, toTimeFragments } from "../durationParser";
 
 /**
  * Component that manages the entry and update of a Refinery Job
@@ -17,6 +17,8 @@ export default class JobEntryController {
     );
     this.jobEntryView.bindAddMaterial(this.addMaterialEntryOption.bind(this));
     this.jobEntryView.bindOnFormDataChange(this.onFormChange.bind(this));
+
+    this.isEditing = false;
   }
 
   /**
@@ -56,18 +58,81 @@ export default class JobEntryController {
    */
   handleJobEntry(jobEntry) {
     var valid = this._validateEntry(jobEntry);
-    if (valid) {
-      // make new run  and add it
-
-      this.jobModel.add(this._createRun(jobEntry));
-      // TODO display alert SUCCESS!
-      this.jobEntryView.closeEntryModal();
+    if (!valid) {
+      return;
     }
+
+    if (!this.isEditing) {
+      this.jobModel.add(this._createRun(jobEntry));
+    } else {
+      // consolidate the runs, only overwriting what is permissible
+      var previousRun = this.editJobState;
+      var newRun = this._createRun(jobEntry);
+
+      var consolidatedRun = new Run(
+        previousRun.uuid,
+        newRun.name,
+        newRun.location,
+        newRun.duration,
+        newRun.durationSeconds,
+        newRun.yieldAmount,
+        previousRun.entryTime,
+        newRun.materials
+      );
+
+      this.jobModel.update(consolidatedRun);
+    }
+
+    // TODO display alert SUCCESS/UPDATE!
+    this.jobEntryView.closeEntryModal();
   }
 
-  prepareEntryJobModal() {
-    // if we needed to set any state OR edit the state, we'd do it here in the future
-    this.jobEntryView.openEntryModal();
+  /**
+   * Opens the modal to add a new Job
+   */
+  openAddJobModal() {
+    // clear data only if our past action was an edit
+    var clearData = this.isEditing;
+
+    this.isEditing = false;
+
+    this.jobEntryView.openAddEntryModal(clearData);
+  }
+
+  _toEditFormData(job) {
+    // to form data
+    var formData = {};
+
+    formData["name"] = job.name;
+    formData["location"] = job.location;
+    formData["yieldAmount"] = job.yieldAmount;
+
+    var timeFragments = toTimeFragments(job.durationSeconds);
+    formData["duration.days"] = timeFragments.days;
+    formData["duration.hours"] = timeFragments.hours;
+    formData["duration.minutes"] = timeFragments.minutes;
+    formData["duration.seconds"] = timeFragments.seconds;
+
+    // materials
+    if (job.materials) {
+      var materialEntries = [];
+      for (const [key, value] of Object.entries(job.materials)) {
+        materialEntries.push({ name: key, value: value });
+      }
+      formData.materialEntries = materialEntries;
+    }
+
+    return formData;
+  }
+
+  /**
+   * Opens the modal to Edit a Job
+   */
+  openEditJobModal(job) {
+    this.editJobState = job;
+    this.isEditing = true;
+
+    this.jobEntryView.openEditEntryModal(this._toEditFormData(job));
   }
 
   /**

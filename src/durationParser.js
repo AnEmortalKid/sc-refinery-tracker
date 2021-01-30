@@ -68,3 +68,34 @@ export function toSeconds(durationString) {
   parts.forEach((part) => (totalSecs += partToSeconds(part)));
   return totalSecs;
 }
+
+/**
+ * Returns a dictionary of the duration parts (days/hours/minutes/seconds)
+ * @param {int} durationSeconds
+ */
+export function toTimeFragments(durationSeconds) {
+  var fragment = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  var remaining = durationSeconds;
+
+  if (remaining >= secondsInDay) {
+    var fullDays = Math.floor(remaining / secondsInDay);
+    remaining -= fullDays * secondsInDay;
+    fragment.days = fullDays;
+  }
+
+  if (remaining >= secondsInHour) {
+    var fullHours = Math.floor(remaining / secondsInHour);
+    remaining -= fullHours * secondsInHour;
+    fragment.hours = fullHours;
+  }
+
+  if (remaining >= secondsInMinute) {
+    var fullMinutes = Math.floor(remaining / secondsInMinute);
+    remaining -= fullMinutes * secondsInMinute;
+    fragment.minutes = fullMinutes;
+  }
+
+  fragment.seconds = remaining;
+
+  return fragment;
+}

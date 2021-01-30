@@ -1,3 +1,8 @@
 .rf-material-data-padding {
   padding: 6px 12px;
 }
+
+.rf-job-actions-btn {
+  margin-right: 4px;
+  margin-left: 4px;
+}

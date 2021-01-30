@@ -1,6 +1,5 @@
 import { removeChildren } from "../elementUtils";
 import { toDurationString } from "../durationParser";
-import { doc } from "prettier";
 
 /**
  * Component responsible for displaying a list of Refinery Jobs
@@ -88,6 +87,14 @@ export default class JobView {
   }
 
   /**
+   * Binds handler to notify when a click event happens on the edit icon for a row
+   * @param {function} handler
+   */
+  bindEditJob(handler) {
+    this.editJobHandler = handler;
+  }
+
+  /**
    * Open the Remove All Jobs Modal
    */
   openRemoveAllModal() {
@@ -101,23 +108,50 @@ export default class JobView {
     app.controls.closeModal("remove-all-jobs-modal");
   }
 
+  _createRemoveJobButton(job) {
+    var button = document.createElement("button");
+    button.classList.add(
+      "w3-btn",
+      "w3-red",
+      "w3-round-xlarge",
+      "rf-job-actions-btn"
+    );
+    button.addEventListener("click", () => this.removeJobHandler(job.uuid));
+
+    var icon = document.createElement("i");
+    icon.classList.add("fa", "fa-trash", "fa-lg");
+    button.appendChild(icon);
+
+    return button;
+  }
+
+  _createEditJobButton(job) {
+    var button = document.createElement("button");
+    button.classList.add(
+      "w3-btn",
+      "w3-blue",
+      "w3-round-xlarge",
+      "rf-job-actions-btn"
+    );
+    button.addEventListener("click", () => {
+      this.editJobHandler(job.uuid);
+    });
+
+    var icon = document.createElement("i");
+    icon.classList.add("fa", "fa-pencil-square-o", "fa-lg");
+    button.appendChild(icon);
+
+    return button;
+  }
+
   _createActionsRow(job) {
     var row = document.createElement("td");
 
     var rowDiv = document.createElement("div");
     rowDiv.classList.add("w3-bar");
 
-    var removeJobButton = document.createElement("button");
-    removeJobButton.classList.add("w3-btn", "w3-red", "w3-round-xlarge");
-    removeJobButton.addEventListener("click", () =>
-      this.removeJobHandler(job.uuid)
-    );
-
-    var removeIcon = document.createElement("i");
-    removeIcon.classList.add("fa", "fa-trash", "fa-lg");
-    removeJobButton.appendChild(removeIcon);
-
-    rowDiv.append(removeJobButton);
+    rowDiv.append(this._createEditJobButton(job));
+    rowDiv.append(this._createRemoveJobButton(job));
 
     row.appendChild(rowDiv);
     return row;
