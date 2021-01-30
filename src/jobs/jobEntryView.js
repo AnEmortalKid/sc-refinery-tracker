@@ -1,6 +1,12 @@
 import { removeChildren } from "../elementUtils";
 import { getMaterialsList } from "../model/materials";
 
+/**
+ * Creates a select option with the set of materials, optionally setting a pre-selected one
+ * @param {String} id an identifier to uniquely identify the select
+ * @param {function} onChangeAction an action to set to an onChange event
+ * @param {object} data any data to set on the select, the 'name' property will be used
+ */
 function createMaterialSelect(id, onChangeAction, data = {}) {
   var selectDiv = document.createElement("div");
   selectDiv.classList.add("w3-third");
@@ -27,6 +33,11 @@ function createMaterialSelect(id, onChangeAction, data = {}) {
   return selectDiv;
 }
 
+/**
+ * Creates div with a button that will remove a parent row
+ * @param {String} id an identifer that uniquely identifies the material row
+ * @param {function} onChangeAction an action to call when the material row is removed
+ */
 function createRemoveMaterialInput(id, onChangeAction) {
   var removeMaterialDiv = document.createElement("div");
   removeMaterialDiv.classList.add("w3-half");
@@ -47,6 +58,14 @@ function createRemoveMaterialInput(id, onChangeAction) {
   return removeMaterialDiv;
 }
 
+/**
+ *
+ * @param {String} id an identifier that uniquely identifies a parent
+ * @param {String} selectId the identifier of a select that determines what this value refers to
+ * @param {function} onChangeAction an action to call when the data in the input changes
+ * @param {boolean} removable whether this input should be removable through a button click or not
+ * @param {object} data any data to set on the input, the 'value' property will be used
+ */
 function createMaterialInputValue(
   id,
   selectId,
