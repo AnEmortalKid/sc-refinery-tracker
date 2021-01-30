@@ -164,3 +164,18 @@ describe("onChangeListener", () => {
     expect(mockListener).not.toHaveBeenCalled();
   });
 });
+
+describe("onUserDeleted", () => {
+  test("fires on user removed", () => {
+    var mockListener = jest.fn();
+
+    var existing = ["foo", "bar"];
+    localStorage.setItem(usersDataKey, JSON.stringify(existing));
+
+    const model = new UserModel();
+    model.registerOnUserDeletedListener(mockListener);
+    model.delete("foo");
+
+    expect(mockListener).toHaveBeenCalledWith("foo");
+  });
+});
