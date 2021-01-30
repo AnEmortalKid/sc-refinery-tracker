@@ -8,6 +8,7 @@ export default class JobController {
     this.jobEntryController = jobEntryController;
 
     this.jobView.bindAddJob(this.handleAddJob.bind(this));
+    this.jobView.bindEditJob(this.handleEditJob.bind(this));
     this.jobView.bindRemoveJob(this.handleRemoveJob.bind(this));
     this.jobView.bindRemoveAllJobs(this.handleRemoveAllJobs.bind(this));
     this.jobView.bindRemoveAllConfirm(
@@ -59,7 +60,7 @@ export default class JobController {
    * Handles the result of clicking the Add Job button
    */
   handleAddJob() {
-    this.jobEntryController.prepareEntryJobModal();
+    this.jobEntryController.openAddJobModal();
   }
 
   /**
@@ -93,5 +94,10 @@ export default class JobController {
 
   handleToggleDetails(jobId) {
     this.jobView.toggleDetailsRow(jobId);
+  }
+
+  handleEditJob(jobId) {
+    var jobData = this.jobModel.get(jobId);
+    this.jobEntryController.openEditJobModal(jobData);
   }
 }

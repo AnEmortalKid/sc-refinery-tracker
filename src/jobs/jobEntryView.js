@@ -1,6 +1,13 @@
+import { removeChildren } from "../elementUtils";
 import { getMaterialsList } from "../model/materials";
 
-function createMaterialSelect(id, onChangeAction) {
+/**
+ * Creates a select option with the set of materials, optionally setting a pre-selected one
+ * @param {String} id an identifier to uniquely identify the select
+ * @param {function} onChangeAction an action to set to an onChange event
+ * @param {object} data any data to set on the select, the 'name' property will be used
+ */
+function createMaterialSelect(id, onChangeAction, data = {}) {
   var selectDiv = document.createElement("div");
   selectDiv.classList.add("w3-third");
 
@@ -17,12 +24,20 @@ function createMaterialSelect(id, onChangeAction) {
     option.text = materialList[i];
     select.appendChild(option);
   }
+  if (data.name) {
+    select.value = data.name;
+  }
   selectDiv.appendChild(select);
 
   selectDiv.dataset.selectId = select.id;
   return selectDiv;
 }
 
+/**
+ * Creates div with a button that will remove a parent row
+ * @param {String} id an identifer that uniquely identifies the material row
+ * @param {function} onChangeAction an action to call when the material row is removed
+ */
 function createRemoveMaterialInput(id, onChangeAction) {
   var removeMaterialDiv = document.createElement("div");
   removeMaterialDiv.classList.add("w3-half");
@@ -43,11 +58,20 @@ function createRemoveMaterialInput(id, onChangeAction) {
   return removeMaterialDiv;
 }
 
+/**
+ *
+ * @param {String} id an identifier that uniquely identifies a parent
+ * @param {String} selectId the identifier of a select that determines what this value refers to
+ * @param {function} onChangeAction an action to call when the data in the input changes
+ * @param {boolean} removable whether this input should be removable through a button click or not
+ * @param {object} data any data to set on the input, the 'value' property will be used
+ */
 function createMaterialInputValue(
   id,
   selectId,
   onChangeAction,
-  removable = true
+  removable = true,
+  data = {}
 ) {
   var materialEntryDiv = document.createElement("div");
   materialEntryDiv.classList.add("w3-third", "w3-row-padding");
@@ -57,10 +81,13 @@ function createMaterialInputValue(
   var materialInput = document.createElement("input");
   materialInput.classList.add("w3-input", "w3-border", "w3-light-grey");
   materialInput.type = "number";
-  materialInput.placeholder = 0;
+  materialInput.defaultValue = 0;
   materialInput.min = 0;
   materialInput.name = "material.input." + id;
   materialInput.dataset.selectId = selectId;
+  if (data.value) {
+    materialInput.value = data.value;
+  }
   materialInputDiv.appendChild(materialInput);
 
   materialEntryDiv.appendChild(materialInputDiv);
@@ -84,7 +111,7 @@ export default class JobEntryView {
    * Toggles between allowing material details or bulk yield amount
    * @param {boolean} toggleState whether the materials entry should be enabled or not
    */
-  toggleMaterialEntryMode(toggleState) {
+  toggleMaterialEntryMode(toggleState, notify = true) {
     var yieldRow = document.getElementById("yield-units");
     var materialRow = document.getElementById("material-units");
 
@@ -97,40 +124,46 @@ export default class JobEntryView {
       // if there's no material entries, create the first one
       if (container.children.length < 1) {
         // create option without ability to remove
-        this.addMaterialOption(false);
+        this.addMaterialOption(false, notify);
       }
     }
 
     // notify the form changed
-    this.onChangeAction();
+    if (notify) {
+      this.onChangeAction();
+    }
   }
 
   /**
    * Adds a new row to specify a material's type and quantity
    * @param {boolean} removable whether this row should be removable or not
+   * @param {object} data an object with a name and value for any pre-existing data
    */
-  addMaterialOption(removable = true) {
+  addMaterialOption(removable = true, notify = true, data = {}) {
     var container = document.getElementById("materials-container");
 
-    var rowId = new Date().getTime();
+    var rowId = container.children.length;
     var row = document.createElement("div");
     row.classList.add("w3-row", "w3-section");
     row.id = rowId;
 
-    var selectDiv = createMaterialSelect(rowId, this.onChangeAction);
+    var selectDiv = createMaterialSelect(rowId, this.onChangeAction, data);
     row.appendChild(selectDiv);
     row.appendChild(
       createMaterialInputValue(
         rowId,
         selectDiv.dataset.selectId,
         this.onChangeAction,
-        removable
+        removable,
+        data
       )
     );
     container.appendChild(row);
 
     // notify the form changed
-    this.onChangeAction();
+    if (notify) {
+      this.onChangeAction();
+    }
   }
 
   /**
@@ -206,10 +239,41 @@ export default class JobEntryView {
     xBtn.addEventListener("click", cancelAction);
   }
 
-  /**
-   *
-   */
-  openEntryModal() {
+  _setModalMode(editing, placeholderText) {
+    var icon = document.getElementById("job-modal-header-icon");
+    var text = document.getElementById("job-modal-header-placeholder");
+    if (editing) {
+      icon.classList.remove("fa-plus-square");
+      icon.classList.add("fa-pencil-square-o");
+    } else {
+      icon.classList.add("fa-plus-square");
+      icon.classList.remove("fa-pencil-square-o");
+    }
+    text.textContent = placeholderText;
+  }
+
+  openAddEntryModal(clearData = false) {
+    this._setModalMode(false, "Add Refinery Job");
+    // only clear the form if specified
+    if (clearData) {
+      this._clearFormData();
+    }
+    app.controls.openModal("add-job-modal");
+  }
+
+  openEditEntryModal(formData) {
+    var runName = formData["name"];
+    var placeHolderText = "Edit ";
+    if (runName) {
+      placeHolderText += runName;
+    } else {
+      placeHolderText += "Refinery Job";
+    }
+
+    this._setModalMode(true, placeHolderText);
+    // let the set form data result be the only notified one
+    this._clearFormData(false);
+    this._setFormData(formData);
     app.controls.openModal("add-job-modal");
   }
 
@@ -261,6 +325,57 @@ export default class JobEntryView {
     } else {
       selection.classList.add("w3-border-red");
     }
+  }
+
+  _clearFormData(notify = true) {
+    var form = document.getElementById("add-job-form");
+    form.reset();
+
+    var container = document.getElementById("materials-container");
+    // if there's entries, clear them
+    if (container.children.length > 0) {
+      removeChildren(container);
+    }
+
+    this.toggleMaterialEntryMode(false, false);
+
+    if (notify) {
+      this.onChangeAction();
+    }
+  }
+
+  _setFormData(formData) {
+    var form = document.getElementById("add-job-form");
+
+    var inputs = form.querySelectorAll("input");
+    for (var i = 0; i < inputs.length; i++) {
+      var item = inputs.item(i);
+      if (item.name) {
+        item.value = formData[item.name];
+      }
+    }
+
+    var selects = form.querySelectorAll("select");
+    for (var i = 0; i < selects.length; i++) {
+      var item = selects.item(i);
+      if (item.name) {
+        item.value = formData[item.name];
+      }
+    }
+
+    if (formData.materialEntries) {
+      for (var index = 0; index < formData.materialEntries.length; index++) {
+        this.addMaterialOption(
+          index != 0,
+          false,
+          formData.materialEntries[index]
+        );
+      }
+      // set mode
+      document.getElementById("add-job-form-entryMode").checked = true;
+    }
+
+    this.toggleMaterialEntryMode(formData.materialEntries);
   }
 
   _getFormData() {

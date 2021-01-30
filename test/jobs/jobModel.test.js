@@ -181,3 +181,63 @@ describe("deleteAllForUser", () => {
     expect(allData).toHaveProperty("user2");
   });
 });
+
+describe("get", () => {
+  test("finds item with correct id", () => {
+    var run1 = new Run("id1", "name", "location", "1m", 30, 100, new Date());
+    var run3 = new Run("id3", "name", "location", "1m", 50, 300, new Date());
+
+    var val = JSON.stringify({ user1: [run1, run3] });
+    localStorage.setItem(key, val);
+
+    const model = new JobModel();
+    model.load("user1");
+
+    // JSON.stringify will turn our dates into ISO strings
+    run1.entryTime = run1.entryTime.toISOString();
+
+    expect(model.get("id1")).toEqual(run1);
+  });
+  test("non existent item", () => {
+    var run1 = new Run("id1", "name", "location", "1m", 30, 100, new Date());
+
+    var val = JSON.stringify({ user1: [run1] });
+    localStorage.setItem(key, val);
+
+    const model = new JobModel();
+    model.load("user1");
+
+    expect(model.get("id2")).toBeNull();
+  });
+});
+
+describe("update", () => {
+  test("replaces state", () => {
+    var run1 = new Run("id1", "name", "location", "1m", 30, 100, new Date());
+
+    var val = JSON.stringify({ user1: [run1] });
+    localStorage.setItem(key, val);
+
+    const model = new JobModel();
+    model.load("user1");
+
+    // JSON.stringify will turn our dates into ISO strings
+    run1.entryTime = run1.entryTime.toISOString();
+
+    const updated = new Run(
+      "id1",
+      "updatedName",
+      "location2",
+      "10s",
+      10,
+      15,
+      run1.entryTime,
+      {
+        Quantainium: 15,
+      }
+    );
+    model.update(updated);
+
+    expect(model.get("id1")).toEqual(updated);
+  });
+});

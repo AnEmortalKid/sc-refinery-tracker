@@ -61,6 +61,15 @@ export default class JobModel {
     this._commit(this.user, this.jobs);
   }
 
+  get(jobId) {
+    var found = this.jobs.find((job) => job.uuid == jobId);
+    if (!found) {
+      return null;
+    }
+
+    return found;
+  }
+
   getAll() {
     return this.jobs;
   }
@@ -80,7 +89,13 @@ export default class JobModel {
     this._deleteData(user);
   }
 
-  // TODO edit(job)
+  update(updatedJob) {
+    var exisstingIndex = this.jobs.findIndex(
+      (job) => job.uuid == updatedJob.uuid
+    );
+    this.jobs[exisstingIndex] = updatedJob;
+    this._commit(this.user, this.jobs);
+  }
 
   registerOnJobChangeListener(callback) {
     this.onJobChangeListeners.push(callback);
