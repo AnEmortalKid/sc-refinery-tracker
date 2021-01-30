@@ -14,6 +14,7 @@ export default class JobController {
       this.handleRemoveAllJobsConfirm.bind(this)
     );
     this.jobView.bindRemoveAllCancel(this.handleRemoveAllJobsCancel.bind(this));
+    this.jobView.bindToggleCollapseRow(this.handleToggleDetails.bind(this));
 
     this.jobModel.registerOnJobChangeListener(
       this.onJobChangeHandler.bind(this)
@@ -88,5 +89,9 @@ export default class JobController {
    */
   handleRemoveJob(jobId) {
     this.jobModel.delete(jobId);
+  }
+
+  handleToggleDetails(jobId) {
+    this.jobView.toggleDetailsRow(jobId);
   }
 }
