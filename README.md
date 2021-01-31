@@ -1,5 +1,7 @@
 # sc-refinery-tracker
 
+[![Build Status](https://travis-ci.com/AnEmortalKid/sc-refinery-tracker.svg?branch=main)](https://travis-ci.com/AnEmortalKid/sc-refinery-tracker)
+
 The Refinery Tracker keeps track of your refinery jobs in StarCitizen
 
 See in action:
