@@ -90,6 +90,7 @@ export default class JobController {
    */
   handleRemoveJob(jobId) {
     this.jobModel.delete(jobId);
+    this.jobView.alertJobRemoved();
   }
 
   handleToggleDetails(jobId) {

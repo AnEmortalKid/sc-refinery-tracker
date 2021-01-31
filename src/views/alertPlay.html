@@ -2,14 +2,47 @@
     <button class="w3-button w3-black" onclick="tossAlert()">Alert</button>
   </div>
 
+  <div id="alert-container" class="w3-container w3-bar-block w3-top rf-horizontal-center" style="width:35%">
+    <div class="w3-display-container w3-panel w3-green w3-card-4 w3-border-light-green w3-bottombar w3-round-large" >
+      <span class="w3-tag w3-green w3-display-left">
+            <i class="fa fa-check-circle fa-2x" style="color:white"></i>       
+         </span>
+         <h4 class="w3-margin-left w3-padding">User added</h4>  
+         
+     <span class="w3-tag w3-green w3-round-xlarge w3-display-right">
+         <i class="fa fa-times fa-2x" style="color:white"></i>
+       </span>
+       </div>
+       <div class="w3-display-container  w3-panel w3-green w3-card-4 w3-border-light-green w3-bottombar w3-round-large" >
+        <span class="w3-tag w3-green w3-display-left">
+              <i class="fa fa-check-circle fa-2x" style="color:white"></i>       
+           </span>
+           <h4 class="w3-margin-left w3-padding">User added</h4>  
+           
+       <span class="w3-tag w3-green w3-round-xlarge w3-display-right">
+           <i class="fa fa-times fa-2x" style="color:white"></i>
+         </span>
+         </div>
+         <div class="w3-panel w3-green w3-card-4 w3-border-light-green w3-bottombar w3-round-large" style="width:35%" hidden>
+          <span class="w3-tag w3-green w3-display-left">
+                <i class="fa fa-check-circle fa-2x" style="color:white"></i>       
+             </span>
+             <h4 class="w3-margin-left w3-padding">User added</h4>  
+             
+         <span class="w3-tag w3-green w3-round-xlarge w3-display-right">
+             <i class="fa fa-times fa-2x" style="color:white"></i>
+           </span>
+           </div>
+  </div>
+
   <script>
       function tossAlert() {
         var id = "alert-" + (new Date().getMilliseconds());
 
   //       <div class="w3-panel w3-green w3-card-4 w3-top w3-border-light-green w3-bottombar w3-round-large rf-horizontal-center" style="width:35%" hidden>
     var panel = document.createElement('div');
-    panel.classList.add("w3-panel","w3-green", "w3-card-4", "w3-top", "w3-border-light-green", "w3-bottombar", "w3-round-large", "rf-horizontal-center" )
-    panel.style = "width:35%";
+    panel.classList.add("w3-panel","w3-green", "w3-card-4", "w3-top", "w3-round-large", "rf-horizontal-center", "rf-alert-fade-out" )
+    panel.style = "width:35%;";
     panel.id = id;
 
       //   <span class="w3-tag w3-green w3-display-left">
@@ -28,7 +61,7 @@
   message.classList.add("w3-margin-left", "w3-padding");
   message.textContent="User Added!";
         panel.appendChild(message);
-        
+
   //   <span class="w3-tag w3-green w3-round-xlarge w3-display-right">
   //     <i class="fa fa-times fa-2x" style="color:white"></i>
   //   </span>
@@ -47,6 +80,6 @@
 
         setTimeout(function() {
           document.getElementById(id).remove()
-        }, 2000);
+        }, 5000);
       }
   </script>

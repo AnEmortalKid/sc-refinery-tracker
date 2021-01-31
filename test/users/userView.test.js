@@ -53,6 +53,7 @@ beforeEach(() => {
   controls = {
     openModal: jest.fn(),
     closeModal: jest.fn(),
+    displayAlert: jest.fn(),
   };
 });
 
@@ -231,5 +232,18 @@ describe("modal controls", () => {
     var view = new UserView(controls);
     view.closeRemoveUserModal();
     expect(controls.closeModal).toHaveBeenCalledWith("remove-user-form-modal");
+  });
+});
+
+describe("alerts", () => {
+  test("alertUserAdded", () => {
+    var view = new UserView(controls);
+    view.alertUserAdded();
+    expect(controls.displayAlert).toHaveBeenCalledWith("User Added.");
+  });
+  test("alertUserRemoved", () => {
+    var view = new UserView(controls);
+    view.alertUserRemoved();
+    expect(controls.displayAlert).toHaveBeenCalledWith("User Removed.");
   });
 });

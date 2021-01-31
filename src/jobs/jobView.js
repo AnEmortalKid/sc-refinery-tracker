@@ -5,7 +5,9 @@ import { toDurationString } from "../durationParser";
  * Component responsible for displaying a list of Refinery Jobs
  */
 export default class JobView {
-  constructor() {
+  constructor(controls) {
+    this.controls = controls;
+
     this.tableBody = document.getElementById("jobs-table-body");
     this.tableFooter = document.getElementById("runs-table-footer");
     this.tableFooterYieldColumn = document.getElementById(
@@ -98,14 +100,19 @@ export default class JobView {
    * Open the Remove All Jobs Modal
    */
   openRemoveAllModal() {
-    app.controls.openModal("remove-all-jobs-modal");
+    this.controls.openModal("remove-all-jobs-modal");
   }
 
   /**
    * Closes the modal
    */
   closeRemoveAllModal() {
-    app.controls.closeModal("remove-all-jobs-modal");
+    this.controls.closeModal("remove-all-jobs-modal");
+  }
+
+  alertJobRemoved() {
+    // TODO pass in ids and what not
+    this.controls.displayAlert('Refinery Job Removed.');
   }
 
   _createRemoveJobButton(job) {

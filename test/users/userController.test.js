@@ -32,6 +32,8 @@ beforeEach(() => {
     closeRemoveUserModal: jest.fn(),
     updateButtons: jest.fn(),
     showUsers: jest.fn(),
+    alertUserAdded: jest.fn(),
+    alertUserRemoved: jest.fn(),
   };
 });
 
@@ -65,6 +67,7 @@ describe("Adding a User", () => {
     expect(mockModel.setCurrent).toHaveBeenCalledWith("newUser");
     expect(mockView.closeAddUserModal).toHaveBeenCalled();
     expect(mockView.showUsers).toHaveBeenCalled();
+    expect(mockView.alertUserAdded).toHaveBeenCalled();
   });
   test("closing dialog", () => {
     var controller = new UserController(mockModel, mockView);
@@ -93,6 +96,7 @@ describe("Removing a User", () => {
     expect(mockModel.clearCurrent).toHaveBeenCalled();
     expect(mockView.closeRemoveUserModal).toHaveBeenCalled();
     expect(mockView.showUsers).toHaveBeenCalled();
+    expect(mockView.alertUserRemoved).toHaveBeenCalled();
   });
   test("closing dialog", () => {
     var controller = new UserController(mockModel, mockView);
