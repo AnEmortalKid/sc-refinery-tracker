@@ -1,7 +1,7 @@
-const buttonId = "user-settings-modal-btn";
-
 export default class SettingsView {
-  constructor() {
+  constructor(controls) {
+    this.controls = controls;
+
     this.form = document.getElementById("settings-form");
     this.headerPlaceholder = document.getElementById(
       "user-settings-header-placeholder"
@@ -65,11 +65,11 @@ export default class SettingsView {
       }
     }
 
-    app.controls.openModal("settings-modal");
+    this.controls.openModal("settings-modal");
   }
 
   closeSettingsModal() {
-    app.controls.closeModal("settings-modal");
+    this.controls.closeModal("settings-modal");
   }
 
   /**
