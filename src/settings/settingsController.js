@@ -23,9 +23,6 @@ export default class SettingsController {
 
   onUserChangeHandler(user) {
     this.user = user;
-    if (user != null) {
-      this.user = user;
-    }
   }
 
   handleEditSettings() {

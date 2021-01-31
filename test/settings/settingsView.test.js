@@ -54,29 +54,43 @@ describe("bindOpenSettings", () => {
   });
 });
 describe("bindConfirmSettings", () => {
-  // test("calls bound handler with data on click", () => {
-  //     var mockHandler = jest.fn();
-  //     var view = new UserView();
-  //     view.bindConfirmAddUser(mockHandler);
-  //     var input = document.getElementById("user-form-username");
-  //     input.value = "newUserName";
-  //     var button = document.getElementById("add-user-form-confirm-btn");
-  //     button.click();
-  //     expect(mockHandler).toHaveBeenCalledWith("newUserName");
-  //   });
-  //   test("calls bound handler with submit on form", () => {
-  //     var mockHandler = jest.fn();
-  //     var view = new UserView();
-  //     view.bindConfirmAddUser(mockHandler);
-  //     var input = document.getElementById("user-form-username");
-  //     input.value = "newUserName";
-  //     var form = document.getElementById("user-form");
-  //     form.submit();
-  //     expect(mockHandler).toHaveBeenCalledWith("newUserName");
-  //   });
+  test("calls bound handler with data on click", () => {
+    var mockHandler = jest.fn();
+    var view = new SettingsView();
+    view.bindConfirmSettings(mockHandler);
+
+    var form = document.getElementById("settings-form");
+    var inputs = form.querySelectorAll("input");
+    inputs[0].value = "55";
+
+    var button = document.getElementById("settings-confirm-btn");
+    button.click();
+    expect(mockHandler).toHaveBeenCalledWith({ "refresh.interval": "55" });
+  });
+  test("calls bound handler with data on submit", () => {
+    var mockHandler = jest.fn();
+    var view = new SettingsView();
+    view.bindConfirmSettings(mockHandler);
+
+    var form = document.getElementById("settings-form");
+    var inputs = form.querySelectorAll("input");
+    inputs[0].value = "55";
+
+    form.submit();
+    expect(mockHandler).toHaveBeenCalledWith({ "refresh.interval": "55" });
+  });
 });
 
-describe("bindCancelSettings", () => {});
+describe("bindCancelSettings", () => {
+  test("calls bound handler on click", () => {
+    var mockHandler = jest.fn();
+    var view = new SettingsView();
+    view.bindCancelSettings(mockHandler);
+    var button = document.getElementById("settings-cancel-btn");
+    button.click();
+    expect(mockHandler).toHaveBeenCalled();
+  });
+});
 
 describe("modal controls", () => {
   test("openSettingsModal", () => {
@@ -102,5 +116,24 @@ describe("modal controls", () => {
     var view = new SettingsView(controls);
     view.closeSettingsModal();
     expect(controls.closeModal).toHaveBeenCalledWith("settings-modal");
+  });
+});
+
+describe("updateButtons", () => {
+  test("selected user enables button", () => {
+    var view = new SettingsView(controls);
+    view.updateButtons("someUser");
+
+    var btn = document.getElementById("user-settings-modal-btn");
+    expect(btn.disabled).toBeFalsy();
+    expect(btn.classList).not.toContain("w3-disabled");
+  });
+  test("no user disables button", () => {
+    var view = new SettingsView(controls);
+    view.updateButtons(null);
+
+    var btn = document.getElementById("user-settings-modal-btn");
+    expect(btn.disabled).toBeTruthy();
+    expect(btn.classList).toContain("w3-disabled");
   });
 });
