@@ -2,47 +2,48 @@
     <button class="w3-button w3-black" onclick="tossAlert()">Alert</button>
   </div>
 
-  <template id="alert-template">
-  <div  class="w3-panel w3-pale-green w3-round-large w3-display-topmiddle">
-    <span onclick="this.parentElement.remove()" class="w3-button w3-display-topright">&times;</span>
-    <h3>Success!</h3>
-    <p>You've done it</p>
-  </div>
-</template>
-
   <script>
       function tossAlert() {
         var id = "alert-" + (new Date().getMilliseconds());
 
-        var alertDiv = document.createElement('div');
-        alertDiv.id = id;
-        alertDiv.classList.add("w3-panel", "w3-pale-green", "w3-round-large", "w3-display-topmiddle");
+  //       <div class="w3-panel w3-green w3-card-4 w3-top w3-border-light-green w3-bottombar w3-round-large rf-horizontal-center" style="width:35%" hidden>
+    var panel = document.createElement('div');
+    panel.classList.add("w3-panel","w3-green", "w3-card-4", "w3-top", "w3-border-light-green", "w3-bottombar", "w3-round-large", "rf-horizontal-center" )
+    panel.style = "width:35%";
+    panel.id = id;
 
-      //   <button id="add-user-modal-close-button" class="w3-button w3-blue-grey w3-round-large w3-display-topright">
-      //   <i class="fa fa-times fa-lg"></i>
-      // </button>
+      //   <span class="w3-tag w3-green w3-display-left">
+  //     <i class="fa fa-check-circle fa-2x" style="color:white"></i>       
+  //   </span>
+    var successIconContainer = document.createElement('span');
+    successIconContainer.classList.add("w3-tag", "w3-green", "w3-display-left");
+    var successIcon = document.createElement('i');
+    successIcon.classList.add("fa", "fa-check-circle", "fa-2x")
+    successIcon.style="color:white";
+    successIconContainer.appendChild(successIcon);
+    panel.appendChild(successIconContainer);
 
-        var closeButton = document.createElement('button');
-        closeButton.onclick = "this.parentElement.remove()"
-        closeButton.classList.add("w3-button", "w3-round-large", "w3-display-topright");
-
-        var icon = document.createElement('i');
-        icon.classList.add("fa", "fa-times", "fa-lg");
-        closeButton.appendChild(icon);
-
-        alertDiv.appendChild(closeButton);
+  //   <h4 class="w3-margin-left w3-padding">User added</h4>  
+  var message = document.createElement("h4") ;
+  message.classList.add("w3-margin-left", "w3-padding");
+  message.textContent="User Added!";
+        panel.appendChild(message);
         
-        var header = document.createElement('h3');
-        header.textContent="Success!";
-        alertDiv.appendChild(header);
-
-        var paragraph = document.createElement('p');
-        paragraph.textContent="You did it!";
-        alertDiv.appendChild(paragraph);
+  //   <span class="w3-tag w3-green w3-round-xlarge w3-display-right">
+  //     <i class="fa fa-times fa-2x" style="color:white"></i>
+  //   </span>
+  var closeIconContainer = document.createElement('span');
+  closeIconContainer.classList.add("w3-tag", "w3-green", "w3-display-right");
+    var closeIcon = document.createElement('i');
+    closeIcon.classList.add("fa", "fa-times", "fa-2x")
+    closeIcon.style="color:white";
+    closeIconContainer.appendChild(closeIcon);
+    panel.appendChild(closeIconContainer);
+  // </div>
         
 
         // need to add it to something
-        document.body.appendChild(alertDiv);
+        document.body.appendChild(panel);
 
         setTimeout(function() {
           document.getElementById(id).remove()
