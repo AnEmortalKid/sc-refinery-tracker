@@ -38,7 +38,7 @@ beforeEach(() => {
   controls = {
     openModal: jest.fn(),
     closeModal: jest.fn(),
-    displayAlert: jest.fn()
+    displayAlert: jest.fn(),
   };
 });
 
