@@ -23,7 +23,7 @@ import SettingsModel from "./settings/settingsModel";
 export const controls = new Controls();
 
 const userModel = new UserModel();
-const userView = new UserView();
+const userView = new UserView(controls);
 const userController = new UserController(userModel, userView);
 
 const jobModel = new JobModel();

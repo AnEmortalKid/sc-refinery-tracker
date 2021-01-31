@@ -13,9 +13,10 @@ function createPlaceholder() {
 }
 
 export default class UserView {
-  constructor() {
-    this.addUserForm = document.getElementById("user-form");
+  constructor(controls) {
+    this.controls = controls;
 
+    this.addUserForm = document.getElementById("user-form");
     this.addUserInput = document.getElementById("user-form-username");
     this.userSelect = document.getElementById("user-selection");
   }
@@ -124,14 +125,14 @@ export default class UserView {
    * Open the Add User Modal
    */
   openAddUserModal() {
-    app.controls.openModal("add-user-form-modal");
+    this.controls.openModal("add-user-form-modal");
   }
 
   /**
    * Closes the Add User Modal
    */
   closeAddUserModal() {
-    app.controls.closeModal("add-user-form-modal");
+    this.controls.closeModal("add-user-form-modal");
   }
 
   /**
@@ -141,14 +142,14 @@ export default class UserView {
     document.getElementById(
       "remove-user-header-placeholder"
     ).textContent = userName;
-    app.controls.openModal("remove-user-form-modal");
+    this.controls.openModal("remove-user-form-modal");
   }
 
   /**
    * Closes the Remove User Modal
    */
   closeRemoveUserModal() {
-    app.controls.closeModal("remove-user-form-modal");
+    this.controls.closeModal("remove-user-form-modal");
   }
 
   /**
