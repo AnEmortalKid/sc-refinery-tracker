@@ -1,0 +1,51 @@
+<div class="w3-container">
+    <button class="w3-button w3-black" onclick="tossAlert()">Alert</button>
+  </div>
+
+  <template id="alert-template">
+  <div  class="w3-panel w3-pale-green w3-round-large w3-display-topmiddle">
+    <span onclick="this.parentElement.remove()" class="w3-button w3-display-topright">&times;</span>
+    <h3>Success!</h3>
+    <p>You've done it</p>
+  </div>
+</template>
+
+  <script>
+      function tossAlert() {
+        var id = "alert-" + (new Date().getMilliseconds());
+
+        var alertDiv = document.createElement('div');
+        alertDiv.id = id;
+        alertDiv.classList.add("w3-panel", "w3-pale-green", "w3-round-large", "w3-display-topmiddle");
+
+      //   <button id="add-user-modal-close-button" class="w3-button w3-blue-grey w3-round-large w3-display-topright">
+      //   <i class="fa fa-times fa-lg"></i>
+      // </button>
+
+        var closeButton = document.createElement('button');
+        closeButton.onclick = "this.parentElement.remove()"
+        closeButton.classList.add("w3-button", "w3-round-large", "w3-display-topright");
+
+        var icon = document.createElement('i');
+        icon.classList.add("fa", "fa-times", "fa-lg");
+        closeButton.appendChild(icon);
+
+        alertDiv.appendChild(closeButton);
+        
+        var header = document.createElement('h3');
+        header.textContent="Success!";
+        alertDiv.appendChild(header);
+
+        var paragraph = document.createElement('p');
+        paragraph.textContent="You did it!";
+        alertDiv.appendChild(paragraph);
+        
+
+        // need to add it to something
+        document.body.appendChild(alertDiv);
+
+        setTimeout(function() {
+          document.getElementById(id).remove()
+        }, 2000);
+      }
+  </script>

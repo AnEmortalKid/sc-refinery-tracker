@@ -6,3 +6,10 @@
   margin-right: 4px;
   margin-left: 4px;
 }
+
+.rf-horizontal-center {
+  position: fixed;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, 0%);
+}
