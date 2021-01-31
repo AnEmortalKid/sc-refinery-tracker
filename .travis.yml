@@ -3,3 +3,6 @@ node_js:
   - "14"
 before_script: 
   - "npm run prettier:check"
+branches:
+  only:
+  - main
