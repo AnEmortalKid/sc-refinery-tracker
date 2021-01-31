@@ -115,6 +115,11 @@ export default class JobView {
     this.controls.displayAlert('Refinery Job Removed.');
   }
 
+  alertAllJobsRemoved() {
+    // TODO pass in count
+    this.controls.displayAlert('All Refinery Jobs Removed.');
+  }
+
   _createRemoveJobButton(job) {
     var button = document.createElement("button");
     button.classList.add(

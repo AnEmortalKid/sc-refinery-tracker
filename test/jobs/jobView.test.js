@@ -39,4 +39,9 @@ describe("alerts", () => {
       view.alertJobRemoved();
       expect(controls.displayAlert).toHaveBeenCalledWith("Refinery Job Removed.");
     });
+    test("alertJobRemoved", () => {
+      var view = new JobView(controls);
+      view.alertAllJobsRemoved();
+      expect(controls.displayAlert).toHaveBeenCalledWith("All Refinery Jobs Removed.");
+    });
   });

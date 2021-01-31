@@ -76,6 +76,7 @@ export default class JobController {
   handleRemoveAllJobsConfirm() {
     this.jobModel.deleteAll();
     this.jobView.closeRemoveAllModal();
+    this.jobView.alertAllJobsRemoved();
   }
 
   /**
