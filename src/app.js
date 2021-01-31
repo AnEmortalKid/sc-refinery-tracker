@@ -34,7 +34,7 @@ const jobView = new JobView();
 const jobController = new JobController(jobModel, jobView, jobEntry);
 
 const settingsModel = new SettingsModel();
-const settingsView = new SettingsView();
+const settingsView = new SettingsView(controls);
 const settingsController = new SettingsController(settingsModel, settingsView);
 
 var currentRefreshFn;
