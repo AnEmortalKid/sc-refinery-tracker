@@ -112,12 +112,12 @@ export default class JobView {
 
   alertJobRemoved() {
     // TODO pass in ids and what not
-    this.controls.displayAlert('Refinery Job Removed.');
+    this.controls.displayAlert("Refinery Job Removed.");
   }
 
   alertAllJobsRemoved() {
     // TODO pass in count
-    this.controls.displayAlert('All Refinery Jobs Removed.');
+    this.controls.displayAlert("All Refinery Jobs Removed.");
   }
 
   _createRemoveJobButton(job) {

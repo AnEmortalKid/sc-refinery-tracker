@@ -81,7 +81,7 @@ export default class Controls {
     panel.appendChild(_createMessage(alertMsg));
     panel.appendChild(_createCloseIcon(id));
 
-    var alertcontainer = document.getElementById('alert-container');
+    var alertcontainer = document.getElementById("alert-container");
     alertcontainer.prepend(panel);
 
     setTimeout(function () {

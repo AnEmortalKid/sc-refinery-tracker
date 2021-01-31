@@ -38,6 +38,7 @@ beforeEach(() => {
   controls = {
     openModal: jest.fn(),
     closeModal: jest.fn(),
+    displayAlert: jest.fn()
   };
 });
 
@@ -135,5 +136,13 @@ describe("updateButtons", () => {
     var btn = document.getElementById("user-settings-modal-btn");
     expect(btn.disabled).toBeTruthy();
     expect(btn.classList).toContain("w3-disabled");
+  });
+});
+
+describe("alerts", () => {
+  test("alertSettingsUpdated", () => {
+    var view = new SettingsView(controls);
+    view.alertSettingsUpdated();
+    expect(controls.displayAlert).toHaveBeenCalledWith("Settings Updated.");
   });
 });
