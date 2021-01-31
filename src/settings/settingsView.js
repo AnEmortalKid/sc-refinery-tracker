@@ -86,4 +86,8 @@ export default class SettingsView {
       settingsBtn.disabled = false;
     }
   }
+
+  alertSettingsUpdated() {
+    this.controls.displayAlert("Settings Updated.");
+  }
 }

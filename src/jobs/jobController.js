@@ -76,6 +76,7 @@ export default class JobController {
   handleRemoveAllJobsConfirm() {
     this.jobModel.deleteAll();
     this.jobView.closeRemoveAllModal();
+    this.jobView.alertAllJobsRemoved();
   }
 
   /**
@@ -90,6 +91,7 @@ export default class JobController {
    */
   handleRemoveJob(jobId) {
     this.jobModel.delete(jobId);
+    this.jobView.alertJobRemoved();
   }
 
   handleToggleDetails(jobId) {

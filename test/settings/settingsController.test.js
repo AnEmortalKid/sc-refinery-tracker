@@ -19,6 +19,7 @@ beforeEach(() => {
     closeSettingsModal: jest.fn(),
 
     updateButtons: jest.fn(),
+    alertSettingsUpdated: jest.fn(),
   };
 });
 
@@ -69,6 +70,7 @@ describe("handleConfirmUpdateSettings", () => {
       refreshRateSeconds: 10,
     });
     expect(mockView.closeSettingsModal).toHaveBeenCalled();
+    expect(mockView.alertSettingsUpdated).toHaveBeenCalled();
   });
 });
 

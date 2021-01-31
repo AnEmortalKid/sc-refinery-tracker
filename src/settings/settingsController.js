@@ -37,6 +37,7 @@ export default class SettingsController {
 
     this.settingsModel.update(this.user, settings);
     this.settingsView.closeSettingsModal();
+    this.settingsView.alertSettingsUpdated();
   }
 
   handleCancelUpdateSettings() {

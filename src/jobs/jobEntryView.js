@@ -103,7 +103,8 @@ function createMaterialInputValue(
  * Component responsible for managing the view portion of adding or editing refinery jobs
  */
 export default class JobEntryView {
-  constructor() {
+  constructor(controls) {
+    this.controls = controls;
     this.form = document.getElementById("add-job-form");
   }
 
@@ -258,7 +259,7 @@ export default class JobEntryView {
     if (clearData) {
       this._clearFormData();
     }
-    app.controls.openModal("add-job-modal");
+    this.controls.openModal("add-job-modal");
   }
 
   openEditEntryModal(formData) {
@@ -274,14 +275,14 @@ export default class JobEntryView {
     // let the set form data result be the only notified one
     this._clearFormData(false);
     this._setFormData(formData);
-    app.controls.openModal("add-job-modal");
+    this.controls.openModal("add-job-modal");
   }
 
   /**
    * Closes the modal
    */
   closeEntryModal() {
-    app.controls.closeModal("add-job-modal");
+    this.controls.closeModal("add-job-modal");
   }
 
   /**
@@ -325,6 +326,10 @@ export default class JobEntryView {
     } else {
       selection.classList.add("w3-border-red");
     }
+  }
+
+  alertJobAdded() {
+    this.controls.displayAlert("Refinery Job Added.");
   }
 
   _clearFormData(notify = true) {
