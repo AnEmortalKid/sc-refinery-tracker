@@ -377,7 +377,7 @@ export default class JobView {
 
     var yieldTotal = 0;
     for (var i = 0; i < jobCount; i++) {
-      yieldTotal += jobs[i].yieldAmount;
+      yieldTotal += parseInt(jobs[i].yieldAmount);
     }
 
     // setup footer
