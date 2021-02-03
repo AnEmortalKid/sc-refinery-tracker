@@ -390,7 +390,7 @@ export default class JobEntryView {
     var obj = {};
     for (var i = 0; i < inputs.length; i++) {
       var item = inputs.item(i);
-      if (item.name) {
+      if (item.name && !item.name.startsWith("material.input")) {
         obj[item.name] = item.value;
       }
     }
