@@ -86,22 +86,18 @@ describe("onuserChangeHandler", () => {
 });
 
 describe("onUserDeletedHandler", () => {
-    test("null user, does nothing", () => {
-        var controller = new JobController(jobModel, jobView, jobEntryController);
-        controller.onUserDeletedHandler(null);
+  test("null user, does nothing", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+    controller.onUserDeletedHandler(null);
 
-        expect(jobModel.deleteAllForUser).not.toHaveBeenCalled();
-    });
-    test("deletes runs for user", () => {
-        var controller = new JobController(jobModel, jobView, jobEntryController);
-        controller.onUserDeletedHandler(
-            "deleted"
-        );
+    expect(jobModel.deleteAllForUser).not.toHaveBeenCalled();
+  });
+  test("deletes runs for user", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+    controller.onUserDeletedHandler("deleted");
 
-        expect(jobModel.deleteAllForUser).toHaveBeenCalledWith(
-            "deleted"
-        );
-    });
+    expect(jobModel.deleteAllForUser).toHaveBeenCalledWith("deleted");
+  });
 });
 
 describe("refreshJobStatus", () => {
