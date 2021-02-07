@@ -290,7 +290,7 @@ export default class JobView {
     row.dataset.jobId = job.uuid;
 
     var name = document.createElement("td");
-    if (job.materials) {
+    if (this._hasMaterials(job)) {
       name.appendChild(this._createDetailsToggle(job.uuid));
     }
     name.appendChild(document.createTextNode(job.name));
@@ -325,6 +325,10 @@ export default class JobView {
 
     row.appendChild(this._createActionsRow(job));
     return row;
+  }
+
+  _hasMaterials(job) {
+    return job.materials && Object.keys(job.materials).length > 0;
   }
 
   /**
@@ -368,7 +372,7 @@ export default class JobView {
       tableBody.appendChild(jobRow);
 
       // TODO check if null or empty or no keys
-      if (job.materials) {
+      if (this._hasMaterials(job)) {
         var detailsRow = this._createDetailsRow(job);
         detailsRow.classList.add(colorClass);
         tableBody.appendChild(detailsRow);
