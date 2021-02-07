@@ -48,8 +48,122 @@ beforeEach(() => {
 
 describe("constructor", () => {
   test("binds to view", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    new JobController(jobModel, jobView, jobEntryController);
 
     expect(jobView.bindAddJob).toHaveBeenCalled();
+    expect(jobView.bindEditJob).toHaveBeenCalled();
+    expect(jobView.bindRemoveJob).toHaveBeenCalled();
+    expect(jobView.bindRemoveAllJobs).toHaveBeenCalled();
+    expect(jobView.bindRemoveAllConfirm).toHaveBeenCalled();
+    expect(jobView.bindRemoveAllCancel).toHaveBeenCalled();
+    expect(jobView.bindToggleCollapseRow).toHaveBeenCalled();
+    expect(jobModel.registerOnJobChangeListener).toHaveBeenCalled();
+  });
+});
+
+describe("onJobChangeHandler", () => {
+  test("calls showJobs", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+
+    controller.onJobChangeHandler([{ uuid: "foo" }]);
+
+    expect(jobView.showJobs).toHaveBeenCalledWith([{ uuid: "foo" }]);
+  });
+});
+describe("onuserChangeHandler", () => {
+  test("with null user, calls clear", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+    controller.onUserChangeHandler(null);
+
+    expect(jobModel.clear).toHaveBeenCalled();
+  });
+  test("with user, calls load", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+
+    controller.onUserChangeHandler("user");
+    expect(jobModel.load).toHaveBeenCalledWith("user");
+  });
+});
+
+describe("refreshJobStatus", () => {
+  test("loads runs from model", () => {
+    var mockJobs = [{ uuid: "foo" }, { uuid: "bar" }];
+    jobModel.getAll.mockReturnValueOnce(mockJobs);
+
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+
+    controller.refreshJobStatus();
+
+    expect(jobModel.getAll).toHaveBeenCalled();
+    expect(jobView.updateJobStatus).toHaveBeenCalledWith(mockJobs);
+  });
+});
+
+describe("handleAddJob", () => {
+  test("opens modal", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+
+    controller.handleAddJob();
+    expect(jobEntryController.openAddJobModal).toHaveBeenCalled();
+  });
+});
+
+describe("handleRemoveAllJobs", () => {
+  test("opens modal", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+
+    controller.handleRemoveAllJobs();
+    expect(jobEntryController.openRemoveAllModal).toHaveBeenCalled();
+  });
+});
+
+describe("handleRemoveAllJobsConfirm", () => {
+  test("closes remove modal and removes jobs", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+
+    controller.handleRemoveAllJobsConfirm();
+    expect(jobModel.deleteAll).toHaveBeenCalled();
+    expect(jobView.closeRemoveAllModal).toHaveBeenCalled();
+    expect(jobView.alertAllJobsRemoved).toHaveBeenCalled();
+  });
+});
+
+describe("handleRemoveAllJobsCancel", () => {
+  test("closes remove modal", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+
+    controller.handleRemoveAllJobsCancel();
+    expect(jobView.closeRemoveAllModal).toHaveBeenCalled();
+  });
+});
+
+describe("handleRemoveJob", () => {
+  test("removes job", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+
+    controller.handleRemoveJob("someId");
+    expect(jobModel.delete).toHaveBeenCalledWith("someId");
+    expect(jobView.alertJobRemoved).toHaveBeenCalled();
+  });
+});
+
+describe("handleToggleDetails", () => {
+  test("toggles row", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+    controller.handleToggleDetails("someRow");
+    expect(jobView.toggleDetailsRow).toHaveBeenCalledWith("someRow");
+  });
+});
+
+describe("handleEditJob", () => {
+  test("loads edit data", () => {
+    jobModel.get.mockReturnValueOnce({ uuid: "someJob" });
+
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+    controller.handleEditJob("someJob");
+    expect(jobModel.get).toHaveBeenCalledWith("someJob");
+    expect(jobEntryController.openEditJobModal).toHaveBeenCalledWith({
+      uuid: "someJob",
+    });
   });
 });
