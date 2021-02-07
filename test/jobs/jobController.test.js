@@ -85,6 +85,25 @@ describe("onuserChangeHandler", () => {
   });
 });
 
+describe("onUserDeletedHandler", () => {
+    test("null user, does nothing", () => {
+        var controller = new JobController(jobModel, jobView, jobEntryController);
+        controller.onUserDeletedHandler(null);
+
+        expect(jobModel.deleteAllForUser).not.toHaveBeenCalled();
+    });
+    test("deletes runs for user", () => {
+        var controller = new JobController(jobModel, jobView, jobEntryController);
+        controller.onUserDeletedHandler(
+            "deleted"
+        );
+
+        expect(jobModel.deleteAllForUser).toHaveBeenCalledWith(
+            "deleted"
+        );
+    });
+});
+
 describe("refreshJobStatus", () => {
   test("loads runs from model", () => {
     var mockJobs = [{ uuid: "foo" }, { uuid: "bar" }];
@@ -113,7 +132,7 @@ describe("handleRemoveAllJobs", () => {
     var controller = new JobController(jobModel, jobView, jobEntryController);
 
     controller.handleRemoveAllJobs();
-    expect(jobEntryController.openRemoveAllModal).toHaveBeenCalled();
+    expect(jobView.openRemoveAllModal).toHaveBeenCalled();
   });
 });
 
