@@ -26,11 +26,14 @@ beforeEach(() => {
     bindRemoveAllConfirm: jest.fn(),
     bindRemoveAllCancel: jest.fn(),
     bindToggleCollapseRow: jest.fn(),
+    bindToggleCollapseAll: jest.fn(),
     openRemoveAllModal: jest.fn(),
     closeRemoveAllModal: jest.fn(),
     alertJobRemoved: jest.fn(),
     alertAllJobsRemoved: jest.fn(),
     toggleDetailsRow: jest.fn(),
+    expandAll: jest.fn(),
+    collapseAll: jest.fn(),
     showJobs: jest.fn(),
     updateJobStatus: jest.fn(),
   };
@@ -57,6 +60,7 @@ describe("constructor", () => {
     expect(jobView.bindRemoveAllConfirm).toHaveBeenCalled();
     expect(jobView.bindRemoveAllCancel).toHaveBeenCalled();
     expect(jobView.bindToggleCollapseRow).toHaveBeenCalled();
+    expect(jobView.bindToggleCollapseAll).toHaveBeenCalled();
     expect(jobModel.registerOnJobChangeListener).toHaveBeenCalled();
   });
 });
@@ -68,6 +72,14 @@ describe("onJobChangeHandler", () => {
     controller.onJobChangeHandler([{ uuid: "foo" }]);
 
     expect(jobView.showJobs).toHaveBeenCalledWith([{ uuid: "foo" }]);
+  });
+  test("preserves collapsed state", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+    controller.expandAll = false;
+
+    controller.onJobChangeHandler([{ uuid: "foo" }]);
+
+    expect(jobView.collapseAll).toHaveBeenCalled();
   });
 });
 describe("onuserChangeHandler", () => {
@@ -167,6 +179,21 @@ describe("handleToggleDetails", () => {
     var controller = new JobController(jobModel, jobView, jobEntryController);
     controller.handleToggleDetails("someRow");
     expect(jobView.toggleDetailsRow).toHaveBeenCalledWith("someRow");
+  });
+});
+
+describe("handleToggleCollapseAll", () => {
+  test("collapsesAll", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+    controller.handleToggleCollapseAll();
+    expect(jobView.collapseAll).toHaveBeenCalled();
+  });
+  test("expandsAll", () => {
+    var controller = new JobController(jobModel, jobView, jobEntryController);
+    // pretend we collapsed b4
+    controller.expandAll = false;
+    controller.handleToggleCollapseAll();
+    expect(jobView.expandAll).toHaveBeenCalled();
   });
 });
 

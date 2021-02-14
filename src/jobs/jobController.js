@@ -16,10 +16,14 @@ export default class JobController {
     );
     this.jobView.bindRemoveAllCancel(this.handleRemoveAllJobsCancel.bind(this));
     this.jobView.bindToggleCollapseRow(this.handleToggleDetails.bind(this));
+    this.jobView.bindToggleCollapseAll(this.handleToggleCollapseAll.bind(this));
 
     this.jobModel.registerOnJobChangeListener(
       this.onJobChangeHandler.bind(this)
     );
+
+    // expand all by default
+    this.expandAll = true;
   }
 
   /**
@@ -28,6 +32,7 @@ export default class JobController {
    */
   onJobChangeHandler(jobs) {
     this.jobView.showJobs(jobs);
+    this._synchronizeExpandCollapseAll();
   }
 
   /**
@@ -96,6 +101,18 @@ export default class JobController {
 
   handleToggleDetails(jobId) {
     this.jobView.toggleDetailsRow(jobId);
+  }
+
+  _synchronizeExpandCollapseAll() {
+    if (this.expandAll) {
+      this.jobView.expandAll();
+    } else {
+      this.jobView.collapseAll();
+    }
+  }
+  handleToggleCollapseAll() {
+    this.expandAll = !this.expandAll;
+    this._synchronizeExpandCollapseAll();
   }
 
   handleEditJob(jobId) {

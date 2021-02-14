@@ -129,6 +129,18 @@ describe("bindToggleCollapseRow", () => {
     expect(mockHandler).toHaveBeenCalledWith("row1");
   });
 });
+
+describe("bindToggleCollapseAll", () => {
+  test("calls handler", () => {
+    var mockHandler = jest.fn();
+    var view = new JobView(controls);
+    view.bindToggleCollapseAll(mockHandler);
+    document.getElementById("toggle-collapse-all").click();
+
+    expect(mockHandler).toHaveBeenCalled();
+  });
+});
+
 describe("bindEditJob", () => {
   test("calls handler with data", () => {
     var mockHandler = jest.fn();
@@ -168,6 +180,85 @@ describe("toggleDetailsRow", () => {
     expect(fakeIcon.classList).not.toContain("fa-chevron-down");
     expect(fakeIcon.classList).toContain("fa-chevron-up");
     expect(fakeDetailsRow.hidden).toBeFalsy();
+  });
+});
+
+describe("expandAll and collapseAll", () => {
+  var view;
+  var expandIcon;
+  var expandedDetailsRow;
+  var collapseIcon;
+  var collapsedDetailsRow;
+
+  beforeEach(() => {
+    view = new JobView(controls);
+
+    var expandedRow = document.createElement("tr");
+    expandedRow.dataset.jobId = "expand";
+
+    var expandName = document.createElement("td");
+    expandIcon = document.createElement("i");
+    expandIcon.id = "details-toggle-expand";
+    expandIcon.classList.add("fa-chevron-up");
+    expandName.appendChild(expandIcon);
+    expandName.appendChild(document.createTextNode("expand"));
+    expandedRow.appendChild(expandName);
+
+    expandedDetailsRow = document.createElement("tr");
+    expandedDetailsRow.id = "job-details-expand";
+
+    // clean up the placeholder
+    var body = document.getElementById("jobs-table-body");
+    body.children[0].remove();
+
+    body.appendChild(expandedRow);
+    body.appendChild(expandedDetailsRow);
+
+    var collapsedRow = document.createElement("tr");
+    collapsedRow.dataset.jobId = "collapse";
+
+    var collapseName = document.createElement("td");
+    collapseIcon = document.createElement("i");
+    collapseIcon.id = "details-toggle-collapse";
+    collapseIcon.classList.add("fa-chevron-down");
+    collapseName.appendChild(collapseIcon);
+    collapseName.appendChild(document.createTextNode("collapsed"));
+    collapsedRow.appendChild(collapseName);
+
+    collapsedDetailsRow = document.createElement("tr");
+    collapsedDetailsRow.id = "job-details-collapse";
+
+    body.appendChild(collapsedRow);
+    body.appendChild(collapsedDetailsRow);
+  });
+
+  test("collapseAll collapses all rows", () => {
+    view.collapseAll();
+    expect(expandIcon.classList).toContain("fa-chevron-down");
+    expect(expandIcon.classList).not.toContain("fa-chevron-up");
+    expect(expandedDetailsRow.hidden).toBeTruthy();
+
+    expect(collapseIcon.classList).toContain("fa-chevron-down");
+    expect(collapseIcon.classList).not.toContain("fa-chevron-up");
+    expect(collapsedDetailsRow.hidden).toBeTruthy();
+
+    var toggleIcon = document.getElementById("toggle-collapse-all");
+    expect(toggleIcon.classList).toContain("fa-angle-double-down");
+    expect(toggleIcon.classList).not.toContain("fa-angle-double-up");
+  });
+  test("expandAll expands all rows", () => {
+    view.expandAll();
+    expect(expandIcon.classList).not.toContain("fa-chevron-down");
+    expect(expandIcon.classList).toContain("fa-chevron-up");
+    expect(expandedDetailsRow.hidden).toBeFalsy();
+
+    expect(collapseIcon.classList).not.toContain("fa-chevron-down");
+    expect(collapseIcon.classList).toContain("fa-chevron-up");
+    expect(collapsedDetailsRow.hidden).toBeFalsy();
+
+    var toggleIcon = document.getElementById("toggle-collapse-all");
+    expect(toggleIcon.classList).not.toContain("fa-angle-double-down");
+    expect(toggleIcon.classList).toContain("fa-angle-double-up");
   });
 });
 
