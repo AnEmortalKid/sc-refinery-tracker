@@ -89,6 +89,19 @@ export default class JobView {
   }
 
   /**
+   * Binds handler to notify when a click event happens on the collapse/expand icon for all rows
+   * @param {function} handler
+   */
+  bindToggleCollapseAll(handler) {
+    var action = (event) => {
+      handler();
+    };
+
+    var btn = document.getElementById("toggle-collapse-all");
+    btn.addEventListener("click", action);
+  }
+
+  /**
    * Binds handler to notify when a click event happens on the edit icon for a row
    * @param {function} handler
    */
@@ -209,15 +222,60 @@ export default class JobView {
     var icon = document.getElementById("details-toggle-" + jobId);
     var hidden = detailsRow.hidden;
     if (hidden) {
-      // expand and add collapse icon
-      icon.classList.remove("fa-chevron-down");
-      icon.classList.add("fa-chevron-up");
-      detailsRow.hidden = false;
+      this._expandDetails(detailsRow, icon);
     } else {
-      icon.classList.add("fa-chevron-down");
-      icon.classList.remove("fa-chevron-up");
-      detailsRow.hidden = true;
+      this._collapseDetails(detailsRow, icon);
     }
+  }
+
+  _collapseDetails(detailsRow, icon) {
+    icon.classList.add("fa-chevron-down");
+    icon.classList.remove("fa-chevron-up");
+    detailsRow.hidden = true;
+  }
+
+  _expandDetails(detailsRow, icon) {
+    icon.classList.remove("fa-chevron-down");
+    icon.classList.add("fa-chevron-up");
+    detailsRow.hidden = false;
+  }
+
+  _toggleAll(collapse) {
+    var tableBody = document.getElementById("jobs-table-body");
+    var rows = tableBody.children;
+
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      if (row.dataset.jobId) {
+        var jobId = row.dataset.jobId;
+        var detailsRow = document.getElementById("job-details-" + jobId);
+        if (detailsRow) {
+          var icon = document.getElementById("details-toggle-" + jobId);
+          if (collapse) {
+            this._collapseDetails(detailsRow, icon);
+          } else {
+            this._expandDetails(detailsRow, icon);
+          }
+        }
+      }
+    }
+
+    var toggleIcon = document.getElementById("toggle-collapse-all");
+    if (collapse) {
+      toggleIcon.classList.add("fa-angle-double-down");
+      toggleIcon.classList.remove("fa-angle-double-up");
+    } else {
+      toggleIcon.classList.remove("fa-angle-double-down");
+      toggleIcon.classList.add("fa-angle-double-up");
+    }
+  }
+
+  collapseAll() {
+    this._toggleAll(true);
+  }
+
+  expandAll() {
+    this._toggleAll(false);
   }
 
   _createMaterialsHeader() {
