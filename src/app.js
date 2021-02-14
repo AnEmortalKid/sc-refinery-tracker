@@ -27,10 +27,10 @@ const userView = new UserView(controls);
 const userController = new UserController(userModel, userView);
 
 const jobModel = new JobModel();
-const jobEntryView = new JobEntryView();
+const jobEntryView = new JobEntryView(controls);
 export const jobEntry = new JobEntryController(jobModel, jobEntryView);
 
-const jobView = new JobView();
+const jobView = new JobView(controls);
 const jobController = new JobController(jobModel, jobView, jobEntry);
 
 const settingsModel = new SettingsModel();

@@ -98,6 +98,30 @@ describe("add", () => {
   });
 });
 
+describe("onChangeListener", () => {
+  test("fires on change", () => {
+    var mockHandler = jest.fn();
+    var newRun = new Run(
+      "nextRun",
+      "name",
+      "location",
+      "1m",
+      60,
+      100,
+      new Date()
+    );
+
+    const model = new JobModel();
+    model.registerOnJobChangeListener(mockHandler);
+    model.add(newRun);
+
+    // JSON.stringify will turn our dates into ISO strings
+    newRun.entryTime = newRun.entryTime.toISOString();
+
+    expect(mockHandler).toHaveBeenCalledWith([newRun]);
+  });
+});
+
 describe("delete", () => {
   test("non existent id, does nothing", () => {
     var run1 = new Run("id1", "name", "location", "1m", 60, 100, new Date());

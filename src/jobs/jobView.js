@@ -5,7 +5,9 @@ import { toDurationString } from "../durationParser";
  * Component responsible for displaying a list of Refinery Jobs
  */
 export default class JobView {
-  constructor() {
+  constructor(controls) {
+    this.controls = controls;
+
     this.tableBody = document.getElementById("jobs-table-body");
     this.tableFooter = document.getElementById("runs-table-footer");
     this.tableFooterYieldColumn = document.getElementById(
@@ -98,14 +100,24 @@ export default class JobView {
    * Open the Remove All Jobs Modal
    */
   openRemoveAllModal() {
-    app.controls.openModal("remove-all-jobs-modal");
+    this.controls.openModal("remove-all-jobs-modal");
   }
 
   /**
    * Closes the modal
    */
   closeRemoveAllModal() {
-    app.controls.closeModal("remove-all-jobs-modal");
+    this.controls.closeModal("remove-all-jobs-modal");
+  }
+
+  alertJobRemoved() {
+    // TODO pass in ids and what not
+    this.controls.displayAlert("Refinery Job Removed.");
+  }
+
+  alertAllJobsRemoved() {
+    // TODO pass in count
+    this.controls.displayAlert("All Refinery Jobs Removed.");
   }
 
   _createRemoveJobButton(job) {
@@ -278,7 +290,7 @@ export default class JobView {
     row.dataset.jobId = job.uuid;
 
     var name = document.createElement("td");
-    if (job.materials) {
+    if (this._hasMaterials(job)) {
       name.appendChild(this._createDetailsToggle(job.uuid));
     }
     name.appendChild(document.createTextNode(job.name));
@@ -313,6 +325,10 @@ export default class JobView {
 
     row.appendChild(this._createActionsRow(job));
     return row;
+  }
+
+  _hasMaterials(job) {
+    return job.materials && Object.keys(job.materials).length > 0;
   }
 
   /**
@@ -356,7 +372,7 @@ export default class JobView {
       tableBody.appendChild(jobRow);
 
       // TODO check if null or empty or no keys
-      if (job.materials) {
+      if (this._hasMaterials(job)) {
         var detailsRow = this._createDetailsRow(job);
         detailsRow.classList.add(colorClass);
         tableBody.appendChild(detailsRow);
@@ -365,7 +381,7 @@ export default class JobView {
 
     var yieldTotal = 0;
     for (var i = 0; i < jobCount; i++) {
-      yieldTotal += jobs[i].yieldAmount;
+      yieldTotal += parseInt(jobs[i].yieldAmount);
     }
 
     // setup footer

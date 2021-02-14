@@ -191,4 +191,11 @@ export default class UserView {
       selector.appendChild(option);
     });
   }
+
+  alertUserAdded() {
+    this.controls.displayAlert("User Added.");
+  }
+  alertUserRemoved() {
+    this.controls.displayAlert("User Removed.");
+  }
 }

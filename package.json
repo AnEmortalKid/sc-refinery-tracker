@@ -1,6 +1,6 @@
 {
   "name": "mining_tracker",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "a mining tracker for starcitizen",
   "private": true,
   "scripts": {
@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "font-awesome": "^4.7.0",
+    "mockdate": "^3.0.2",
     "uuid": "^8.3.2"
   }
 }

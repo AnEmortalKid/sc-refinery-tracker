@@ -83,8 +83,8 @@ export default class JobEntryController {
       this.jobModel.update(consolidatedRun);
     }
 
-    // TODO display alert SUCCESS/UPDATE!
     this.jobEntryView.closeEntryModal();
+    this.jobEntryView.alertJobAdded();
   }
 
   /**

@@ -41,6 +41,7 @@ export default class UserController {
 
     this.userView.closeAddUserModal();
     this._renderUsers();
+    this.userView.alertUserAdded();
   }
 
   /**
@@ -70,6 +71,7 @@ export default class UserController {
       this.userModel.getAll(),
       this.userModel.getCurrent()
     );
+    this.userView.alertUserRemoved();
   }
 
   /**
