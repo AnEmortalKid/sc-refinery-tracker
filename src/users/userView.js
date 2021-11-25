@@ -139,9 +139,8 @@ export default class UserView {
    * Open the Remove User Modal
    */
   openRemoveUserModal(userName) {
-    document.getElementById(
-      "remove-user-header-placeholder"
-    ).textContent = userName;
+    document.getElementById("remove-user-header-placeholder").textContent =
+      userName;
     this.controls.openModal("remove-user-form-modal");
   }
 
