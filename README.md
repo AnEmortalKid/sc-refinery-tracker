@@ -9,6 +9,27 @@ See in action:
 * LIVE Version: http://anemortalkid.github.io/starcitizen/mining_tracker/
 * DEV Updates: https://anemortalkid.github.io/sc-refinery-tracker/
 
+
+### Contributing
+0. Fork this repository
+1. Clone repository
+``` 
+git clone https://github.com/{GITHUB_USERNAME}/sc-refinery-tracker.git
+```
+2. Install dependencies 
+``` 
+cd sc-refinery-tracker
+```
+```
+yarn install
+```
+3. Run dev server
+```
+yarn start:watch
+```
+4. Navigate to localhost:9000 and start making your changes
+4. Open PR on main repo requesting merge of changes on your fork
+
 ## Data
 
 * All data is kept locally on your browser through the usage of `localStorage` (for now)
@@ -42,8 +63,4 @@ By default, jobs update their Time Remaining every second. If you would like to 
 2. Modify the settings in the dialog
 
 ![](./docs/user_settings_dialog.png)
-
-### Contributing
-1. Clone repository
-``` git clone https://github.com/AnEmortalKid/sc-refinery-tracker.git```
 
