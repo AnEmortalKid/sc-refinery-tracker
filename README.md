@@ -42,3 +42,8 @@ By default, jobs update their Time Remaining every second. If you would like to 
 2. Modify the settings in the dialog
 
 ![](./docs/user_settings_dialog.png)
+
+### Contributing
+1. Clone repository
+``` git clone https://github.com/AnEmortalKid/sc-refinery-tracker.git```
+
