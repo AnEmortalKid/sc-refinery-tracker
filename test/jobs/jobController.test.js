@@ -3,6 +3,7 @@ import JobController from "../../src/jobs/jobController";
 var jobEntryController;
 var jobView;
 var jobModel;
+var sortController;
 
 beforeEach(() => {
   jobModel = {
@@ -36,6 +37,7 @@ beforeEach(() => {
     collapseAll: jest.fn(),
     showJobs: jest.fn(),
     updateJobStatus: jest.fn(),
+    bindToggleSort: jest.fn(),
   };
 
   jobEntryController = {
@@ -47,11 +49,27 @@ beforeEach(() => {
     openAddJobModal: jest.fn(),
     openEditJobModal: jest.fn(),
   };
+
+  sortController = {
+    getSorted: jest.fn(),
+    clearSorts: jest.fn(),
+    setSorting: jest.fn(),
+    getCurrentSort: jest.fn(),
+  };
 });
+
+function createController() {
+  return new JobController(
+    jobModel,
+    jobView,
+    jobEntryController,
+    sortController
+  );
+}
 
 describe("constructor", () => {
   test("binds to view", () => {
-    new JobController(jobModel, jobView, jobEntryController);
+    createController();
 
     expect(jobView.bindAddJob).toHaveBeenCalled();
     expect(jobView.bindEditJob).toHaveBeenCalled();
@@ -62,19 +80,22 @@ describe("constructor", () => {
     expect(jobView.bindToggleCollapseRow).toHaveBeenCalled();
     expect(jobView.bindToggleCollapseAll).toHaveBeenCalled();
     expect(jobModel.registerOnJobChangeListener).toHaveBeenCalled();
+    expect(jobView.bindToggleSort).toHaveBeenCalled();
   });
 });
 
 describe("onJobChangeHandler", () => {
   test("calls showJobs", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    // prevent no sort
+    sortController.getSorted.mockReturnValue([{ uuid: "foo" }]);
+    var controller = createController();
 
     controller.onJobChangeHandler([{ uuid: "foo" }]);
 
     expect(jobView.showJobs).toHaveBeenCalledWith([{ uuid: "foo" }]);
   });
   test("preserves collapsed state", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
     controller.expandAll = false;
 
     controller.onJobChangeHandler([{ uuid: "foo" }]);
@@ -84,13 +105,13 @@ describe("onJobChangeHandler", () => {
 });
 describe("onuserChangeHandler", () => {
   test("with null user, calls clear", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
     controller.onUserChangeHandler(null);
 
     expect(jobModel.clear).toHaveBeenCalled();
   });
   test("with user, calls load", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
 
     controller.onUserChangeHandler("user");
     expect(jobModel.load).toHaveBeenCalledWith("user");
@@ -99,13 +120,13 @@ describe("onuserChangeHandler", () => {
 
 describe("onUserDeletedHandler", () => {
   test("null user, does nothing", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
     controller.onUserDeletedHandler(null);
 
     expect(jobModel.deleteAllForUser).not.toHaveBeenCalled();
   });
   test("deletes runs for user", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
     controller.onUserDeletedHandler("deleted");
 
     expect(jobModel.deleteAllForUser).toHaveBeenCalledWith("deleted");
@@ -117,7 +138,7 @@ describe("refreshJobStatus", () => {
     var mockJobs = [{ uuid: "foo" }, { uuid: "bar" }];
     jobModel.getAll.mockReturnValueOnce(mockJobs);
 
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
 
     controller.refreshJobStatus();
 
@@ -128,7 +149,7 @@ describe("refreshJobStatus", () => {
 
 describe("handleAddJob", () => {
   test("opens modal", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
 
     controller.handleAddJob();
     expect(jobEntryController.openAddJobModal).toHaveBeenCalled();
@@ -137,7 +158,7 @@ describe("handleAddJob", () => {
 
 describe("handleRemoveAllJobs", () => {
   test("opens modal", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
 
     controller.handleRemoveAllJobs();
     expect(jobView.openRemoveAllModal).toHaveBeenCalled();
@@ -146,7 +167,7 @@ describe("handleRemoveAllJobs", () => {
 
 describe("handleRemoveAllJobsConfirm", () => {
   test("closes remove modal and removes jobs", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
 
     controller.handleRemoveAllJobsConfirm();
     expect(jobModel.deleteAll).toHaveBeenCalled();
@@ -157,7 +178,7 @@ describe("handleRemoveAllJobsConfirm", () => {
 
 describe("handleRemoveAllJobsCancel", () => {
   test("closes remove modal", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
 
     controller.handleRemoveAllJobsCancel();
     expect(jobView.closeRemoveAllModal).toHaveBeenCalled();
@@ -166,7 +187,7 @@ describe("handleRemoveAllJobsCancel", () => {
 
 describe("handleRemoveJob", () => {
   test("removes job", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
 
     controller.handleRemoveJob("someId");
     expect(jobModel.delete).toHaveBeenCalledWith("someId");
@@ -176,7 +197,7 @@ describe("handleRemoveJob", () => {
 
 describe("handleToggleDetails", () => {
   test("toggles row", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
     controller.handleToggleDetails("someRow");
     expect(jobView.toggleDetailsRow).toHaveBeenCalledWith("someRow");
   });
@@ -184,12 +205,12 @@ describe("handleToggleDetails", () => {
 
 describe("handleToggleCollapseAll", () => {
   test("collapsesAll", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
     controller.handleToggleCollapseAll();
     expect(jobView.collapseAll).toHaveBeenCalled();
   });
   test("expandsAll", () => {
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
     // pretend we collapsed b4
     controller.expandAll = false;
     controller.handleToggleCollapseAll();
@@ -201,7 +222,7 @@ describe("handleEditJob", () => {
   test("loads edit data", () => {
     jobModel.get.mockReturnValueOnce({ uuid: "someJob" });
 
-    var controller = new JobController(jobModel, jobView, jobEntryController);
+    var controller = createController();
     controller.handleEditJob("someJob");
     expect(jobModel.get).toHaveBeenCalledWith("someJob");
     expect(jobEntryController.openEditJobModal).toHaveBeenCalledWith({

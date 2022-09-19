@@ -32,8 +32,13 @@ const jobEntryView = new JobEntryView(controls);
 export const jobEntry = new JobEntryController(jobModel, jobEntryView);
 
 const sortController = new SortController();
-const jobView = new JobView(controls, sortController);
-const jobController = new JobController(jobModel, jobView, jobEntry);
+const jobView = new JobView(controls);
+const jobController = new JobController(
+  jobModel,
+  jobView,
+  jobEntry,
+  sortController
+);
 
 const settingsModel = new SettingsModel();
 const settingsView = new SettingsView(controls);

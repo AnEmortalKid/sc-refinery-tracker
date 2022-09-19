@@ -2,25 +2,26 @@ import { removeChildren } from "../elementUtils";
 import { toDurationString } from "../durationParser";
 import { SortFields, SortDirection } from "./sorting/sortOptions";
 
+const sortButtonIds = [
+  "toggle-sort-location",
+  "toggle-sort-duration",
+  "toggle-sort-timeRemaining",
+  "toggle-sort-yield",
+  "toggle-sort-status",
+];
+
 /**
  * Component responsible for displaying a list of Refinery Jobs
  */
 export default class JobView {
   constructor(controls, sortController) {
     this.controls = controls;
-    this.sortController = sortController;
 
     this.tableBody = document.getElementById("jobs-table-body");
     this.tableFooter = document.getElementById("runs-table-footer");
     this.tableFooterYieldColumn = document.getElementById(
       "runs-table-footer-yield"
     );
-
-    // mvc this correctly
-    // should be a bind sort for each...... grumble
-    // but then the handler can be responsible for calling showJobs
-    // from the job controller, which will autosort
-    this.bindSortButtons();
   }
 
   /**
@@ -139,37 +140,6 @@ export default class JobView {
   alertAllJobsRemoved() {
     // TODO pass in count
     this.controls.displayAlert("All Refinery Jobs Removed.");
-  }
-
-  bindSortButtons() {
-
-    var sl = document.getElementById("toggle-sort-location");
-    sl.addEventListener("click", () => {
-      // todo this.something
-
-      var currMode = sl.dataset.mode;
-      var field = sl.dataset.field;
-
-      if (currMode === "none") {
-        this.sortController.setSorting(SortFields.LOCATION, SortDirection.ASC);
-        sl.classList.remove('fa-sort');
-        sl.classList.add('fa-sort-asc');
-        sl.dataset.mode = "asc";
-      }
-      if (currMode === "asc") {
-        this.sortController.setSorting(SortFields.LOCATION, SortDirection.DESC);
-        sl.classList.remove('fa-sort-asc');
-        sl.classList.add('fa-sort-desc');
-        sl.dataset.mode = "desc";
-      }
-      if (currMode === "desc") {
-        sl.classList.remove('fa-sort-desc');
-        sl.classList.add('fa-sort');
-        this.sortController.clearSorting(SortFields.LOCATION);
-        sl.dataset.mode = "none";
-      }
-
-    });
   }
 
   _createRemoveJobButton(job) {
@@ -428,19 +398,6 @@ export default class JobView {
     return job.materials && Object.keys(job.materials).length > 0;
   }
 
-
-  _sortByLocationAsc(a, b) {
-    const aLoc = a.location.toUpperCase();
-    const bLoc = b.location.toUpperCase();
-    if (aLoc < bLoc) {
-      return -1;
-    }
-    if (aLoc > bLoc) {
-      return 1
-    }
-    return 0;
-  }
-
   /**
    * Displays the given jobs
    * @param {Run[]} jobs
@@ -470,11 +427,9 @@ export default class JobView {
     removeAllButton.classList.remove("w3-disabled");
     footer.hidden = false;
 
-    var sortedJobs = this.sortController.getSorted(jobs);
-
     // layout rows
     for (var i = 0; i < jobCount; i++) {
-      var job = sortedJobs[i];
+      var job = jobs[i];
       // create a stripped effect
       var colorClass = i % 2 == 0 ? "w3-white" : "w3-light-grey";
 
@@ -520,6 +475,43 @@ export default class JobView {
 
       var timeLeftCol = document.getElementById("job-remaining-" + job.uuid);
       this._setTimeRemaining(timeLeftCol, remainingSeconds);
+    }
+  }
+
+  bindToggleSort(handler) {
+    sortButtonIds.forEach((id) => {
+      var item = document.getElementById(id);
+      item.addEventListener("click", () => {
+        handler(item.dataset.property);
+      });
+    });
+  }
+
+  updateSortState(sortState) {
+    // reset everything
+    if (!sortState) {
+      sortButtonIds.forEach((id) => {
+        var item = document.getElementById(id);
+        item.classList.remove("fa-sort-asc", "fa-sort-desc", "fa-sort");
+        item.classList.add("fa-sort");
+      });
+    } else {
+      sortButtonIds.forEach((id) => {
+        var item = document.getElementById(id);
+        item.classList.remove("fa-sort-asc", "fa-sort-desc", "fa-sort");
+        item.classList.add("fa-sort");
+        // set the right state
+        if (item.dataset.property === sortState.field) {
+          if (sortState.direction == SortDirection.ASC) {
+            item.classList.add("fa-sort-asc");
+            item.classList.remove("fa-sort");
+          }
+          if (sortState.direction == SortDirection.DESC) {
+            item.classList.add("fa-sort-desc");
+            item.classList.remove("fa-sort");
+          }
+        }
+      });
     }
   }
 }
