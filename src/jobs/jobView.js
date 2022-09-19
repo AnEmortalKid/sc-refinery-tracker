@@ -389,6 +389,19 @@ export default class JobView {
     return job.materials && Object.keys(job.materials).length > 0;
   }
 
+
+  _sortByLocationAsc(a, b) {
+    const aLoc = a.location.toUpperCase();
+    const bLoc = b.location.toUpperCase();
+    if (aLoc < bLoc) {
+      return -1;
+    }
+    if (aLoc > bLoc) {
+      return 1
+    }
+    return 0;
+  }
+
   /**
    * Displays the given jobs
    * @param {Run[]} jobs
@@ -418,9 +431,15 @@ export default class JobView {
     removeAllButton.classList.remove("w3-disabled");
     footer.hidden = false;
 
+    // sORT HERE
+    // TODO support sort mode (group vs single)
+    // todo move that to a view sorter object that tracks etc
+    var sortedJobs = [...jobs];
+    sortedJobs = sortedJobs.sort(this._sortByLocationAsc);
+
     // layout rows
     for (var i = 0; i < jobCount; i++) {
-      var job = jobs[i];
+      var job = sortedJobs[i];
       // create a stripped effect
       var colorClass = i % 2 == 0 ? "w3-white" : "w3-light-grey";
 
