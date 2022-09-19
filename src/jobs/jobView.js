@@ -1,11 +1,20 @@
 import { removeChildren } from "../elementUtils";
 import { toDurationString } from "../durationParser";
+import { SortFields, SortDirection } from "./sorting/sortOptions";
+
+const sortButtonIds = [
+  "toggle-sort-location",
+  "toggle-sort-duration",
+  "toggle-sort-timeRemaining",
+  "toggle-sort-yield",
+  "toggle-sort-status",
+];
 
 /**
  * Component responsible for displaying a list of Refinery Jobs
  */
 export default class JobView {
-  constructor(controls) {
+  constructor(controls, sortController) {
     this.controls = controls;
 
     this.tableBody = document.getElementById("jobs-table-body");
@@ -466,6 +475,43 @@ export default class JobView {
 
       var timeLeftCol = document.getElementById("job-remaining-" + job.uuid);
       this._setTimeRemaining(timeLeftCol, remainingSeconds);
+    }
+  }
+
+  bindToggleSort(handler) {
+    sortButtonIds.forEach((id) => {
+      var item = document.getElementById(id);
+      item.addEventListener("click", () => {
+        handler(item.dataset.property);
+      });
+    });
+  }
+
+  updateSortState(sortState) {
+    // reset everything
+    if (!sortState) {
+      sortButtonIds.forEach((id) => {
+        var item = document.getElementById(id);
+        item.classList.remove("fa-sort-asc", "fa-sort-desc", "fa-sort");
+        item.classList.add("fa-sort");
+      });
+    } else {
+      sortButtonIds.forEach((id) => {
+        var item = document.getElementById(id);
+        item.classList.remove("fa-sort-asc", "fa-sort-desc", "fa-sort");
+        item.classList.add("fa-sort");
+        // set the right state
+        if (item.dataset.property === sortState.field) {
+          if (sortState.direction == SortDirection.ASC) {
+            item.classList.add("fa-sort-asc");
+            item.classList.remove("fa-sort");
+          }
+          if (sortState.direction == SortDirection.DESC) {
+            item.classList.add("fa-sort-desc");
+            item.classList.remove("fa-sort");
+          }
+        }
+      });
     }
   }
 }

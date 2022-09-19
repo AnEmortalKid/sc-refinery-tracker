@@ -1,30 +1,35 @@
 <div class="w3-container w3-padding w3-margin w3-border-blue-gray w3-border" id="jobs-view-container">
-  
-    <div class="w3-center">
-      <h2>Jobs</h2>
-    </div>
-  
-    <div class="w3-margin-top w3-margin-bottom">
-      <button id="add-job-btn" class="w3-button w3-blue w3-round-large">Add Job</button>
-      <button id="remove-all-jobs-btn" class="w3-button w3-red w3-round-large" disabled>Remove All</button>
-    </div>
-  
-    <!-- todo make sortable -->
-    <table id="jobs-table" class="w3-table w3-centered">
-      <thead class="w3-bottombar">
-        <tr>
-          <th>
-            <span>
-              <i id="toggle-collapse-all" class="fa fa-angle-double-up w3-left w3-padding-small"></i></span>
-              Name
-          </th>
-          <th>Location</th>
-          <th>Duration</th>
-          <th>Time Remaining</th>
-          <th>Yield Units</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
+
+  <div class="w3-center">
+    <h2>Jobs</h2>
+  </div>
+
+  <div class="w3-margin-top w3-margin-bottom">
+    <button id="add-job-btn" class="w3-button w3-blue w3-round-large">Add Job</button>
+    <button id="remove-all-jobs-btn" class="w3-button w3-red w3-round-large" disabled>Remove All</button>
+  </div>
+
+  <table id="jobs-table" class="w3-table w3-centered">
+    <thead class="w3-bottombar">
+      <tr>
+        <th>
+          <span>
+            <i id="toggle-collapse-all" class="fa fa-angle-double-up w3-left w3-padding-small"></i></span>
+          Name
+        </th>
+        <th>Location <span><i id="toggle-sort-location" data-property="location"
+              class="fa fa-sort w3-right w3-padding-small"></i></span>
+        </th>
+        <th>Duration <span><i id="toggle-sort-duration" data-property="duration"
+              class="fa fa-sort w3-right w3-padding-small"></i></span></th>
+        <th>Time Remaining <span><i id="toggle-sort-timeRemaining" data-property="timeRemaining"
+              class="fa fa-sort w3-right w3-padding-small"></i></span></th>
+        <th>Yield Units <span><i id="toggle-sort-yield" data-property="yield"
+              class="fa fa-sort w3-right w3-padding-small"></i></span></th>
+        <th>Status <span><i id="toggle-sort-status" data-property="status"
+              class="fa fa-sort w3-right w3-padding-small"></i></span></th>
+        <th>Actions</th>
+      </tr>
     </thead>
     <tbody id="jobs-table-body">
       <!-- placeholder -->
@@ -48,14 +53,14 @@
     </tbody>
     <tfoot class="w3-topbar" id="jobs-table-footer">
       <tr>
-       <td></td> 
-       <td></td>
-       <td></td> 
-       <td></td> 
-       <td id="jobs-table-footer-yield"></td> 
-       <td></td> 
-       <td></td> 
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td id="jobs-table-footer-yield"></td>
+        <td></td>
+        <td></td>
       </tr>
     </tfoot>
-    </table>
-  </div>
+  </table>
+</div>

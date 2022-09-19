@@ -1,11 +1,18 @@
+import {
+  getNextDirection,
+  getSortField,
+  SortDirection,
+} from "./sorting/sortOptions";
+
 /**
  * Component that manages Refinery Jobs
  */
 export default class JobController {
-  constructor(jobModel, jobView, jobEntryController) {
+  constructor(jobModel, jobView, jobEntryController, sortController) {
     this.jobModel = jobModel;
     this.jobView = jobView;
     this.jobEntryController = jobEntryController;
+    this.sortController = sortController;
 
     this.jobView.bindAddJob(this.handleAddJob.bind(this));
     this.jobView.bindEditJob(this.handleEditJob.bind(this));
@@ -22,6 +29,8 @@ export default class JobController {
       this.onJobChangeHandler.bind(this)
     );
 
+    this.jobView.bindToggleSort(this.handleToggleSort.bind(this));
+
     // expand all by default
     this.expandAll = true;
   }
@@ -31,7 +40,7 @@ export default class JobController {
    * @param {Run[]} jobs
    */
   onJobChangeHandler(jobs) {
-    this.jobView.showJobs(jobs);
+    this.jobView.showJobs(this.sortController.getSorted(jobs));
     this._synchronizeExpandCollapseAll();
   }
 
@@ -118,5 +127,42 @@ export default class JobController {
   handleEditJob(jobId) {
     var jobData = this.jobModel.get(jobId);
     this.jobEntryController.openEditJobModal(jobData);
+  }
+
+  handleToggleSort(field) {
+    const currSort = this.sortController.getCurrentSort();
+    const currDirection = currSort ? currSort.direction : SortDirection.NONE;
+
+    var sortField = getSortField(field);
+
+    // set new
+    if (!currSort) {
+      var direction = getNextDirection(currDirection);
+      if (direction == SortDirection.NONE) {
+        this.sortController.clearSorts();
+      } else {
+        this.sortController.setSorting(sortField, direction);
+      }
+    } else {
+      // same field, same logic applies
+      if (currSort.field == sortField) {
+        var direction = getNextDirection(currDirection);
+        if (direction == SortDirection.NONE) {
+          this.sortController.clearSorts();
+        } else {
+          this.sortController.setSorting(sortField, direction);
+        }
+      } else {
+        // direction for new field should be right after NONE
+        var direction = getNextDirection(SortDirection.NONE);
+        this.sortController.setSorting(sortField, direction);
+      }
+    }
+
+    // ask view to display state and repaint
+    this.jobView.updateSortState(this.sortController.getCurrentSort());
+    this.jobView.showJobs(
+      this.sortController.getSorted(this.jobModel.getAll())
+    );
   }
 }
