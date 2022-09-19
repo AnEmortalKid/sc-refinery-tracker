@@ -15,6 +15,7 @@ import Controls from "./controls/controls";
 import JobModel from "./jobs/jobModel";
 import JobEntryController from "./jobs/jobEntryController";
 import JobEntryView from "./jobs/jobEntryView";
+import SortController from "./jobs/sorting/sortController";
 
 import JobController from "./jobs/jobController";
 import JobView from "./jobs/jobView";
@@ -30,7 +31,8 @@ const jobModel = new JobModel();
 const jobEntryView = new JobEntryView(controls);
 export const jobEntry = new JobEntryController(jobModel, jobEntryView);
 
-const jobView = new JobView(controls);
+const sortController = new SortController();
+const jobView = new JobView(controls, sortController);
 const jobController = new JobController(jobModel, jobView, jobEntry);
 
 const settingsModel = new SettingsModel();

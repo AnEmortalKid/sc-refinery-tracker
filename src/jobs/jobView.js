@@ -1,18 +1,26 @@
 import { removeChildren } from "../elementUtils";
 import { toDurationString } from "../durationParser";
+import { SortFields, SortDirection } from "./sorting/sortOptions";
 
 /**
  * Component responsible for displaying a list of Refinery Jobs
  */
 export default class JobView {
-  constructor(controls) {
+  constructor(controls, sortController) {
     this.controls = controls;
+    this.sortController = sortController;
 
     this.tableBody = document.getElementById("jobs-table-body");
     this.tableFooter = document.getElementById("runs-table-footer");
     this.tableFooterYieldColumn = document.getElementById(
       "runs-table-footer-yield"
     );
+
+    // mvc this correctly
+    // should be a bind sort for each...... grumble
+    // but then the handler can be responsible for calling showJobs
+    // from the job controller, which will autosort
+    this.bindSortButtons();
   }
 
   /**
@@ -131,6 +139,37 @@ export default class JobView {
   alertAllJobsRemoved() {
     // TODO pass in count
     this.controls.displayAlert("All Refinery Jobs Removed.");
+  }
+
+  bindSortButtons() {
+
+    var sl = document.getElementById("toggle-sort-location");
+    sl.addEventListener("click", () => {
+      // todo this.something
+
+      var currMode = sl.dataset.mode;
+      var field = sl.dataset.field;
+
+      if (currMode === "none") {
+        this.sortController.setSorting(SortFields.LOCATION, SortDirection.ASC);
+        sl.classList.remove('fa-sort');
+        sl.classList.add('fa-sort-asc');
+        sl.dataset.mode = "asc";
+      }
+      if (currMode === "asc") {
+        this.sortController.setSorting(SortFields.LOCATION, SortDirection.DESC);
+        sl.classList.remove('fa-sort-asc');
+        sl.classList.add('fa-sort-desc');
+        sl.dataset.mode = "desc";
+      }
+      if (currMode === "desc") {
+        sl.classList.remove('fa-sort-desc');
+        sl.classList.add('fa-sort');
+        this.sortController.clearSorting(SortFields.LOCATION);
+        sl.dataset.mode = "none";
+      }
+
+    });
   }
 
   _createRemoveJobButton(job) {
@@ -431,11 +470,7 @@ export default class JobView {
     removeAllButton.classList.remove("w3-disabled");
     footer.hidden = false;
 
-    // sORT HERE
-    // TODO support sort mode (group vs single)
-    // todo move that to a view sorter object that tracks etc
-    var sortedJobs = [...jobs];
-    sortedJobs = sortedJobs.sort(this._sortByLocationAsc);
+    var sortedJobs = this.sortController.getSorted(jobs);
 
     // layout rows
     for (var i = 0; i < jobCount; i++) {
