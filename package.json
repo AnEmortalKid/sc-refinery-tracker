@@ -1,6 +1,6 @@
 {
   "name": "mining_tracker",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "a mining tracker for starcitizen",
   "private": true,
   "scripts": {
@@ -8,7 +8,8 @@
     "test": "jest --coverage",
     "prettier": "node ./node_modules/prettier/bin-prettier.js --write .",
     "prettier:check": "node ./node_modules/prettier/bin-prettier.js --check .",
-    "start:dev": "webpack serve"
+    "start:dev": "webpack serve",
+    "start:watch": "nodemon yarn build && webpack serve --port 9000"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
   "dependencies": {
     "font-awesome": "^4.7.0",
     "mockdate": "^3.0.2",
+    "nodemon": "^2.0.15",
     "uuid": "^8.3.2"
   }
 }
