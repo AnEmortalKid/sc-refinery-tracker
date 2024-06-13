@@ -1,5 +1,8 @@
 # sc-refinery-tracker
 
+Updated a few Stations and added names + missing Iron as a rescource
+all credits go to AnEmortalKid
+
 [![Build Status](https://travis-ci.com/AnEmortalKid/sc-refinery-tracker.svg?branch=main)](https://travis-ci.com/AnEmortalKid/sc-refinery-tracker)
 
 The Refinery Tracker keeps track of your refinery jobs in StarCitizen
