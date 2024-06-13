@@ -1,10 +1,4 @@
-# sc-refinery-tracker Updated 2024
-
-Updated a few Stations and added names + missing Iron as a rescource
-all credits go to AnEmortalKid
-
-
-
+# sc-refinery-tracker
 
 [![Build Status](https://travis-ci.com/AnEmortalKid/sc-refinery-tracker.svg?branch=main)](https://travis-ci.com/AnEmortalKid/sc-refinery-tracker)
 
