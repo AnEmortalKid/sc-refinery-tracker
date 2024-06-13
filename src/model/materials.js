@@ -14,6 +14,7 @@ export function getMaterialsList() {
     "Beryl",
     "Tungsten",
     "Corundum",
+    "Iron",
     "Quartz",
     "Aluminium",
   ];
