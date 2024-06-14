@@ -57,7 +57,9 @@ function synchronizeSettings(userSettings) {
   }
 }
 
+console.log('[sc-refinery-tracker] app loaded');
 export function startApp() {
+  console.log('[sc-refinery-tracker] starting app');
   controls.setEscapeClosesModals();
 
   var current = userModel.getCurrent();

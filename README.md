@@ -11,24 +11,8 @@ See in action:
 
 
 ### Contributing
-0. Fork this repository
-1. Clone repository
-``` 
-git clone https://github.com/{GITHUB_USERNAME}/sc-refinery-tracker.git
-```
-2. Install dependencies 
-``` 
-cd sc-refinery-tracker
-```
-```
-yarn install
-```
-3. Run dev server
-```
-yarn start:watch
-```
-4. Navigate to localhost:9000 and start making your changes
-4. Open PR on main repo requesting merge of changes on your fork
+
+See the [Development](./docs/DEVELOPMENT.md) tips.
 
 ## Data
 
