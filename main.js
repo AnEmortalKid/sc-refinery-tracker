@@ -327,7 +327,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"getMaterialsList\": () => /* binding */ getMaterialsList\n/* harmony export */ });\nfunction getMaterialsList() {\n  return [\n    \"Quantainium\",\n    \"Bexalite\",\n    \"Taranite\",\n    \"Borase\",\n    \"Laranite\",\n    \"Agricium\",\n    \"Hephaestanite\",\n    \"Titanium\",\n    \"Diamond\",\n    \"Gold\",\n    \"Copper\",\n    \"Beryl\",\n    \"Tungsten\",\n    \"Corundum\",\n    \"Quartz\",\n    \"Aluminium\",\n  ];\n}\n\n\n//# sourceURL=webpack://app/./src/model/materials.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"getMaterialsList\": () => /* binding */ getMaterialsList\n/* harmony export */ });\nfunction getMaterialsList() {\n  return [\n    \"Quantainium\",\n    \"Bexalite\",\n    \"Taranite\",\n    \"Borase\",\n    \"Laranite\",\n    \"Agricium\",\n    \"Hephaestanite\",\n    \"Titanium\",\n    \"Diamond\",\n    \"Gold\",\n    \"Copper\",\n    \"Beryl\",\n    \"Tungsten\",\n    \"Corundum\",\n    \"Iron\",\n    \"Quartz\",\n    \"Aluminium\",\n  ];\n}\n\n\n//# sourceURL=webpack://app/./src/model/materials.js?");
 
 /***/ }),
 
