@@ -41,3 +41,12 @@ My flow seems to have to be (for whatever reason, its been 2 years):
 npx yarn build
 npx yarn webpack serve
 ```
+
+## Deploy to the live site
+
+1. build with webpack
+```
+npx yarn build
+```
+2. Copy the contents to the folder
+3. Commit to the main branch in the other repo
